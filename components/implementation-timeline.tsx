@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "motion/react"
 import { Reveal } from "@/components/motion-primitives"
 
 const weeks = [
@@ -48,30 +47,16 @@ export function ImplementationTimeline() {
 
       <div className="mx-auto mt-14 max-w-5xl">
         <div className="relative grid gap-4 md:grid-cols-5">
-          {/* animated connecting line (desktop) */}
+          {/* connecting line (desktop) */}
           <div className="pointer-events-none absolute left-0 right-0 top-[22px] hidden h-px bg-border md:block">
-            <motion.div
-              className="h-full origin-left bg-primary"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.4, ease: "easeInOut" }}
-            />
+            <div className="animate-grow-line h-full origin-left bg-primary" />
           </div>
 
           {weeks.map((w, i) => (
-            <motion.div
+            <Reveal
               key={w.week}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "0px 0px -60px 0px" }}
-              transition={{
-                duration: 0.5,
-                delay: i * 0.15,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              whileHover={{ y: -6 }}
-              className="relative"
+              delay={i * 0.15}
+              className="group relative transition-transform hover:-translate-y-1.5"
             >
               <div className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/40">
                 <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
@@ -85,7 +70,7 @@ export function ImplementationTimeline() {
                   {w.desc}
                 </p>
               </div>
-            </motion.div>
+            </Reveal>
           ))}
         </div>
       </div>

@@ -1,7 +1,6 @@
 "use client"
 
 import { ArrowRight } from "lucide-react"
-import { motion } from "motion/react"
 import { useCountUp } from "@/components/use-count-up"
 import { Reveal } from "@/components/motion-primitives"
 
@@ -44,13 +43,7 @@ export function BeforeAfter() {
 
       <div className="mx-auto mt-14 grid max-w-5xl items-center gap-6 md:grid-cols-[1fr_auto_1fr]">
         {/* Before */}
-        <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "0px 0px -60px 0px" }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="rounded-2xl border border-border bg-card/50 p-8"
-        >
+        <Reveal className="rounded-2xl border border-border bg-card/50 p-8">
           <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
             Before MyOS
           </span>
@@ -68,24 +61,19 @@ export function BeforeAfter() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </Reveal>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.6 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3, ease: "backOut" }}
+        <Reveal
+          delay={0.3}
+          y={0}
           className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card md:h-14 md:w-14"
         >
           <ArrowRight className="h-5 w-5 text-primary md:h-6 md:w-6" />
-        </motion.div>
+        </Reveal>
 
         {/* After */}
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "0px 0px -60px 0px" }}
-          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        <Reveal
+          delay={0.15}
           className="rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/10 to-accent/10 p-8"
         >
           <span className="text-xs font-medium uppercase tracking-wider text-primary">
@@ -107,7 +95,7 @@ export function BeforeAfter() {
               </p>
             </div>
           </div>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   )

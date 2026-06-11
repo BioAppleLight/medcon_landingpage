@@ -1,11 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import {
-  motion,
-  AnimatePresence,
-  useReducedMotion,
-} from "motion/react"
 import { Play, Calendar, Stethoscope, GraduationCap, Landmark } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 
@@ -35,7 +30,6 @@ const scenarios = [
 
 export function Hero() {
   const [active, setActive] = useState(0)
-  const reduce = useReducedMotion()
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -59,48 +53,29 @@ export function Hero() {
       </div>
 
       <div className="mx-auto max-w-4xl text-center">
-        <motion.a
+        <a
           href="#book-demo"
-          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          whileHover={{ scale: 1.03 }}
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:text-foreground"
+          className="animate-rise mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:text-foreground"
         >
           <span className="flex h-4 w-4 items-center justify-center rounded-[3px] bg-[#ff6600] text-[9px] font-bold text-white">
             Y
           </span>
           Backed by Y Combinator
-        </motion.a>
+        </a>
 
-        <motion.h1
-          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="text-balance text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl"
-        >
+        <h1 className="animate-rise text-balance text-5xl font-semibold leading-[1.05] tracking-tight [animation-delay:0.05s] md:text-7xl">
           Every expert,{" "}
           <span className="font-serif italic font-normal text-primary">
             available 24/7.
           </span>
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground"
-        >
+        <p className="animate-rise mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground [animation-delay:0.15s]">
           Deploy AI-powered doctors, professors, and government assistants that
           teach, guide, and answer questions in real time.
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"
-        >
+        <div className="animate-rise mt-9 flex flex-col items-center justify-center gap-3 [animation-delay:0.25s] sm:flex-row">
           <a
             href="#demos"
             className={buttonVariants({
@@ -122,50 +97,37 @@ export function Hero() {
             <Calendar className="h-4 w-4" />
             Book Demo
           </a>
-        </motion.div>
+        </div>
       </div>
 
       {/* Cycling avatar card */}
-      <motion.div
-        initial={reduce ? { opacity: 0 } : { opacity: 0, y: 32, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto mt-16 max-w-lg"
-      >
+      <div className="animate-rise mx-auto mt-16 max-w-lg [animation-delay:0.35s]">
         <div className="relative rounded-2xl border border-border bg-card p-6 shadow-2xl">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={scenario.role}
-              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -10 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent">
-                    <Icon className="h-7 w-7 text-primary-foreground" />
-                  </span>
-                  <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card bg-emerald-400" />
-                </div>
-                <div className="text-left">
-                  <p className="text-sm font-medium">{scenario.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {scenario.title}
-                  </p>
-                </div>
-                <span className="ml-auto rounded-full border border-border bg-secondary px-3 py-1 text-xs text-muted-foreground">
-                  {scenario.role}
+          <div key={scenario.role} className="animate-fade-in">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent">
+                  <Icon className="h-7 w-7 text-primary-foreground" />
                 </span>
+                <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card bg-emerald-400" />
               </div>
-
-              <div className="mt-5 rounded-xl rounded-tl-sm bg-secondary px-4 py-3 text-left">
-                <p className="text-pretty text-sm leading-relaxed">
-                  {scenario.quote}
+              <div className="text-left">
+                <p className="text-sm font-medium">{scenario.name}</p>
+                <p className="text-xs text-muted-foreground">
+                  {scenario.title}
                 </p>
               </div>
-            </motion.div>
-          </AnimatePresence>
+              <span className="ml-auto rounded-full border border-border bg-secondary px-3 py-1 text-xs text-muted-foreground">
+                {scenario.role}
+              </span>
+            </div>
+
+            <div className="mt-5 rounded-xl rounded-tl-sm bg-secondary px-4 py-3 text-left">
+              <p className="text-pretty text-sm leading-relaxed">
+                {scenario.quote}
+              </p>
+            </div>
+          </div>
 
           <div className="mt-5 flex items-center justify-center gap-2">
             {scenarios.map((s, i) => (
@@ -181,7 +143,7 @@ export function Hero() {
             ))}
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   )
 }

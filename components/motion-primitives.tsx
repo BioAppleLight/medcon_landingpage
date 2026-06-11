@@ -1,21 +1,34 @@
 "use client"
 
-import { motion, useReducedMotion, type Variants } from "motion/react"
-import type { ReactNode } from "react"
+import {
+  useEffect,
+  useRef,
+  useState,
+  Children,
+  isValidElement,
+  cloneElement,
+  type ReactNode,
+  type CSSProperties,
+} from "react"
 
+/**
+ * Resilient scroll reveal.
+ *
+ * IMPORTANT: content is VISIBLE BY DEFAULT (during SSR and before hydration).
+ * The hidden/pre-animation state is only applied inside a client effect, so if
+ * JS never runs or hydration fails, the content still shows — it can never
+ * leave a blank/black page.
+ */
 type RevealProps = {
   children: ReactNode
   className?: string
+  /** delay in seconds */
   delay?: number
   /** vertical offset in px the element animates up from */
   y?: number
   as?: "div" | "section" | "li" | "span"
 }
 
-/**
- * Fade + slide-up on scroll into view.
- * Automatically disables motion when the user prefers reduced motion.
- */
 export function Reveal({
   children,
   className,
@@ -23,74 +36,136 @@ export function Reveal({
   y = 24,
   as = "div",
 }: RevealProps) {
-  const reduce = useReducedMotion()
-  const MotionTag = motion[as]
+  const ref = useRef<HTMLElement | null>(null)
+  // mounted => hydration succeeded and effects run
+  const [mounted, setMounted] = useState(false)
+  const [shown, setShown] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    const el = ref.current
+    if (!el) return
+
+    if (typeof IntersectionObserver === "undefined") {
+      setShown(true)
+      return
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setShown(true)
+          io.disconnect()
+        }
+      },
+      { rootMargin: "0px 0px -80px 0px" },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  // Only ever hide AFTER mount. Pre-hydration => visible.
+  const hidden = mounted && !shown
+
+  const style: CSSProperties = {
+    opacity: hidden ? 0 : 1,
+    transform: hidden ? `translateY(${y}px)` : "none",
+    transition: mounted
+      ? `opacity 0.6s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.6s cubic-bezier(0.22,1,0.36,1) ${delay}s`
+      : undefined,
+    willChange: mounted ? "opacity, transform" : undefined,
+  }
+
+  const Tag = as as keyof JSX.IntrinsicElements
 
   return (
-    <MotionTag
-      className={className}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y }}
-      whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -80px 0px" }}
-      transition={{
-        duration: 0.6,
-        delay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
+    // @ts-expect-error -- ref typing across the union of tags is fine at runtime
+    <Tag ref={ref} className={className} style={style}>
       {children}
-    </MotionTag>
+    </Tag>
   )
 }
 
-const containerVariants: Variants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
-  },
-}
-
-const itemVariantsBase: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
-  },
-}
-
-const itemVariantsReduced: Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { duration: 0.4 } },
-}
-
 /**
- * Wrap a group whose direct children should stagger in.
- * Use <StaggerItem> for each child.
+ * Staggered container. Wraps children; each direct child fades/slides up in
+ * sequence once scrolled into view. Same resilience guarantee as Reveal:
+ * everything is visible until hydration runs.
  */
 export function Stagger({
   children,
   className,
   as = "div",
+  step = 0.1,
 }: {
   children: ReactNode
   className?: string
   as?: "div" | "ul"
+  step?: number
 }) {
-  const MotionTag = motion[as]
+  const ref = useRef<HTMLElement | null>(null)
+  const [mounted, setMounted] = useState(false)
+  const [shown, setShown] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    const el = ref.current
+    if (!el) return
+
+    if (typeof IntersectionObserver === "undefined") {
+      setShown(true)
+      return
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setShown(true)
+          io.disconnect()
+        }
+      },
+      { rootMargin: "0px 0px -60px 0px" },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  const hidden = mounted && !shown
+  const Tag = as as keyof JSX.IntrinsicElements
+
+  const items = Children.toArray(children)
+
   return (
-    <MotionTag
-      className={className}
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "0px 0px -60px 0px" }}
-    >
-      {children}
-    </MotionTag>
+    // @ts-expect-error -- ref typing across the union of tags is fine at runtime
+    <Tag ref={ref} className={className}>
+      {items.map((child, i) => {
+        const style: CSSProperties = {
+          opacity: hidden ? 0 : 1,
+          transform: hidden ? "translateY(20px)" : "none",
+          transition: mounted
+            ? `opacity 0.55s cubic-bezier(0.22,1,0.36,1) ${i * step}s, transform 0.55s cubic-bezier(0.22,1,0.36,1) ${i * step}s`
+            : undefined,
+        }
+        if (isValidElement(child)) {
+          const prev = (child.props as { style?: CSSProperties }).style
+          return cloneElement(child as React.ReactElement<{ style?: CSSProperties }>, {
+            style: { ...prev, ...style },
+          })
+        }
+        return (
+          <div key={i} style={style}>
+            {child}
+          </div>
+        )
+      })}
+    </Tag>
   )
 }
 
+/**
+ * Kept for API compatibility with existing imports. With the new Stagger the
+ * per-item animation is applied by the parent, so this is just a passthrough
+ * wrapper that preserves the element tag.
+ */
 export function StaggerItem({
   children,
   className,
@@ -100,14 +175,9 @@ export function StaggerItem({
   className?: string
   as?: "div" | "li"
 }) {
-  const reduce = useReducedMotion()
-  const MotionTag = motion[as]
+  const Tag = as as keyof JSX.IntrinsicElements
   return (
-    <MotionTag
-      className={className}
-      variants={reduce ? itemVariantsReduced : itemVariantsBase}
-    >
-      {children}
-    </MotionTag>
+    // @ts-expect-error -- union tag typing is fine at runtime
+    <Tag className={className}>{children}</Tag>
   )
 }

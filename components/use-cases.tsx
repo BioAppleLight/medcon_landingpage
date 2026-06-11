@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { motion, AnimatePresence } from "motion/react"
 import { Check, Stethoscope, GraduationCap, Landmark } from "lucide-react"
 import { Reveal } from "@/components/motion-primitives"
 
@@ -77,11 +76,7 @@ export function UseCases() {
                 }`}
               >
                 {isActive && (
-                  <motion.span
-                    layoutId="usecase-pill"
-                    className="absolute inset-0 -z-10 rounded-full bg-primary"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
+                  <span className="absolute inset-0 -z-10 rounded-full bg-primary" />
                 )}
                 <Icon className="h-4 w-4" />
                 {t.label}
@@ -91,49 +86,35 @@ export function UseCases() {
         </div>
 
         <div className="mt-10 grid items-center gap-8 overflow-hidden rounded-2xl border border-border bg-card p-6 md:grid-cols-2 md:p-8">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`${tab.id}-text`}
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 16 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-            >
-              <h3 className="text-balance text-2xl font-semibold tracking-tight">
-                {tab.headline}
-              </h3>
-              <ul className="mt-6 flex flex-col gap-4">
-                {tab.points.map((point) => (
-                  <li key={point} className="flex items-start gap-3">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15">
-                      <Check className="h-3 w-3 text-primary" />
-                    </span>
-                    <span className="text-pretty text-muted-foreground">
-                      {point}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </AnimatePresence>
+          <div key={`${tab.id}-text`} className="animate-fade-in">
+            <h3 className="text-balance text-2xl font-semibold tracking-tight">
+              {tab.headline}
+            </h3>
+            <ul className="mt-6 flex flex-col gap-4">
+              {tab.points.map((point) => (
+                <li key={point} className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15">
+                    <Check className="h-3 w-3 text-primary" />
+                  </span>
+                  <span className="text-pretty text-muted-foreground">
+                    {point}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`${tab.id}-img`}
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              className="relative aspect-video overflow-hidden rounded-xl border border-border bg-secondary"
-            >
-              <Image
-                src={tab.image || "/placeholder.svg"}
-                alt={tab.alt}
-                fill
-                className="object-cover"
-              />
-            </motion.div>
-          </AnimatePresence>
+          <div
+            key={`${tab.id}-img`}
+            className="animate-fade-in relative aspect-video overflow-hidden rounded-xl border border-border bg-secondary"
+          >
+            <Image
+              src={tab.image || "/placeholder.svg"}
+              alt={tab.alt}
+              fill
+              className="object-cover"
+            />
+          </div>
         </div>
       </div>
     </section>
