@@ -9,7 +9,7 @@ const pillars = [
     n: "01",
     icon: UserRound,
     title: "Customizable human expert persona",
-    desc: "A real-time, human-like avatar with your expert's voice, tone, and mannerisms — delivering knowledge the way they would.",
+    desc: "A real-time, human-like avatar with your expert's voice, tone, and mannerisms that delivers knowledge the way they would.",
   },
   {
     n: "02",
@@ -21,7 +21,7 @@ const pillars = [
     n: "03",
     icon: Globe,
     title: "Subscribe anytime, anywhere, any language",
-    desc: "Learners and patients access the expert across time zones and languages — English, Arabic, or both.",
+    desc: "Learners and patients reach the expert across time zones and languages, in English, Arabic, or both.",
   },
 ]
 
@@ -29,7 +29,7 @@ export function Pillars() {
   return (
     <section id="solution" className="px-6 py-20 md:py-28">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <span className="text-xs font-medium uppercase tracking-wider text-primary">
+        <span className="eyebrow text-primary">
           The Solution
         </span>
         <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">

@@ -8,7 +8,7 @@ const tech = [
   {
     icon: FileText,
     title: "Reasoning Replication",
-    desc: "Avatars emulate expert reasoning, not just appearance — grounded in the source material your experts approve.",
+    desc: "Avatars emulate expert reasoning, not just appearance, grounded in the source material your experts approve.",
   },
   {
     icon: RefreshCw,
@@ -18,7 +18,7 @@ const tech = [
   {
     icon: Network,
     title: "Multi-Domain Platform",
-    desc: "A publisher–subscriber architecture lets one expert's knowledge be delivered across institutions and domains.",
+    desc: "A publisher and subscriber architecture lets one expert's knowledge reach many institutions and domains.",
   },
 ]
 
@@ -27,7 +27,7 @@ export function CoreTech() {
     <section id="technology" className="px-6 py-20 md:py-28">
       <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <Reveal>
-          <span className="text-xs font-medium uppercase tracking-wider text-primary">
+          <span className="eyebrow text-primary">
             Core Technology
           </span>
           <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-4xl">
@@ -35,7 +35,7 @@ export function CoreTech() {
           </h2>
           <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
             MyOS isn&apos;t a talking head. It&apos;s a knowledge engine wrapped
-            in a human-like persona — built to reason like your best expert and
+            in a human-like persona, built to reason like your best expert and
             improve with every conversation.
           </p>
         </Reveal>

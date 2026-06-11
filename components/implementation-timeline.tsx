@@ -34,7 +34,7 @@ export function ImplementationTimeline() {
   return (
     <section className="px-6 py-20 md:py-28">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <span className="text-xs font-medium uppercase tracking-wider text-primary">
+        <span className="eyebrow text-primary">
           Implementation
         </span>
         <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
@@ -62,7 +62,7 @@ export function ImplementationTimeline() {
                 <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
                   {i + 1}
                 </span>
-                <span className="mt-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                <span className="mt-4 eyebrow">
                   {w.week}
                 </span>
                 <h3 className="mt-1 font-medium">{w.title}</h3>

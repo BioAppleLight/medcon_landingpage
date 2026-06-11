@@ -7,9 +7,9 @@ import { Reveal } from "@/components/motion-primitives"
 export function FinalCta() {
   return (
     <section id="book-demo" className="px-6 py-20 md:py-28">
-      <Reveal className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/15 via-card to-accent/15 px-6 py-20 text-center md:px-16">
+      <Reveal className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/[0.08] via-card to-accent/[0.08] px-6 py-20 text-center md:px-16">
         <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="animate-float-slow absolute left-1/2 top-0 h-72 w-[600px] -translate-x-1/2 rounded-full bg-primary/20 blur-[120px]" />
+          <div className="absolute left-1/2 top-[-20%] h-72 w-[600px] -translate-x-1/2 rounded-full bg-primary/10 blur-[140px]" />
         </div>
         <h2 className="mx-auto max-w-3xl text-balance text-3xl font-semibold tracking-tight md:text-5xl">
           Your best expert shouldn&apos;t have an{" "}

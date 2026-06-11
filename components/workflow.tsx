@@ -22,7 +22,7 @@ const columns = [
     title: "MyOS creates",
     items: [
       "A lifelike doctor avatar",
-      "A 2–4 minute personalized video",
+      "A 2 to 4 minute personalized video",
       "Step-by-step exercise demonstrations",
       "An approved patient FAQ layer",
     ],
@@ -44,14 +44,14 @@ export function Workflow() {
   return (
     <section id="workflow" className="px-6 py-20 md:py-28">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <span className="text-xs font-medium uppercase tracking-wider text-primary">
+        <span className="eyebrow text-primary">
           Healthcare Workflow
         </span>
         <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
           From procedure to personalized recovery.
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-pretty text-muted-foreground">
-          Content stays physician-approved and standardized — then scales to
+          Content stays physician-approved and standardized, then scales to
           hundreds of patients.
         </p>
       </Reveal>
@@ -71,7 +71,7 @@ export function Workflow() {
                     <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15">
                       <Icon className="h-5 w-5 text-primary" />
                     </span>
-                    <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    <span className="eyebrow">
                       {col.tag}
                     </span>
                   </div>

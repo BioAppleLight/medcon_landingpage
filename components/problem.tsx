@@ -26,18 +26,18 @@ export function Problem() {
   return (
     <section id="problem" className="px-6 py-20 md:py-28">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <span className="text-xs font-medium uppercase tracking-wider text-primary">
+        <span className="eyebrow text-primary">
           The Problem
         </span>
         <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-          Expertise doesn&apos;t scale.{" "}
+          Expertise doesn&apos;t{" "}
           <span className="font-serif italic font-normal text-primary">
-            Until now.
+            scale.
           </span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-pretty text-muted-foreground">
-          The high cost of expert time creates inaccessibility for learners and
-          patients alike.
+          The cost of expert time keeps real guidance out of reach for the
+          learners and patients who need it most.
         </p>
       </Reveal>
 

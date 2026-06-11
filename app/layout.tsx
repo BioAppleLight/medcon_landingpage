@@ -16,7 +16,7 @@ const instrumentSerif = Instrument_Serif({
 })
 
 export const metadata: Metadata = {
-  title: 'MyOS — Every Expert. Available 24/7.',
+  title: 'MyOS · Every Expert. Available 24/7.',
   description:
     'MyOS turns your best experts into AI avatars that teach, guide, and answer questions in real time. Deploy AI-powered doctors, professors, and government assistants that scale knowledge 24/7.',
   generator: 'v0.app',

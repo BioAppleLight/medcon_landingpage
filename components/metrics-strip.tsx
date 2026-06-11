@@ -30,7 +30,7 @@ export function MetricsStrip() {
   return (
     <section id="impact" className="px-6 py-16">
       <div className="mx-auto max-w-5xl">
-        <p className="text-center text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <p className="eyebrow block text-center">
           We boast of our impact
         </p>
         <div className="mt-8 grid gap-10 rounded-2xl border border-border bg-card/50 p-10 sm:grid-cols-2 lg:grid-cols-4">

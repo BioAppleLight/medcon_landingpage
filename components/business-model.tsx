@@ -38,14 +38,14 @@ export function BusinessModel() {
   return (
     <section id="roi" className="px-6 py-20 md:py-28">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <span className="text-xs font-medium uppercase tracking-wider text-primary">
+        <span className="eyebrow text-primary">
           Business Model
         </span>
         <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
           Doctor-led AI videos that pay for themselves.
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-pretty text-muted-foreground">
-          Improve patient outcomes and reduce operational load — with a return
+          Improve patient outcomes and reduce operational load, with a return
           you can measure.
         </p>
       </Reveal>
@@ -92,9 +92,9 @@ export function BusinessModel() {
           vs. traditional diagnostic and recovery pathways.
         </p>
         <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm text-muted-foreground">
-          A traditional MS diagnostic pathway runs €1,500–€7,000. MyOS delivers
-          comparable patient guidance from as little as €8.32 per scan at
-          hospital scale.
+          A traditional MS diagnostic pathway runs €1,500 to €7,000. MyOS
+          delivers comparable patient guidance from as little as €8.32 per scan
+          at hospital scale.
         </p>
       </Reveal>
     </section>

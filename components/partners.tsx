@@ -13,7 +13,7 @@ export function Partners() {
   return (
     <section className="px-6 py-16">
       <div className="mx-auto max-w-5xl text-center">
-        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <p className="eyebrow">
           Piloting with leading partners
         </p>
 

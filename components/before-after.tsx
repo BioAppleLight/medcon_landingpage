@@ -44,7 +44,7 @@ export function BeforeAfter() {
       <div className="mx-auto mt-14 grid max-w-5xl items-center gap-6 md:grid-cols-[1fr_auto_1fr]">
         {/* Before */}
         <Reveal className="rounded-2xl border border-border bg-card/50 p-8">
-          <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <span className="eyebrow">
             Before MyOS
           </span>
           <div className="mt-6 flex flex-col gap-5">
@@ -76,7 +76,7 @@ export function BeforeAfter() {
           delay={0.15}
           className="rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/10 to-accent/10 p-8"
         >
-          <span className="text-xs font-medium uppercase tracking-wider text-primary">
+          <span className="eyebrow text-primary">
             After MyOS
           </span>
           <div className="mt-6 flex flex-col gap-5">

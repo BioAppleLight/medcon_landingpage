@@ -39,7 +39,7 @@ export function Team() {
   return (
     <section id="team" className="px-6 py-20 md:py-28">
       <Reveal className="mx-auto max-w-3xl text-center">
-        <span className="text-xs font-medium uppercase tracking-wider text-primary">
+        <span className="eyebrow text-primary">
           Our Team
         </span>
         <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
@@ -70,7 +70,7 @@ export function Team() {
       </Stagger>
 
       <Reveal delay={0.1} className="mx-auto mt-16 max-w-5xl text-center">
-        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <p className="eyebrow">
           Mentored by experts from leading institutions
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">

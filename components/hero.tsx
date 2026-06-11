@@ -46,14 +46,17 @@ export function Hero() {
       id="product"
       className="relative overflow-hidden px-6 pb-20 pt-36 md:pb-28 md:pt-44"
     >
-      {/* ambient glow */}
+      {/* ambient wash */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="animate-float-slow absolute left-1/2 top-0 h-[480px] w-[820px] -translate-x-1/2 rounded-full bg-primary/20 blur-[140px]" />
-        <div className="animate-float-slow absolute right-10 top-40 h-[320px] w-[320px] rounded-full bg-accent/20 blur-[120px] [animation-delay:-4s]" />
+        <div className="absolute left-1/2 top-[-10%] h-[520px] w-[760px] -translate-x-1/2 rounded-full bg-primary/10 blur-[160px]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
 
       <div className="mx-auto max-w-4xl text-center">
-        <h1 className="animate-rise text-balance text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl">
+        <span className="eyebrow animate-rise mx-auto">
+          AI expert avatars
+        </span>
+        <h1 className="animate-rise mt-6 text-balance text-5xl font-semibold leading-[1.03] md:text-7xl [animation-delay:0.05s]">
           Every expert,{" "}
           <span className="font-serif italic font-normal text-primary">
             available 24/7.

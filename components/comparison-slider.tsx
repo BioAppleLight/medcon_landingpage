@@ -49,7 +49,7 @@ export function ComparisonSlider() {
       >
         {/* Traditional (base layer) */}
         <div className="absolute inset-0 flex flex-col justify-center gap-5 bg-secondary p-8 md:p-12">
-          <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <span className="eyebrow">
             Traditional Expert
           </span>
           {traditional.map((item) => {
@@ -68,7 +68,7 @@ export function ComparisonSlider() {
           className="absolute inset-0 flex flex-col items-end justify-center gap-5 bg-gradient-to-br from-primary/20 to-accent/20 p-8 text-right md:p-12"
           style={{ clipPath: `inset(0 0 0 ${pos}%)` }}
         >
-          <span className="text-xs font-medium uppercase tracking-wider text-primary">
+          <span className="eyebrow text-primary">
             MyOS Expert
           </span>
           {myos.map((item) => {

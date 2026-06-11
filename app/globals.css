@@ -124,10 +124,28 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   html {
     @apply font-sans;
     scroll-behavior: smooth;
+  }
+  /* Refined display typography: tighter optical tracking on large headings */
+  h1,
+  h2 {
+    letter-spacing: -0.02em;
+  }
+  h1 {
+    letter-spacing: -0.03em;
+  }
+}
+
+@layer components {
+  /* Consistent, refined section eyebrow label */
+  .eyebrow {
+    @apply text-[0.7rem] font-medium uppercase tracking-[0.2em] text-muted-foreground;
   }
 }
 

@@ -21,11 +21,11 @@ const plans = [
   },
   {
     name: "Department",
-    tagline: "3–5 doctors + 10–20 videos",
+    tagline: "3 to 5 doctors + 10 to 20 videos",
     desc: "Ideal for growing departments.",
     features: [
-      "3–5 doctor avatars",
-      "10–20 recovery videos",
+      "3 to 5 doctor avatars",
+      "10 to 20 recovery videos",
       "Faster turnaround",
       "Dedicated account manager",
       "Priority support",
