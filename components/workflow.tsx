@@ -1,3 +1,5 @@
+"use client"
+
 import { ArrowRight, ClipboardList, Wand2, Smartphone } from "lucide-react"
 import { motion } from "motion/react"
 import { Reveal } from "@/components/motion-primitives"

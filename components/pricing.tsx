@@ -1,3 +1,5 @@
+"use client"
+
 import { Check } from "lucide-react"
 import { motion } from "motion/react"
 import { buttonVariants } from "@/components/ui/button"

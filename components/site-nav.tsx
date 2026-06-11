@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { Compass, Menu, X } from "lucide-react"
+import { motion, useScroll, useSpring } from "motion/react"
 import { buttonVariants } from "@/components/ui/button"
 
 const links = [
-  { label: "Product", href: "#product" },
+  { label: "Solution", href: "#solution" },
   { label: "Use Cases", href: "#use-cases" },
   { label: "Technology", href: "#technology" },
   { label: "Pricing", href: "#pricing" },
@@ -15,6 +16,12 @@ const links = [
 export function SiteNav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { scrollYProgress } = useScroll()
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
+  })
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -31,6 +38,10 @@ export function SiteNav() {
           : "border-b border-transparent"
       }`}
     >
+      <motion.div
+        style={{ scaleX: progress }}
+        className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-primary"
+      />
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a href="#" className="flex items-center gap-2">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">

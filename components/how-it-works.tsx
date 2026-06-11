@@ -1,3 +1,5 @@
+"use client"
+
 import { Upload, UserCog, Rocket } from "lucide-react"
 import { motion } from "motion/react"
 import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
