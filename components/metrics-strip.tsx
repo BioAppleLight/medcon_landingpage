@@ -28,17 +28,31 @@ function Metric({
 
 export function MetricsStrip() {
   return (
-    <section className="px-6 py-16">
-      <div className="mx-auto grid max-w-5xl gap-10 rounded-2xl border border-border bg-card/50 p-10 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="text-center">
-          <p className="text-4xl font-semibold tracking-tight md:text-5xl">
-            24/7
-          </p>
-          <p className="mt-2 text-sm text-muted-foreground">Availability</p>
+    <section id="impact" className="px-6 py-16">
+      <div className="mx-auto max-w-5xl">
+        <p className="text-center text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          We boast of our impact
+        </p>
+        <div className="mt-8 grid gap-10 rounded-2xl border border-border bg-card/50 p-10 sm:grid-cols-2 lg:grid-cols-4">
+          <Metric
+            target={70}
+            prefix="+"
+            suffix="K"
+            label="People reached across our channels"
+          />
+          <Metric
+            target={50}
+            prefix="$"
+            suffix="K"
+            label="Invested in future health leaders"
+          />
+          <Metric
+            target={140}
+            prefix="+"
+            label="Students mentored worldwide"
+          />
+          <Metric target={20} prefix="+" label="Countries reached" />
         </div>
-        <Metric target={10} suffix="x" label="More learners reached" />
-        <Metric target={50} suffix="+" label="Expert interviews" />
-        <Metric target={3} label="Industries piloted" />
       </div>
     </section>
   )

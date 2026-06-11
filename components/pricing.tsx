@@ -4,25 +4,42 @@ import { buttonVariants } from "@/components/ui/button"
 const plans = [
   {
     name: "Pilot",
-    desc: "Test the waters with a single avatar.",
-    features: ["1 doctor avatar", "3 recovery videos", "Email support"],
+    tagline: "1 doctor avatar + 3 videos",
+    desc: "Ideal for trying MyOS.",
+    features: [
+      "1 doctor avatar",
+      "3 recovery videos",
+      "Standard delivery time",
+      "Email support",
+    ],
     cta: "Start a Pilot",
     featured: false,
   },
   {
     name: "Department",
-    desc: "Roll out across a clinical team.",
-    features: ["3–5 avatars", "10–20 videos", "Priority support"],
+    tagline: "3–5 doctors + 10–20 videos",
+    desc: "Ideal for growing departments.",
+    features: [
+      "3–5 doctor avatars",
+      "10–20 recovery videos",
+      "Faster turnaround",
+      "Dedicated account manager",
+      "Priority support",
+    ],
     cta: "Book Department Demo",
     featured: true,
   },
   {
     name: "Enterprise",
-    desc: "Full deployment across a health system.",
+    tagline: "Multiple departments + integration",
+    desc: "Built for hospitals and health systems.",
     features: [
-      "Unlimited avatars & videos",
-      "API access",
-      "FAQ assistant",
+      "Unlimited doctor avatars",
+      "Unlimited videos",
+      "App / API integration",
+      "AI-powered FAQ assistant",
+      "Custom workflows & analytics",
+      "Dedicated success team & SLA",
     ],
     cta: "Talk to Sales",
     featured: false,
@@ -57,6 +74,9 @@ export function Pricing() {
               </span>
             )}
             <h3 className="text-lg font-medium">{plan.name}</h3>
+            <p className="mt-1 text-sm font-medium text-primary">
+              {plan.tagline}
+            </p>
             <p className="mt-2 text-sm text-muted-foreground">{plan.desc}</p>
             <ul className="mt-6 flex flex-1 flex-col gap-3">
               {plan.features.map((feature) => (

@@ -1,10 +1,11 @@
-import { Compass, Mail, MapPin } from "lucide-react"
+import { Compass, Mail, MapPin, Phone, Globe } from "lucide-react"
 
 const linkGroups = [
   { label: "Product", href: "#product" },
   { label: "Use Cases", href: "#use-cases" },
-  { label: "About", href: "#how-it-works" },
-  { label: "Contact", href: "mailto:mmedcon@gmail.com" },
+  { label: "Technology", href: "#technology" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "Team", href: "#team" },
 ]
 
 export function SiteFooter() {
@@ -44,9 +45,25 @@ export function SiteFooter() {
             <Mail className="h-4 w-4" />
             mmedcon@gmail.com
           </a>
+          <a
+            href="tel:+421902950910"
+            className="flex items-center gap-2 transition-colors hover:text-foreground"
+          >
+            <Phone className="h-4 w-4" />
+            +421 902 950 910
+          </a>
+          <a
+            href="https://www.mmedcon.com"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2 transition-colors hover:text-foreground"
+          >
+            <Globe className="h-4 w-4" />
+            mmedcon.com
+          </a>
           <span className="flex items-center gap-2">
             <MapPin className="h-4 w-4" />
-            Abu Dhabi
+            Abu Dhabi, UAE
           </span>
         </div>
       </div>

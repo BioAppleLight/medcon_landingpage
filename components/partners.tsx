@@ -1,11 +1,9 @@
 const partners = [
   "Burjeel Hospital",
   "NYUAD ARC",
-  "Yale",
-  "NYU",
-  "Charles University",
-  "TU Berlin",
-  "University of Amsterdam",
+  "Presight",
+  "Khalifa Fund",
+  "Marina Health",
 ]
 
 export function Partners() {
@@ -13,7 +11,7 @@ export function Partners() {
     <section className="px-6 py-16">
       <div className="mx-auto max-w-5xl text-center">
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          Trusted by leading institutions
+          Piloting with leading partners
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
           {partners.map((partner) => (

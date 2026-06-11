@@ -7,8 +7,9 @@ import { buttonVariants } from "@/components/ui/button"
 const links = [
   { label: "Product", href: "#product" },
   { label: "Use Cases", href: "#use-cases" },
-  { label: "How It Works", href: "#how-it-works" },
+  { label: "Technology", href: "#technology" },
   { label: "Pricing", href: "#pricing" },
+  { label: "Team", href: "#team" },
 ]
 
 export function SiteNav() {
