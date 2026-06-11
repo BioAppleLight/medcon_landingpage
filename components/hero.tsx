@@ -53,17 +53,7 @@ export function Hero() {
       </div>
 
       <div className="mx-auto max-w-4xl text-center">
-        <a
-          href="#book-demo"
-          className="animate-rise mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:text-foreground"
-        >
-          <span className="flex h-4 w-4 items-center justify-center rounded-[3px] bg-[#ff6600] text-[9px] font-bold text-white">
-            Y
-          </span>
-          Backed by Y Combinator
-        </a>
-
-        <h1 className="animate-rise text-balance text-5xl font-semibold leading-[1.05] tracking-tight [animation-delay:0.05s] md:text-7xl">
+        <h1 className="animate-rise text-balance text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl">
           Every expert,{" "}
           <span className="font-serif italic font-normal text-primary">
             available 24/7.
