@@ -1,3 +1,8 @@
+"use client"
+
+import { motion } from "motion/react"
+import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
+
 const team = [
   { name: "Terezia Juras", role: "Founder, mMEDCON & MyOS" },
   { name: "Lenka Sadovska", role: "Marketing & PR" },
@@ -33,35 +38,38 @@ function initials(name: string) {
 export function Team() {
   return (
     <section id="team" className="px-6 py-20 md:py-28">
-      <div className="mx-auto max-w-3xl text-center">
+      <Reveal className="mx-auto max-w-3xl text-center">
         <span className="text-xs font-medium uppercase tracking-wider text-primary">
           Our Team
         </span>
         <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
           Built by clinicians, engineers, and educators.
         </h2>
-      </div>
+      </Reveal>
 
-      <div className="mx-auto mt-14 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <Stagger className="mx-auto mt-14 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {team.map((member) => (
-          <div
-            key={member.name}
-            className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5"
-          >
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
-              {initials(member.name)}
-            </span>
-            <div>
-              <p className="font-medium leading-tight">{member.name}</p>
-              <p className="mt-0.5 text-sm text-muted-foreground">
-                {member.role}
-              </p>
-            </div>
-          </div>
+          <StaggerItem key={member.name}>
+            <motion.div
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 22 }}
+              className="flex h-full items-center gap-4 rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40"
+            >
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
+                {initials(member.name)}
+              </span>
+              <div>
+                <p className="font-medium leading-tight">{member.name}</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">
+                  {member.role}
+                </p>
+              </div>
+            </motion.div>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
 
-      <div className="mx-auto mt-16 max-w-5xl text-center">
+      <Reveal delay={0.1} className="mx-auto mt-16 max-w-5xl text-center">
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Mentored by experts from leading institutions
         </p>
@@ -75,7 +83,7 @@ export function Team() {
             </span>
           ))}
         </div>
-      </div>
+      </Reveal>
     </section>
   )
 }

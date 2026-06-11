@@ -1,4 +1,6 @@
 import { Banknote, Brain, MousePointerClick } from "lucide-react"
+import { motion } from "motion/react"
+import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
 
 const problems = [
   {
@@ -21,38 +23,44 @@ const problems = [
 export function Problem() {
   return (
     <section id="problem" className="px-6 py-20 md:py-28">
-      <div className="mx-auto max-w-3xl text-center">
+      <Reveal className="mx-auto max-w-3xl text-center">
         <span className="text-xs font-medium uppercase tracking-wider text-primary">
           The Problem
         </span>
         <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-          Expertise doesn&apos;t scale. Until now.
+          Expertise doesn&apos;t scale.{" "}
+          <span className="font-serif italic font-normal text-primary">
+            Until now.
+          </span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-pretty text-muted-foreground">
           The high cost of expert time creates inaccessibility for learners and
           patients alike.
         </p>
-      </div>
+      </Reveal>
 
-      <div className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
+      <Stagger className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
         {problems.map((p) => {
           const Icon = p.icon
           return (
-            <div
-              key={p.title}
-              className="rounded-2xl border border-border bg-card p-8"
-            >
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-destructive/15">
-                <Icon className="h-5 w-5 text-destructive" />
-              </span>
-              <h3 className="mt-6 text-lg font-medium">{p.title}</h3>
-              <p className="mt-2 text-pretty leading-relaxed text-muted-foreground">
-                {p.desc}
-              </p>
-            </div>
+            <StaggerItem key={p.title}>
+              <motion.div
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                className="h-full rounded-2xl border border-border bg-card p-8 transition-colors hover:border-destructive/40"
+              >
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-destructive/15">
+                  <Icon className="h-5 w-5 text-destructive" />
+                </span>
+                <h3 className="mt-6 text-lg font-medium">{p.title}</h3>
+                <p className="mt-2 text-pretty leading-relaxed text-muted-foreground">
+                  {p.desc}
+                </p>
+              </motion.div>
+            </StaggerItem>
           )
         })}
-      </div>
+      </Stagger>
     </section>
   )
 }

@@ -1,4 +1,6 @@
 import { ArrowRight, ClipboardList, Wand2, Smartphone } from "lucide-react"
+import { motion } from "motion/react"
+import { Reveal } from "@/components/motion-primitives"
 
 const columns = [
   {
@@ -39,7 +41,7 @@ const columns = [
 export function Workflow() {
   return (
     <section id="workflow" className="px-6 py-20 md:py-28">
-      <div className="mx-auto max-w-3xl text-center">
+      <Reveal className="mx-auto max-w-3xl text-center">
         <span className="text-xs font-medium uppercase tracking-wider text-primary">
           Healthcare Workflow
         </span>
@@ -50,34 +52,40 @@ export function Workflow() {
           Content stays physician-approved and standardized — then scales to
           hundreds of patients.
         </p>
-      </div>
+      </Reveal>
 
       <div className="mx-auto mt-14 grid max-w-5xl items-stretch gap-4 md:grid-cols-[1fr_auto_1fr_auto_1fr]">
         {columns.map((col, i) => {
           const Icon = col.icon
           return (
             <div key={col.tag} className="contents">
-              <div className="flex flex-col rounded-2xl border border-border bg-card p-6">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15">
-                    <Icon className="h-5 w-5 text-primary" />
-                  </span>
-                  <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                    {col.tag}
-                  </span>
-                </div>
-                <h3 className="mt-5 font-medium">{col.title}</h3>
-                <ul className="mt-4 flex flex-col gap-2.5">
-                  {col.items.map((item) => (
-                    <li
-                      key={item}
-                      className="text-pretty text-sm text-muted-foreground"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <Reveal delay={i * 0.15} className="h-full">
+                <motion.div
+                  whileHover={{ y: -6 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                  className="flex h-full flex-col rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/40"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15">
+                      <Icon className="h-5 w-5 text-primary" />
+                    </span>
+                    <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                      {col.tag}
+                    </span>
+                  </div>
+                  <h3 className="mt-5 font-medium">{col.title}</h3>
+                  <ul className="mt-4 flex flex-col gap-2.5">
+                    {col.items.map((item) => (
+                      <li
+                        key={item}
+                        className="text-pretty text-sm text-muted-foreground"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </Reveal>
               {i < columns.length - 1 && (
                 <div className="flex items-center justify-center">
                   <ArrowRight className="h-5 w-5 rotate-90 text-primary md:rotate-0" />

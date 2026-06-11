@@ -1,4 +1,6 @@
 import { FileText, RefreshCw, Network } from "lucide-react"
+import { motion } from "motion/react"
+import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
 
 const tech = [
   {
@@ -22,7 +24,7 @@ export function CoreTech() {
   return (
     <section id="technology" className="px-6 py-20 md:py-28">
       <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-        <div>
+        <Reveal>
           <span className="text-xs font-medium uppercase tracking-wider text-primary">
             Core Technology
           </span>
@@ -34,29 +36,32 @@ export function CoreTech() {
             in a human-like persona — built to reason like your best expert and
             improve with every conversation.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="flex flex-col gap-4">
+        <Stagger className="flex flex-col gap-4">
           {tech.map((t) => {
             const Icon = t.icon
             return (
-              <div
-                key={t.title}
-                className="flex gap-4 rounded-2xl border border-border bg-card p-6"
-              >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/15">
-                  <Icon className="h-5 w-5 text-accent" />
-                </span>
-                <div>
-                  <h3 className="font-medium">{t.title}</h3>
-                  <p className="mt-1 text-pretty text-sm leading-relaxed text-muted-foreground">
-                    {t.desc}
-                  </p>
-                </div>
-              </div>
+              <StaggerItem key={t.title}>
+                <motion.div
+                  whileHover={{ x: 6 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                  className="flex gap-4 rounded-2xl border border-border bg-card p-6 transition-colors hover:border-accent/40"
+                >
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/15">
+                    <Icon className="h-5 w-5 text-accent" />
+                  </span>
+                  <div>
+                    <h3 className="font-medium">{t.title}</h3>
+                    <p className="mt-1 text-pretty text-sm leading-relaxed text-muted-foreground">
+                      {t.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              </StaggerItem>
             )
           })}
-        </div>
+        </Stagger>
       </div>
     </section>
   )

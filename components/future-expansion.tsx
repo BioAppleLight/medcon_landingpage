@@ -5,6 +5,8 @@ import {
   CalendarCheck,
   Activity,
 } from "lucide-react"
+import { motion } from "motion/react"
+import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
 
 const items = [
   {
@@ -37,7 +39,7 @@ const items = [
 export function FutureExpansion() {
   return (
     <section className="px-6 py-20 md:py-28">
-      <div className="mx-auto max-w-3xl text-center">
+      <Reveal className="mx-auto max-w-3xl text-center">
         <span className="text-xs font-medium uppercase tracking-wider text-primary">
           Roadmap
         </span>
@@ -48,27 +50,30 @@ export function FutureExpansion() {
           Recovery videos are just the start. Here&apos;s where the platform is
           headed.
         </p>
-      </div>
+      </Reveal>
 
-      <div className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <Stagger className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => {
           const Icon = item.icon
           return (
-            <div
-              key={item.title}
-              className="rounded-2xl border border-border bg-card p-6"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/15">
-                <Icon className="h-5 w-5 text-accent" />
-              </span>
-              <h3 className="mt-5 font-medium text-balance">{item.title}</h3>
-              <p className="mt-1.5 text-pretty text-sm leading-relaxed text-muted-foreground">
-                {item.desc}
-              </p>
-            </div>
+            <StaggerItem key={item.title}>
+              <motion.div
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                className="h-full rounded-2xl border border-border bg-card p-6 transition-colors hover:border-accent/40"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/15">
+                  <Icon className="h-5 w-5 text-accent" />
+                </span>
+                <h3 className="mt-5 font-medium text-balance">{item.title}</h3>
+                <p className="mt-1.5 text-pretty text-sm leading-relaxed text-muted-foreground">
+                  {item.desc}
+                </p>
+              </motion.div>
+            </StaggerItem>
           )
         })}
-      </div>
+      </Stagger>
     </section>
   )
 }

@@ -7,21 +7,28 @@ const partners = [
 ]
 
 export function Partners() {
+  // duplicate the list so the marquee can loop seamlessly
+  const loop = [...partners, ...partners]
+
   return (
     <section className="px-6 py-16">
       <div className="mx-auto max-w-5xl text-center">
         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Piloting with leading partners
         </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
-          {partners.map((partner) => (
-            <span
-              key={partner}
-              className="text-lg font-medium text-muted-foreground/70 transition-colors hover:text-foreground"
-            >
-              {partner}
-            </span>
-          ))}
+
+        <div className="group relative mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+          <div className="animate-marquee flex w-max items-center gap-x-12 group-hover:[animation-play-state:paused]">
+            {loop.map((partner, i) => (
+              <span
+                key={`${partner}-${i}`}
+                className="whitespace-nowrap text-lg font-medium text-muted-foreground/70 transition-colors hover:text-foreground"
+                aria-hidden={i >= partners.length}
+              >
+                {partner}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -2,7 +2,9 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import { motion, AnimatePresence } from "motion/react"
 import { Check, Stethoscope, GraduationCap, Landmark } from "lucide-react"
+import { Reveal } from "@/components/motion-primitives"
 
 const tabs = [
   {
@@ -52,11 +54,11 @@ export function UseCases() {
 
   return (
     <section id="use-cases" className="px-6 py-20 md:py-28">
-      <div className="mx-auto max-w-3xl text-center">
+      <Reveal className="mx-auto max-w-3xl text-center">
         <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-5xl">
           Built for the industries that can&apos;t afford to get it wrong.
         </h2>
-      </div>
+      </Reveal>
 
       <div className="mx-auto mt-10 max-w-5xl">
         <div className="flex flex-wrap items-center justify-center gap-2">
@@ -68,12 +70,19 @@ export function UseCases() {
                 key={t.id}
                 type="button"
                 onClick={() => setActive(t.id)}
-                className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-colors ${
+                className={`relative inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-colors ${
                   isActive
-                    ? "border-primary bg-primary text-primary-foreground"
+                    ? "border-primary text-primary-foreground"
                     : "border-border bg-card/50 text-muted-foreground hover:text-foreground"
                 }`}
               >
+                {isActive && (
+                  <motion.span
+                    layoutId="usecase-pill"
+                    className="absolute inset-0 -z-10 rounded-full bg-primary"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
                 <Icon className="h-4 w-4" />
                 {t.label}
               </button>
@@ -81,33 +90,50 @@ export function UseCases() {
           })}
         </div>
 
-        <div className="mt-10 grid items-center gap-8 rounded-2xl border border-border bg-card p-6 md:grid-cols-2 md:p-8">
-          <div>
-            <h3 className="text-balance text-2xl font-semibold tracking-tight">
-              {tab.headline}
-            </h3>
-            <ul className="mt-6 flex flex-col gap-4">
-              {tab.points.map((point) => (
-                <li key={point} className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15">
-                    <Check className="h-3 w-3 text-primary" />
-                  </span>
-                  <span className="text-pretty text-muted-foreground">
-                    {point}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="mt-10 grid items-center gap-8 overflow-hidden rounded-2xl border border-border bg-card p-6 md:grid-cols-2 md:p-8">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${tab.id}-text`}
+              initial={{ opacity: 0, x: -16 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 16 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
+              <h3 className="text-balance text-2xl font-semibold tracking-tight">
+                {tab.headline}
+              </h3>
+              <ul className="mt-6 flex flex-col gap-4">
+                {tab.points.map((point) => (
+                  <li key={point} className="flex items-start gap-3">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15">
+                      <Check className="h-3 w-3 text-primary" />
+                    </span>
+                    <span className="text-pretty text-muted-foreground">
+                      {point}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </AnimatePresence>
 
-          <div className="relative aspect-video overflow-hidden rounded-xl border border-border bg-secondary">
-            <Image
-              src={tab.image || "/placeholder.svg"}
-              alt={tab.alt}
-              fill
-              className="object-cover"
-            />
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${tab.id}-img`}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="relative aspect-video overflow-hidden rounded-xl border border-border bg-secondary"
+            >
+              <Image
+                src={tab.image || "/placeholder.svg"}
+                alt={tab.alt}
+                fill
+                className="object-cover"
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </section>

@@ -1,7 +1,9 @@
 "use client"
 
 import { ArrowRight } from "lucide-react"
+import { motion } from "motion/react"
 import { useCountUp } from "@/components/use-count-up"
+import { Reveal } from "@/components/motion-primitives"
 
 function Counter({
   target,
@@ -27,19 +29,28 @@ function Counter({
 export function BeforeAfter() {
   return (
     <section className="px-6 py-20 md:py-28">
-      <div className="mx-auto max-w-5xl text-center">
+      <Reveal className="mx-auto max-w-5xl text-center">
         <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-          One expert. Infinite reach.
+          One expert.{" "}
+          <span className="font-serif italic font-normal text-primary">
+            Infinite reach.
+          </span>
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-pretty text-muted-foreground">
           A single specialist can only be in one place at a time. MyOS removes
           that limit.
         </p>
-      </div>
+      </Reveal>
 
       <div className="mx-auto mt-14 grid max-w-5xl items-center gap-6 md:grid-cols-[1fr_auto_1fr]">
         {/* Before */}
-        <div className="rounded-2xl border border-border bg-card/50 p-8">
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "0px 0px -60px 0px" }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="rounded-2xl border border-border bg-card/50 p-8"
+        >
           <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
             Before MyOS
           </span>
@@ -57,14 +68,26 @@ export function BeforeAfter() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card md:h-14 md:w-14">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.6 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3, ease: "backOut" }}
+          className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card md:h-14 md:w-14"
+        >
           <ArrowRight className="h-5 w-5 text-primary md:h-6 md:w-6" />
-        </div>
+        </motion.div>
 
         {/* After */}
-        <div className="rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/10 to-accent/10 p-8">
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "0px 0px -60px 0px" }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/10 to-accent/10 p-8"
+        >
           <span className="text-xs font-medium uppercase tracking-wider text-primary">
             After MyOS
           </span>
@@ -84,7 +107,7 @@ export function BeforeAfter() {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
