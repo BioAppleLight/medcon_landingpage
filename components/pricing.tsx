@@ -1,0 +1,83 @@
+import { Check } from "lucide-react"
+import { buttonVariants } from "@/components/ui/button"
+
+const plans = [
+  {
+    name: "Pilot",
+    desc: "Test the waters with a single avatar.",
+    features: ["1 doctor avatar", "3 recovery videos", "Email support"],
+    cta: "Start a Pilot",
+    featured: false,
+  },
+  {
+    name: "Department",
+    desc: "Roll out across a clinical team.",
+    features: ["3–5 avatars", "10–20 videos", "Priority support"],
+    cta: "Book Department Demo",
+    featured: true,
+  },
+  {
+    name: "Enterprise",
+    desc: "Full deployment across a health system.",
+    features: [
+      "Unlimited avatars & videos",
+      "API access",
+      "FAQ assistant",
+    ],
+    cta: "Talk to Sales",
+    featured: false,
+  },
+]
+
+export function Pricing() {
+  return (
+    <section id="pricing" className="px-6 py-20 md:py-28">
+      <div className="mx-auto max-w-3xl text-center">
+        <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-5xl">
+          Start small. Scale fast.
+        </h2>
+        <p className="mt-4 text-muted-foreground">
+          Ideal for hospitals and health systems.
+        </p>
+      </div>
+
+      <div className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
+        {plans.map((plan) => (
+          <div
+            key={plan.name}
+            className={`relative flex flex-col rounded-2xl border p-8 ${
+              plan.featured
+                ? "border-primary bg-gradient-to-b from-primary/10 to-card"
+                : "border-border bg-card"
+            }`}
+          >
+            {plan.featured && (
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
+                Most popular
+              </span>
+            )}
+            <h3 className="text-lg font-medium">{plan.name}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">{plan.desc}</p>
+            <ul className="mt-6 flex flex-1 flex-col gap-3">
+              {plan.features.map((feature) => (
+                <li key={feature} className="flex items-center gap-3 text-sm">
+                  <Check className="h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-muted-foreground">{feature}</span>
+                </li>
+              ))}
+            </ul>
+            <a
+              href="#book-demo"
+              className={buttonVariants({
+                variant: plan.featured ? "default" : "outline",
+                className: "mt-8 h-10",
+              })}
+            >
+              {plan.cta}
+            </a>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
