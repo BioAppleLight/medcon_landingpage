@@ -47,18 +47,20 @@ export function Pillars() {
                 transition={{ type: "spring", stiffness: 300, damping: 22 }}
                 className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card p-8 transition-colors hover:border-primary/40"
               >
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15 transition-transform group-hover:scale-110">
-                  <Icon className="h-5 w-5 text-primary" />
-                </span>
+                <div className="flex items-start justify-between">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15 transition-transform group-hover:scale-110">
+                    <Icon className="h-5 w-5 text-primary" />
+                  </span>
+                  <span className="pointer-events-none text-4xl font-semibold leading-none text-border/60 transition-colors group-hover:text-primary/20">
+                    {p.n}
+                  </span>
+                </div>
                 <h3 className="mt-6 text-lg font-medium text-balance">
                   {p.title}
                 </h3>
                 <p className="mt-2 text-pretty leading-relaxed text-muted-foreground">
                   {p.desc}
                 </p>
-                <span className="pointer-events-none absolute bottom-5 right-5 text-5xl font-semibold leading-none text-border/60 transition-colors group-hover:text-primary/20">
-                  {p.n}
-                </span>
               </motion.div>
             </StaggerItem>
           )
