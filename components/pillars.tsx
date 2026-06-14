@@ -56,7 +56,7 @@ export function Pillars() {
                 <p className="mt-2 text-pretty leading-relaxed text-muted-foreground">
                   {p.desc}
                 </p>
-                <span className="pointer-events-none absolute -bottom-4 right-4 text-6xl font-semibold text-border/60 transition-colors group-hover:text-primary/20">
+                <span className="pointer-events-none absolute bottom-5 right-5 text-5xl font-semibold leading-none text-border/60 transition-colors group-hover:text-primary/20">
                   {p.n}
                 </span>
               </motion.div>
