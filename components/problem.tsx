@@ -1,22 +1,22 @@
 "use client"
 
-import { Banknote, Brain, MousePointerClick } from "lucide-react"
+import { Hourglass, DoorOpen, BookX } from "lucide-react"
 import { motion } from "motion/react"
 import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
 
 const problems = [
   {
-    icon: Banknote,
+    icon: Hourglass,
     title: "Expert time is scarce and expensive",
     desc: "Top specialists cost thousands per hour, leaving learners and patients without access to the expertise they need.",
   },
   {
-    icon: Brain,
+    icon: DoorOpen,
     title: "Knowledge walks out the door",
     desc: "When an experienced expert retires or leaves, decades of hard-won institutional knowledge disappears with them.",
   },
   {
-    icon: MousePointerClick,
+    icon: BookX,
     title: "Passive content doesn't stick",
     desc: "Static textbooks, recorded lectures, and discharge sheets fail because there's no interactive engagement.",
   },
