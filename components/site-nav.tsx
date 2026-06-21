@@ -1,8 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Compass, Menu, X } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
+import { BrandLogo } from "@/components/brand-logo"
+import { BOOKING_URL } from "@/lib/site"
 
 const links = [
   { label: "Product", href: "#product" },
@@ -32,11 +34,11 @@ export function SiteNav() {
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <a href="#" className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Compass className="h-5 w-5 text-primary-foreground" />
+        <a href="#" className="flex items-center gap-2.5" aria-label="MYO'S home">
+          <BrandLogo className="h-8 w-8" />
+          <span className="text-lg font-semibold tracking-tight">
+            MYO&apos;S
           </span>
-          <span className="text-lg font-semibold tracking-tight">MyOS</span>
         </a>
 
         <div className="hidden items-center gap-8 md:flex">
@@ -53,7 +55,9 @@ export function SiteNav() {
 
         <div className="hidden md:block">
           <a
-            href="#book-demo"
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className={buttonVariants({ className: "h-9 px-4" })}
           >
             Book Demo
@@ -84,7 +88,9 @@ export function SiteNav() {
               </a>
             ))}
             <a
-              href="#book-demo"
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setOpen(false)}
               className={buttonVariants({ className: "h-9 px-4" })}
             >

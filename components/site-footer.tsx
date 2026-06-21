@@ -1,4 +1,5 @@
-import { Compass, Mail, MapPin, Phone, Globe } from "lucide-react"
+import { Mail, MapPin, Phone, Globe } from "lucide-react"
+import { BrandLogo } from "@/components/brand-logo"
 
 const linkGroups = [
   { label: "Product", href: "#product" },
@@ -13,11 +14,11 @@ export function SiteFooter() {
     <footer className="border-t border-border px-6 py-14">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 md:flex-row md:items-start md:justify-between">
         <div>
-          <a href="#" className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <Compass className="h-5 w-5 text-primary-foreground" />
+          <a href="#" className="flex items-center gap-2.5" aria-label="MYO'S home">
+            <BrandLogo className="h-8 w-8" />
+            <span className="text-lg font-semibold tracking-tight">
+              MYO&apos;S
             </span>
-            <span className="text-lg font-semibold tracking-tight">MyOS</span>
           </a>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
             The Expert AI Platform. Turn your best experts into AI colleagues,

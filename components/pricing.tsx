@@ -4,6 +4,7 @@ import { Check } from "lucide-react"
 import { motion } from "motion/react"
 import { buttonVariants } from "@/components/ui/button"
 import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
+import { BOOKING_URL } from "@/lib/site"
 
 const plans = [
   {
@@ -96,7 +97,9 @@ export function Pricing() {
                 ))}
               </ul>
               <a
-                href="#book-demo"
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={buttonVariants({
                   variant: plan.featured ? "default" : "outline",
                   className: "mt-8 h-10",

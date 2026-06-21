@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Play, Calendar, Stethoscope, GraduationCap, Landmark } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
+import { BOOKING_URL } from "@/lib/site"
 
 const scenarios = [
   {
@@ -80,7 +81,9 @@ export function Hero() {
             Watch Live Demo
           </a>
           <a
-            href="#book-demo"
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className={buttonVariants({
               variant: "outline",
               className:

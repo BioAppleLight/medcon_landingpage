@@ -3,6 +3,7 @@
 import { Play, Calendar } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { Reveal } from "@/components/motion-primitives"
+import { BOOKING_URL } from "@/lib/site"
 
 export function FinalCta() {
   return (
@@ -19,7 +20,9 @@ export function FinalCta() {
         </h2>
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
-            href="mailto:mmedcon@gmail.com"
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className={buttonVariants({
               className:
                 "h-11 gap-2 px-6 text-base transition-transform hover:-translate-y-0.5",
