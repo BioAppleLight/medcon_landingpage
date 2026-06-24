@@ -1,9 +1,9 @@
 const partners = [
-  "Burjeel Hospital",
-  "NYUAD ARC",
-  "Presight",
-  "Khalifa Fund",
-  "Marina Health",
+  "Bory Hospital",
+  "Roosevelt Hospital",
+  "University Hospital of Bratislava",
+  "Kramáre Hospital",
+  "Navan Clinic",
 ]
 
 export function Partners() {
@@ -14,7 +14,7 @@ export function Partners() {
     <section className="px-6 py-16">
       <div className="mx-auto max-w-5xl text-center">
         <p className="eyebrow">
-          Piloting with leading partners
+          Pilot partners who showed interest
         </p>
 
         <div className="group relative mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
