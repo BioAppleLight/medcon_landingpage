@@ -1,3 +1,4 @@
+import { AdaptiveProvider } from "@/components/adaptive-provider"
 import { SiteNav } from "@/components/site-nav"
 import { Hero } from "@/components/hero"
 import { Partners } from "@/components/partners"
@@ -21,8 +22,9 @@ import { SiteFooter } from "@/components/site-footer"
 
 export default function Page() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <SiteNav />
+    <AdaptiveProvider>
+      <main className="min-h-screen bg-background text-foreground">
+        <SiteNav />
       <Hero />
       <Partners />
       <Problem />
@@ -42,6 +44,7 @@ export default function Page() {
       <Team />
       <FinalCta />
       <SiteFooter />
-    </main>
+      </main>
+    </AdaptiveProvider>
   )
 }
