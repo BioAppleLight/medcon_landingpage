@@ -65,6 +65,15 @@ export function SiteNav() {
             Reset Chat
           </button>
           <a
+            href="/chat"
+            className={buttonVariants({
+              variant: "outline",
+              className: "h-9 px-4",
+            })}
+          >
+            Launch App
+          </a>
+          <a
             href={BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
@@ -108,6 +117,16 @@ export function SiteNav() {
               <RotateCcw className="h-3.5 w-3.5" />
               Reset Chat
             </button>
+            <a
+              href="/chat"
+              onClick={() => setOpen(false)}
+              className={buttonVariants({
+                variant: "outline",
+                className: "h-9 px-4",
+              })}
+            >
+              Launch App
+            </a>
             <a
               href={BOOKING_URL}
               target="_blank"
