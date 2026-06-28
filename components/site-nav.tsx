@@ -65,7 +65,7 @@ export function SiteNav() {
             Reset Chat
           </button>
           <a
-            href="/chat"
+            href="/"
             className={buttonVariants({
               variant: "outline",
               className: "h-9 px-4",
@@ -118,7 +118,7 @@ export function SiteNav() {
               Reset Chat
             </button>
             <a
-              href="/chat"
+              href="/"
               onClick={() => setOpen(false)}
               className={buttonVariants({
                 variant: "outline",

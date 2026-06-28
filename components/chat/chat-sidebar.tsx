@@ -1,13 +1,14 @@
 "use client"
 
 import { MessageSquarePlus, Compass, Clock, Settings, LogOut } from "lucide-react"
+import Link from "next/link"
 import { BrandLogo } from "@/components/brand-logo"
 
 const NAV = [
-  { icon: MessageSquarePlus, label: "New chat" },
-  { icon: Compass, label: "Explore experts" },
-  { icon: Clock, label: "History" },
-  { icon: Settings, label: "Settings" },
+  { icon: MessageSquarePlus, label: "New chat", href: undefined },
+  { icon: Compass, label: "Explore experts", href: "/about" },
+  { icon: Clock, label: "History", href: undefined },
+  { icon: Settings, label: "Settings", href: undefined },
 ]
 
 export function ChatSidebar({ onNewChat }: { onNewChat: () => void }) {
@@ -19,6 +20,21 @@ export function ChatSidebar({ onNewChat }: { onNewChat: () => void }) {
         <nav className="flex flex-col items-center gap-1">
           {NAV.map((item, i) => {
             const Icon = item.icon
+            const className =
+              "flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            if (item.href) {
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  aria-label={item.label}
+                  title={item.label}
+                  className={className}
+                >
+                  <Icon className="h-5 w-5" />
+                </Link>
+              )
+            }
             return (
               <button
                 key={item.label}
@@ -26,7 +42,7 @@ export function ChatSidebar({ onNewChat }: { onNewChat: () => void }) {
                 onClick={i === 0 ? onNewChat : undefined}
                 aria-label={item.label}
                 title={item.label}
-                className="flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                className={className}
               >
                 <Icon className="h-5 w-5" />
               </button>
