@@ -9,6 +9,7 @@ import {
   cloneElement,
   type ReactNode,
   type CSSProperties,
+  type ElementType,
 } from "react"
 
 /**
@@ -76,10 +77,9 @@ export function Reveal({
     willChange: mounted ? "opacity, transform" : undefined,
   }
 
-  const Tag = as as keyof JSX.IntrinsicElements
+  const Tag = as as ElementType
 
   return (
-    // @ts-expect-error -- ref typing across the union of tags is fine at runtime
     <Tag ref={ref} className={className} style={style}>
       {children}
     </Tag>
@@ -130,12 +130,11 @@ export function Stagger({
   }, [])
 
   const hidden = mounted && !shown
-  const Tag = as as keyof JSX.IntrinsicElements
+  const Tag = as as ElementType
 
   const items = Children.toArray(children)
 
   return (
-    // @ts-expect-error -- ref typing across the union of tags is fine at runtime
     <Tag ref={ref} className={className}>
       {items.map((child, i) => {
         const style: CSSProperties = {
@@ -175,9 +174,6 @@ export function StaggerItem({
   className?: string
   as?: "div" | "li"
 }) {
-  const Tag = as as keyof JSX.IntrinsicElements
-  return (
-    // @ts-expect-error -- union tag typing is fine at runtime
-    <Tag className={className}>{children}</Tag>
-  )
+  const Tag = as as ElementType
+  return <Tag className={className}>{children}</Tag>
 }

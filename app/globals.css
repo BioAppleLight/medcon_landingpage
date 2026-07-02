@@ -190,6 +190,23 @@
   }
 }
 
+@keyframes chat-question-pop {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  12%,
+  62% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  78% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+}
+
 .animate-rise {
   animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -219,12 +236,17 @@
   animation: marquee 28s linear infinite;
 }
 
+.animate-chat-question-pop {
+  animation: chat-question-pop 7s cubic-bezier(0.22, 1, 0.36, 1) infinite both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .animate-float-slow,
-  .animate-marquee {
+  .animate-marquee,
+  .animate-chat-question-pop {
     animation: none;
   }
   .animate-rise,

@@ -4,52 +4,17 @@ import { useState } from "react"
 import Image from "next/image"
 import { Check, Stethoscope, GraduationCap, Landmark } from "lucide-react"
 import { Reveal } from "@/components/motion-primitives"
+import { useCases, type UseCaseId } from "@/lib/use-cases"
 
-const tabs = [
-  {
-    id: "healthcare",
-    label: "Healthcare",
-    icon: Stethoscope,
-    headline: "AI doctor avatars for post-surgery recovery.",
-    points: [
-      "Personalized video guidance for rehab exercises",
-      "Patients ask questions and get answers any time",
-      "Automatic red-flag alerts escalate to real clinicians",
-    ],
-    image: "/demos/healthcare-demo.png",
-    alt: "AI doctor avatar guiding a patient through recovery exercises",
-  },
-  {
-    id: "education",
-    label: "Education",
-    icon: GraduationCap,
-    headline: "AI professor avatars that never stop teaching.",
-    points: [
-      "Answer student questions with cited sources",
-      "Adapt to each professor's teaching style",
-      "Available across time zones and languages",
-    ],
-    image: "/demos/education-demo.png",
-    alt: "AI professor avatar answering a student's question",
-  },
-  {
-    id: "government",
-    label: "Government",
-    icon: Landmark,
-    headline: "AI training assistants for compliance at scale.",
-    points: [
-      "Run oral assessments and certification prep",
-      "Deliver consistent training to entire departments",
-      "Supports multiple languages out of the box",
-    ],
-    image: "/demos/government-demo.png",
-    alt: "AI government training assistant running an oral assessment",
-  },
-]
+const icons = {
+  "graduation-cap": GraduationCap,
+  landmark: Landmark,
+  stethoscope: Stethoscope,
+}
 
 export function UseCases() {
-  const [active, setActive] = useState(tabs[0].id)
-  const tab = tabs.find((t) => t.id === active)!
+  const [active, setActive] = useState<UseCaseId>(useCases[0].id)
+  const tab = useCases.find((useCase) => useCase.id === active)!
 
   return (
     <section id="use-cases" className="px-6 py-20 md:py-28">
@@ -60,32 +25,45 @@ export function UseCases() {
       </Reveal>
 
       <div className="mx-auto mt-10 max-w-5xl">
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          {tabs.map((t) => {
-            const Icon = t.icon
-            const isActive = t.id === active
+        <div
+          role="tablist"
+          aria-label="Use case industries"
+          className="flex flex-wrap items-center justify-center gap-2"
+        >
+          {useCases.map((useCase) => {
+            const Icon = icons[useCase.icon]
+            const isActive = useCase.id === active
             return (
               <button
-                key={t.id}
+                key={useCase.id}
                 type="button"
-                onClick={() => setActive(t.id)}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`${useCase.id}-panel`}
+                onClick={() => setActive(useCase.id)}
+                onMouseEnter={() => setActive(useCase.id)}
+                onFocus={() => setActive(useCase.id)}
                 className={`relative inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-colors ${
                   isActive
                     ? "border-primary text-primary-foreground"
-                    : "border-border bg-card/50 text-muted-foreground hover:text-foreground"
+                    : "border-border bg-card/50 text-muted-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-foreground"
                 }`}
               >
                 {isActive && (
                   <span className="absolute inset-0 -z-10 rounded-full bg-primary" />
                 )}
                 <Icon className="h-4 w-4" />
-                {t.label}
+                {useCase.label}
               </button>
             )
           })}
         </div>
 
-        <div className="mt-10 grid items-center gap-8 overflow-hidden rounded-2xl border border-border bg-card p-6 md:grid-cols-2 md:p-8">
+        <div
+          id={`${tab.id}-panel`}
+          role="tabpanel"
+          className="mt-10 grid items-center gap-8 overflow-hidden rounded-2xl border border-border bg-card p-6 md:grid-cols-2 md:p-8"
+        >
           <div key={`${tab.id}-text`} className="animate-fade-in">
             <h3 className="text-balance text-2xl font-semibold tracking-tight">
               {tab.headline}

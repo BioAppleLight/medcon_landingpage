@@ -35,7 +35,7 @@ export default function Page() {
       <CoreTech />
       <ComparisonSlider />
       <BusinessModel />
-      <Pricing />
+      <Pricing showModelDiagram={false} />
       <ImplementationTimeline />
       <FutureExpansion />
       <MetricsStrip />

@@ -1,0 +1,144 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">UAE AI skyline</title>
+  <desc id="desc">A bright purple UAE AI skyline with a Burj Khalifa silhouette, digital map, orbit rings, and an upward growth arrow.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#fbf9ff"/>
+      <stop offset="1" stop-color="#e7dcff"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a291ff"/>
+      <stop offset="0.48" stop-color="#7056e8"/>
+      <stop offset="1" stop-color="#3d2b98"/>
+    </linearGradient>
+    <linearGradient id="softPurple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a793ff" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#6347d8" stop-opacity="0.46"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="52%" cy="32%" r="54%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.34" stop-color="#ffffff" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#cbbdff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cityGlow" cx="50%" cy="83%" r="46%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="0.5" stop-color="#e5dcff" stop-opacity="0.48"/>
+      <stop offset="1" stop-color="#c7b5ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurGlow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#6047dd" flood-opacity="0.22"/>
+    </filter>
+    <pattern id="dotGrid" width="9" height="9" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.45" fill="#927cff" opacity="0.42"/>
+    </pattern>
+    <pattern id="fineDots" width="7" height="7" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1.05" fill="#b3a4ff" opacity="0.42"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#centerGlow)"/>
+  <rect width="1200" height="900" fill="url(#cityGlow)"/>
+
+  <g opacity="0.58">
+    <path d="M196 261C300 183 464 184 570 242C497 292 411 311 322 296C272 288 232 278 196 261Z" fill="url(#fineDots)"/>
+    <path d="M660 58C735 21 841 8 929 30C1003 49 1054 91 1094 150C1052 216 993 260 912 286C822 314 725 303 641 253C606 232 574 202 548 166C572 116 611 83 660 58Z" fill="url(#dotGrid)"/>
+    <path d="M541 191C614 238 698 260 796 254C752 304 670 325 582 305C509 288 448 253 401 204C442 180 493 170 541 191Z" fill="url(#fineDots)" opacity="0.8"/>
+  </g>
+
+  <g fill="none" stroke="#9f8aff" stroke-linecap="round">
+    <circle cx="680" cy="268" r="82" opacity="0.42"/>
+    <circle cx="680" cy="268" r="124" opacity="0.34"/>
+    <circle cx="680" cy="268" r="166" opacity="0.28"/>
+    <circle cx="680" cy="268" r="208" opacity="0.18"/>
+    <path d="M494 272C582 194 775 183 889 270" opacity="0.36"/>
+    <path d="M457 314C570 226 805 218 944 314" opacity="0.32"/>
+    <path d="M418 357C559 262 850 254 1002 364" opacity="0.24"/>
+    <path d="M560 155C613 251 744 329 866 284" stroke-dasharray="4 9" opacity="0.54"/>
+    <path d="M497 370C614 438 818 428 970 311" stroke-dasharray="4 10" opacity="0.34"/>
+  </g>
+
+  <g fill="#ffffff" opacity="0.96" filter="url(#blurGlow)">
+    <circle cx="450" cy="240" r="11"/>
+    <circle cx="684" cy="404" r="15"/>
+    <circle cx="986" cy="337" r="12"/>
+    <circle cx="858" cy="154" r="9"/>
+  </g>
+  <g fill="#ffffff" opacity="0.88">
+    <circle cx="450" cy="240" r="5"/>
+    <circle cx="684" cy="404" r="7"/>
+    <circle cx="986" cy="337" r="5"/>
+    <circle cx="858" cy="154" r="4"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <text x="578" y="336" fill="url(#purple)" font-family="Arial, Helvetica, sans-serif" font-size="176" font-weight="900" letter-spacing="-8">AI</text>
+  </g>
+
+  <path d="M382 725C575 658 774 531 1041 371" stroke="#9278ff" stroke-width="16" stroke-linecap="round" opacity="0.55"/>
+  <path d="M1021 358L1094 315L1076 398Z" fill="#9278ff" opacity="0.68"/>
+
+  <g transform="translate(0 170)">
+    <path d="M0 642H1200V730H0V642Z" fill="#cabdff" opacity="0.2"/>
+    <path d="M0 650C139 624 275 639 424 657C611 678 785 650 961 635C1054 627 1137 629 1200 642V730H0V650Z" fill="#8d76ff" opacity="0.16"/>
+    <path d="M0 720C203 704 361 715 528 724C704 733 868 710 1200 718V730H0V720Z" fill="#ffffff" opacity="0.42"/>
+
+    <g fill="url(#softPurple)" stroke="#a999ff" stroke-width="1.6">
+      <rect x="22" y="586" width="32" height="134"/>
+      <path d="M24 586L38 538L52 586H24Z"/>
+      <rect x="74" y="612" width="42" height="108"/>
+      <path d="M78 612L96 574L112 612H78Z"/>
+      <rect x="140" y="600" width="48" height="120"/>
+      <path d="M145 600L164 552L184 600H145Z"/>
+      <rect x="208" y="558" width="54" height="162"/>
+      <path d="M215 558L235 504L256 558H215Z"/>
+      <rect x="287" y="596" width="55" height="124"/>
+      <path d="M297 596L317 552L336 596H297Z"/>
+      <rect x="374" y="570" width="38" height="150"/>
+      <path d="M380 570L394 526L406 570H380Z"/>
+      <rect x="628" y="558" width="66" height="162"/>
+      <path d="M640 558L674 510L688 558H640Z"/>
+      <rect x="722" y="616" width="56" height="104"/>
+      <path d="M731 616L753 578L772 616H731Z"/>
+      <rect x="812" y="589" width="45" height="131"/>
+      <path d="M820 589L837 538L852 589H820Z"/>
+      <rect x="874" y="548" width="80" height="172"/>
+      <path d="M889 548L926 491L946 548H889Z"/>
+      <rect x="984" y="600" width="66" height="120"/>
+      <path d="M996 600L1020 548L1044 600H996Z"/>
+      <rect x="1074" y="566" width="73" height="154"/>
+      <path d="M1088 566L1120 512L1140 566H1088Z"/>
+    </g>
+
+    <g fill="url(#purple)" stroke="#b6a8ff" stroke-width="1.8">
+      <path d="M493 710H585V454H493V710Z"/>
+      <path d="M514 454H566V322H514V454Z"/>
+      <path d="M528 322H553V194H528V322Z"/>
+      <path d="M537 194H547V82H537V194Z"/>
+      <path d="M542 82H546V0H542V82Z"/>
+      <path d="M464 710H504V590H464V710Z"/>
+      <path d="M580 710H622V590H580V710Z"/>
+      <path d="M444 710H470V650H444V710Z"/>
+      <path d="M618 710H646V642H618V710Z"/>
+      <path d="M478 590H509V534H478V590Z"/>
+      <path d="M570 590H603V528H570V590Z"/>
+    </g>
+
+    <g stroke="#ffffff" stroke-opacity="0.42" stroke-width="2">
+      <path d="M506 493H574"/>
+      <path d="M499 542H582"/>
+      <path d="M493 600H586"/>
+      <path d="M489 657H589"/>
+      <path d="M216 596H254"/>
+      <path d="M639 602H686"/>
+      <path d="M886 590H940"/>
+      <path d="M1088 614H1138"/>
+    </g>
+  </g>
+
+  <rect x="0" y="0" width="1200" height="900" fill="url(#centerGlow)" opacity="0.16"/>
+</svg>

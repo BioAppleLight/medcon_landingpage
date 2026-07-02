@@ -1,6 +1,6 @@
 "use client"
 
-import { Hourglass, DoorOpen, BookX } from "lucide-react"
+import { FileLock2, Hourglass, DoorOpen, BookX } from "lucide-react"
 import { motion } from "motion/react"
 import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
 
@@ -19,6 +19,11 @@ const problems = [
     icon: BookX,
     title: "Passive content doesn't stick",
     desc: "Static textbooks, recorded lectures, and discharge sheets fail because there's no interactive engagement.",
+  },
+  {
+    icon: FileLock2,
+    title: "Critical knowledge gets trapped",
+    desc: "Organizations lose critical knowledge when employees retire, experts leave, teams are restructured, and institutional knowledge remains trapped in documents.",
   },
 ]
 
@@ -41,7 +46,7 @@ export function Problem() {
         </p>
       </Reveal>
 
-      <Stagger className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
+      <Stagger className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-2 lg:grid-cols-4">
         {problems.map((p) => {
           const Icon = p.icon
           return (

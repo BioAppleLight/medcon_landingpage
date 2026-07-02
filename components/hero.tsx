@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Play, Calendar, Stethoscope, GraduationCap, Landmark } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
+import { openNextDemo } from "@/lib/demo-links"
 import { BOOKING_URL } from "@/lib/site"
 
 const scenarios = [
@@ -70,8 +71,9 @@ export function Hero() {
         </p>
 
         <div className="animate-rise mt-9 flex flex-col items-center justify-center gap-3 [animation-delay:0.25s] sm:flex-row">
-          <a
-            href="#demos"
+          <button
+            type="button"
+            onClick={openNextDemo}
             className={buttonVariants({
               className:
                 "h-11 gap-2 px-6 text-base transition-transform hover:-translate-y-0.5",
@@ -79,7 +81,7 @@ export function Hero() {
           >
             <Play className="h-4 w-4" />
             Watch Live Demo
-          </a>
+          </button>
           <a
             href={BOOKING_URL}
             target="_blank"

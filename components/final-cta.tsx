@@ -3,6 +3,7 @@
 import { Play, Calendar } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { Reveal } from "@/components/motion-primitives"
+import { openNextDemo } from "@/lib/demo-links"
 import { BOOKING_URL } from "@/lib/site"
 
 export function FinalCta() {
@@ -31,8 +32,9 @@ export function FinalCta() {
             <Calendar className="h-4 w-4" />
             Book a Demo
           </a>
-          <a
-            href="#demos"
+          <button
+            type="button"
+            onClick={openNextDemo}
             className={buttonVariants({
               variant: "outline",
               className:
@@ -41,7 +43,7 @@ export function FinalCta() {
           >
             <Play className="h-4 w-4" />
             Watch It Work
-          </a>
+          </button>
         </div>
       </Reveal>
     </section>

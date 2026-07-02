@@ -1,9 +1,25 @@
+import Image from "next/image"
 const partners = [
-  "Bory Hospital",
-  "Roosevelt Hospital",
-  "University Hospital of Bratislava",
-  "Kramáre Hospital",
-  "Navan Clinic",
+  {
+    name: "Bory Hospital",
+    image: "/partners/bory-hospital.png",
+  },
+  {
+    name: "F.D. Roosevelt University Hospital With Policlinic Banska Bystrica",
+    image: "/partners/roosevelt-hospital1.png",
+  },
+  {
+    name: "University Hospital of Bratislava",
+    image: "/partners/university-hospital1.png",
+  },
+  {
+    name: "Kramáre Hospital",
+    image: "/partners/kramare-hospital.png",
+  },
+  {
+    name: "Navan Clinic",
+    image: "/partners/navan-clinic.png",
+  },
 ]
 
 export function Partners() {
@@ -14,18 +30,29 @@ export function Partners() {
     <section className="px-6 py-16">
       <div className="mx-auto max-w-5xl text-center">
         <p className="eyebrow">
-          Pilot partners who showed interest
+          Trusted by Hospitals and Clinics
         </p>
 
         <div className="group relative mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
           <div className="animate-marquee flex w-max items-center gap-x-12 group-hover:[animation-play-state:paused]">
             {loop.map((partner, i) => (
               <span
-                key={`${partner}-${i}`}
-                className="whitespace-nowrap text-lg font-medium text-muted-foreground/70 transition-colors hover:text-foreground"
+                key={`${partner.name}-${i}`}
+                className="flex items-center gap-3 whitespace-nowrap text-lg font-medium text-muted-foreground/70 transition-colors hover:text-foreground"
                 aria-hidden={i >= partners.length}
               >
-                {partner}
+                <Image
+                  src={partner.image}
+                  alt={partner.name}
+                  width={100}
+                  height={56}
+                  className={
+                    partner.name === "Navan Clinic"
+                      ? "h-14 w-14 rounded-full object-cover opacity-90 transition-opacity hover:opacity-100"
+                      : "h-14 w-auto object-contain opacity-90 transition-opacity hover:opacity-100"
+                  }
+                />
+                {partner.name !== "Kramáre Hospital" && partner.name !== "Bory Hospital" && partner.name}
               </span>
             ))}
           </div>
@@ -34,3 +61,4 @@ export function Partners() {
     </section>
   )
 }
+  

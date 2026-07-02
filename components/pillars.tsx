@@ -1,7 +1,8 @@
 "use client"
 
-import { UserRound, Database, Globe } from "lucide-react"
+import { Check, UserRound, Database, Globe } from "lucide-react"
 import { motion } from "motion/react"
+import { BrandLogo } from "@/components/brand-logo"
 import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
 
 const pillars = [
@@ -23,6 +24,13 @@ const pillars = [
     title: "Subscribe anytime, anywhere, any language",
     desc: "Learners and patients reach the expert across time zones and languages, in English, Arabic, or both.",
   },
+]
+
+const knowledgeOutcomes = [
+  "Preserve expertise",
+  "Accelerate onboarding",
+  "Improve training",
+  "Enable knowledge access at scale",
 ]
 
 export function Pillars() {
@@ -66,6 +74,41 @@ export function Pillars() {
           )
         })}
       </Stagger>
+
+      <Reveal className="mx-auto mt-12 max-w-5xl rounded-2xl border border-primary/25 bg-card p-6 shadow-xl shadow-primary/5 md:p-8">
+        <div className="grid gap-6 md:grid-cols-[auto_1fr] md:items-center">
+          <div className="flex items-center gap-4">
+            <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-border bg-background">
+              <BrandLogo className="h-10 w-10" />
+            </span>
+            <div className="md:hidden">
+              <p className="text-lg font-semibold tracking-tight">MYO&apos;S</p>
+              <p className="text-sm text-muted-foreground">
+                Organizational knowledge, made interactive.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-balance text-2xl font-semibold tracking-tight md:text-3xl">
+              MyOS transforms organizational knowledge into interactive AI
+              avatars that:
+            </h3>
+            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+              {knowledgeOutcomes.map((outcome) => (
+                <li key={outcome} className="flex items-center gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/15">
+                    <Check className="h-4 w-4 text-primary" />
+                  </span>
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {outcome}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Reveal>
     </section>
   )
 }

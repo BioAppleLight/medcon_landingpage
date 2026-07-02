@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { motion } from "motion/react"
 import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
 
@@ -13,15 +14,32 @@ const team = [
   { name: "Prof. Dr. Charmayne M. L. Hughes", role: "Advisor" },
 ]
 
-const mentors = [
-  "Yale",
-  "New York University",
-  "Charles University",
-  "TU Berlin",
-  "University of Amsterdam",
-  "NIMHANS",
-  "Czech Technical University",
-  "Comenius University",
+type Mentor = {
+  name: string
+  logo?: string
+  width?: number
+  height?: number
+  className?: string
+}
+
+const mentors: Mentor[] = [
+  {
+    name: "Yale",
+    logo: "/institutions/Yale-University-Logo-Vector.png",
+    width: 188,
+    height: 30,
+    className: "h-12",
+  },
+  {
+    name: "New York University",
+    logo: "/institutions/nyu-logo.svg",
+  },
+  { name: "Charles University" },
+  { name: "TU Berlin" },
+  { name: "University of Amsterdam" },
+  { name: "NIMHANS" },
+  { name: "Czech Technical University" },
+  { name: "Comenius University" },
 ]
 
 function initials(name: string) {
@@ -74,12 +92,21 @@ export function Team() {
           Mentored by experts from leading institutions
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
-          {mentors.map((m) => (
-            <span
-              key={m}
-              className="text-sm font-medium text-muted-foreground/70 transition-colors hover:text-foreground"
-            >
-              {m}
+          {mentors.map((mentor) => (
+            <span key={mentor.name}>
+              {mentor.logo ? (
+                <Image
+                  src={mentor.logo}
+                  alt={`${mentor.name} logo`}
+                  width={mentor.width ?? 110}
+                  height={mentor.height ?? 36}
+                  className={`${mentor.className ?? "h-9"} w-auto opacity-75 transition-opacity hover:opacity-100`}
+                />
+              ) : (
+                <span className="text-sm font-medium text-muted-foreground/70 transition-colors hover:text-foreground">
+                  {mentor.name}
+                </span>
+              )}
             </span>
           ))}
         </div>
