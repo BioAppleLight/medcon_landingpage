@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { Check, Stethoscope, GraduationCap, Landmark } from "lucide-react"
 import { Reveal } from "@/components/motion-primitives"
 import { useCases, type UseCaseId } from "@/lib/use-cases"
@@ -80,6 +81,12 @@ export function UseCases() {
                 </li>
               ))}
             </ul>
+            <Link
+              href={`/use-cases/${tab.id}`}
+              className="mt-8 inline-flex text-sm font-semibold text-[#9d8cff] transition-colors hover:text-[#c4b8ff]"
+            >
+              Learn More
+            </Link>
           </div>
 
           <div

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Play, Calendar, Stethoscope, GraduationCap, Landmark } from "lucide-react"
+import { BrandLogo } from "@/components/brand-logo"
 import { buttonVariants } from "@/components/ui/button"
 import { openNextDemo } from "@/lib/demo-links"
 import { BOOKING_URL } from "@/lib/site"
@@ -55,12 +56,15 @@ export function Hero() {
       </div>
 
       <div className="mx-auto max-w-4xl text-center">
-        <span className="eyebrow animate-rise mx-auto">
-          AI expert avatars
-        </span>
-        <h1 className="animate-rise mt-6 text-balance text-5xl font-semibold leading-[1.03] md:text-7xl [animation-delay:0.05s]">
+        <div className="animate-rise mx-auto inline-flex items-center justify-center gap-4">
+          <BrandLogo className="h-14 w-14 md:h-20 md:w-20" />
+          <span className="text-5xl font-semibold leading-[1.03] tracking-tight md:text-7xl">
+            MYO&apos;S
+          </span>
+        </div>
+        <h1 className="animate-rise mt-16 text-balance text-5xl font-semibold leading-[1.03] md:text-7xl [animation-delay:0.05s]">
           Every expert,{" "}
-          <span className="font-serif italic font-normal text-primary">
+          <span className="bg-gradient-to-br from-[#7c5cfc] via-[#5b7cff] to-[#4db6e8] bg-clip-text font-serif italic font-normal text-transparent drop-shadow-[0_0_18px_rgba(124,92,252,0.5)]">
             available 24/7.
           </span>
         </h1>

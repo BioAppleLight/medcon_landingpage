@@ -224,6 +224,15 @@
   }
 }
 
+@keyframes network-flow {
+  from {
+    stroke-dashoffset: 96;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 .animate-grow-line {
   animation: grow-line 1.4s ease-in-out both;
 }
@@ -238,6 +247,13 @@
 
 .animate-chat-question-pop {
   animation: chat-question-pop 7s cubic-bezier(0.22, 1, 0.36, 1) infinite both;
+}
+
+.animate-network-flow {
+  animation: network-flow 1.8s linear infinite;
+  filter: drop-shadow(0 0 10px rgb(124 92 252 / 0.7));
+  opacity: 0.95;
+  stroke-dasharray: 22 74;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -258,5 +274,9 @@
   .animate-grow-line {
     animation: none;
     transform: scaleX(1);
+  }
+  .animate-network-flow {
+    animation: none;
+    stroke-dasharray: none;
   }
 }

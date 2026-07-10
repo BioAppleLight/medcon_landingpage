@@ -6,15 +6,11 @@ const partners = [
   },
   {
     name: "F.D. Roosevelt University Hospital With Policlinic Banska Bystrica",
-    image: "/partners/roosevelt-hospital1.png",
+    image: "/partners/roosevelt-hospital2.png",
   },
   {
     name: "University Hospital of Bratislava",
     image: "/partners/university-hospital1.png",
-  },
-  {
-    name: "Kramáre Hospital",
-    image: "/partners/kramare-hospital.png",
   },
   {
     name: "Navan Clinic",
@@ -52,7 +48,11 @@ export function Partners() {
                       : "h-14 w-auto object-contain opacity-90 transition-opacity hover:opacity-100"
                   }
                 />
-                {partner.name !== "Kramáre Hospital" && partner.name !== "Bory Hospital" && partner.name}
+                {partner.name !== "Kramáre Hospital" &&
+                  partner.name !== "Bory Hospital" &&
+                  !partner.name.startsWith("F.D. Roosevelt") &&
+                  partner.name !== "University Hospital of Bratislava" &&
+                  partner.name}
               </span>
             ))}
           </div>
