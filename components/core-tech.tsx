@@ -24,8 +24,14 @@ const tech = [
 
 export function CoreTech() {
   return (
-    <section id="technology" className="px-6 py-20 md:py-28">
-      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+    <section
+      id="technology"
+      className="relative overflow-hidden border-y border-border/70 bg-gradient-to-br from-[#2563eb]/10 via-card/25 to-[#7c5cfc]/10 px-6 py-20 md:py-28"
+    >
+      <div className="pointer-events-none absolute -left-24 bottom-12 h-64 w-64 rounded-full bg-[#2563eb]/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-20 top-12 h-72 w-72 rounded-full bg-[#7c5cfc]/20 blur-3xl" />
+
+      <div className="relative mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <Reveal>
           <span className="eyebrow text-primary">
             Core Technology

@@ -12,6 +12,7 @@ const linkGroups = [
   },
   { label: "Pricing", href: "/pricing" },
   { label: "Team", href: "/#team" },
+  { label: "Contact", href: "/contact" },
 ]
 
 export function SiteFooter() {

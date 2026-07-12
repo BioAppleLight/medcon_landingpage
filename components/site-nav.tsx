@@ -13,12 +13,25 @@ const links = [
   { label: "Partnerships and Collaborations", href: "/partnerships" },
   { label: "Pricing", href: "/pricing" },
   { label: "Team", href: "/#team" },
+  { label: "Contact", href: "/contact" },
 ]
 
 const useCaseLinks = [
-  { label: "Healthcare", href: "/use-cases/healthcare" },
-  { label: "Education", href: "/use-cases/education" },
-  { label: "Government", href: "/use-cases/government" },
+  {
+    label: "Healthcare",
+    href: "/use-cases/healthcare",
+    description: "AI doctor avatars for post-surgery recovery.",
+  },
+  {
+    label: "Education",
+    href: "/use-cases/education",
+    description: "AI Oral Examinator avatars that never stop teaching.",
+  },
+  {
+    label: "Government",
+    href: "/use-cases/government",
+    description: "AI training assistants for government at scale.",
+  },
 ]
 
 export function SiteNav() {
@@ -79,10 +92,10 @@ export function SiteNav() {
                 </button>
 
                 {useCasesOpen && (
-                  <div className="absolute left-1/2 top-full w-44 -translate-x-1/2 pt-4">
+                  <div className="absolute left-1/2 top-full w-80 -translate-x-1/2 pt-4">
                     <div
                       role="menu"
-                      className="overflow-hidden rounded-xl border border-border bg-card/95 p-1.5 shadow-2xl shadow-black/20 backdrop-blur-xl"
+                      className="overflow-hidden rounded-xl border border-border bg-card/95 p-2 shadow-2xl shadow-black/20 backdrop-blur-xl"
                     >
                       {useCaseLinks.map((item) => (
                         <a
@@ -90,9 +103,14 @@ export function SiteNav() {
                           href={item.href}
                           role="menuitem"
                           onClick={closeMenus}
-                          className="block rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground"
+                          className="block rounded-lg px-4 py-3 transition-colors hover:bg-primary/10"
                         >
-                          {item.label}
+                          <span className="block text-sm font-semibold text-foreground">
+                            {item.label}
+                          </span>
+                          <span className="mt-1 block text-pretty text-xs leading-5 text-muted-foreground">
+                            {item.description}
+                          </span>
                         </a>
                       ))}
                     </div>
@@ -159,9 +177,14 @@ export function SiteNav() {
                           key={item.href}
                           href={item.href}
                           onClick={closeMenus}
-                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                          className="rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
                         >
-                          {item.label}
+                          <span className="block text-sm font-semibold text-foreground">
+                            {item.label}
+                          </span>
+                          <span className="mt-1 block text-xs leading-5 text-muted-foreground">
+                            {item.description}
+                          </span>
                         </a>
                       ))}
                     </div>

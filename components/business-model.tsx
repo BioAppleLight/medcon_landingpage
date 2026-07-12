@@ -36,8 +36,14 @@ const pillars = [
 
 export function BusinessModel() {
   return (
-    <section id="roi" className="px-6 py-20 md:py-28">
-      <Reveal className="mx-auto max-w-3xl text-center">
+    <section
+      id="roi"
+      className="relative overflow-hidden border-y border-border/70 bg-gradient-to-br from-[#7c5cfc]/10 via-card/25 to-[#2563eb]/10 px-6 py-20 md:py-28"
+    >
+      <div className="pointer-events-none absolute -left-24 top-16 h-64 w-64 rounded-full bg-[#7c5cfc]/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 bottom-12 h-72 w-72 rounded-full bg-[#2563eb]/20 blur-3xl" />
+
+      <Reveal className="relative mx-auto max-w-3xl text-center">
         <span className="eyebrow text-primary">
           Business Model
         </span>
@@ -50,7 +56,7 @@ export function BusinessModel() {
         </p>
       </Reveal>
 
-      <Stagger className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
+      <Stagger className="relative mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
         {pillars.map((p) => {
           const Icon = p.icon
           return (
@@ -82,7 +88,7 @@ export function BusinessModel() {
 
       <Reveal
         delay={0.1}
-        className="mx-auto mt-10 max-w-5xl rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/10 to-accent/10 px-8 py-10 text-center"
+        className="relative mx-auto mt-10 max-w-5xl rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/10 to-accent/10 px-8 py-10 text-center"
       >
         <p className="text-balance text-2xl font-semibold tracking-tight md:text-3xl">
           Up to{" "}

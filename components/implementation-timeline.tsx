@@ -32,8 +32,11 @@ const weeks = [
 
 export function ImplementationTimeline() {
   return (
-    <section className="px-6 py-20 md:py-28">
-      <Reveal className="mx-auto max-w-3xl text-center">
+    <section className="relative overflow-hidden border-y border-border/70 bg-gradient-to-br from-[#7c5cfc]/10 via-card/25 to-[#2563eb]/10 px-6 py-20 md:py-28">
+      <div className="pointer-events-none absolute -left-24 top-12 h-64 w-64 rounded-full bg-[#7c5cfc]/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 bottom-12 h-72 w-72 rounded-full bg-[#2563eb]/20 blur-3xl" />
+
+      <Reveal className="relative mx-auto max-w-3xl text-center">
         <span className="eyebrow text-primary">
           Implementation
         </span>
@@ -45,7 +48,7 @@ export function ImplementationTimeline() {
         </h2>
       </Reveal>
 
-      <div className="mx-auto mt-14 max-w-5xl">
+      <div className="relative mx-auto mt-14 max-w-5xl">
         <div className="relative grid gap-4 md:grid-cols-5">
           {/* connecting line (desktop) */}
           <div className="pointer-events-none absolute left-0 right-0 top-[22px] hidden h-px bg-border md:block">

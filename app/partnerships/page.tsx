@@ -103,7 +103,7 @@ export default function PartnershipsPage() {
             <span className="eyebrow text-primary">
               Partnerships and Collaborations
             </span>
-            <h1 className="mt-4 text-balance text-4xl font-semibold tracking-tight md:text-6xl">
+            <h1 className="mt-4 bg-gradient-to-br from-[#7c5cfc] via-[#5b7cff] to-[#4db6e8] bg-clip-text text-balance text-4xl font-semibold tracking-tight text-transparent md:text-6xl">
               Building MYO&apos;S with aligned capital and strategic partners.
             </h1>
             <p className="mt-6 text-pretty text-lg leading-8 text-muted-foreground">
@@ -125,24 +125,29 @@ export default function PartnershipsPage() {
               />
             </div>
 
-            <div>
-              <span className="eyebrow text-primary">Funding Goals</span>
-              <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-                Funding goals for regional growth.
-              </h2>
-              <p className="mt-5 text-pretty leading-8 text-muted-foreground">
-                MYO&apos;S is preparing for partnerships that combine capital,
-                regional insight, institutional credibility, and practical
-                deployment pathways.
-              </p>
+            <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-[#7c5cfc]/15 via-card/70 to-[#2563eb]/15 p-6 shadow-2xl shadow-black/10 md:p-8">
+              <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#7c5cfc]/20 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-[#2563eb]/20 blur-3xl" />
 
-              <div className="mt-8 grid gap-4">
+              <div className="relative">
+                <span className="eyebrow text-primary">Funding Goals</span>
+                <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
+                  Funding goals for regional growth.
+                </h2>
+                <p className="mt-5 text-pretty leading-8 text-muted-foreground">
+                  MYO&apos;S is preparing for partnerships that combine capital,
+                  regional insight, institutional credibility, and practical
+                  deployment pathways.
+                </p>
+              </div>
+
+              <div className="relative mt-8 grid gap-4">
                 {fundingGoals.map((goal) => {
                   const Icon = goal.icon
                   return (
                     <div
                       key={goal.title}
-                      className="flex gap-4 rounded-2xl border border-border bg-card p-5"
+                      className="flex gap-4 rounded-md border border-border bg-card/80 p-5 shadow-xl shadow-black/15"
                     >
                       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
                         <Icon className="h-5 w-5" />

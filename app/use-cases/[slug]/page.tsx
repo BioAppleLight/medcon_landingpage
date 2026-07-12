@@ -22,6 +22,21 @@ const icons = {
   stethoscope: Stethoscope,
 }
 
+const transformationCtas = {
+  healthcare: {
+    theme: "Medical Procedures",
+    body: "Let's discuss how MYO'S AI solutions can help your healthcare team improve patient guidance, streamline recovery, and scale trusted medical knowledge.",
+  },
+  education: {
+    theme: "Education Programs",
+    body: "Let's discuss how MYO'S AI solutions can help educators extend expert teaching, personalize learning support, and scale trusted academic guidance.",
+  },
+  government: {
+    theme: "Government Operations",
+    body: "Let's discuss how MYO'S AI solutions can help public-sector teams standardize training, improve knowledge access, and support service success at scale.",
+  },
+} as const
+
 type PageProps = {
   params: Promise<{
     slug: string
@@ -61,6 +76,7 @@ export default async function UseCasePage({ params }: PageProps) {
   }
 
   const Icon = icons[useCase.icon]
+  const transformationCta = transformationCtas[useCase.id]
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -217,6 +233,48 @@ export default async function UseCasePage({ params }: PageProps) {
               Explore all use cases
               <ArrowRight className="h-4 w-4" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 pb-20">
+        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-border bg-card/70 px-6 py-14 text-center shadow-2xl shadow-black/10 md:px-12 md:py-18">
+          <div className="pointer-events-none absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-[#2563eb]/20 blur-3xl" />
+          <div className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-[#7c5cfc]/20 blur-3xl" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#2563eb]/10 via-transparent to-[#7c5cfc]/10" />
+
+          <div className="relative mx-auto max-w-4xl">
+            <h2 className="text-balance text-4xl font-semibold tracking-tight md:text-6xl">
+              Ready to Transform Your{" "}
+              <span className="bg-gradient-to-r from-[#7c5cfc] via-[#5b7cff] to-[#4db6e8] bg-clip-text text-transparent">
+                {transformationCta.theme}
+              </span>
+              ?
+            </h2>
+            <p className="mx-auto mt-6 max-w-3xl text-pretty text-lg leading-8 text-muted-foreground md:text-xl">
+              {transformationCta.body}
+            </p>
+
+            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#7c5cfc] via-[#5b7cff] to-[#2563eb] px-7 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5"
+              >
+                Get Started Today
+                <ArrowRight className="h-4 w-4" />
+              </a>
+              <Link
+                href="/#product"
+                className="relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full p-px text-sm font-semibold text-[#c4b8ff] shadow-lg shadow-primary/10"
+              >
+                <span className="absolute -inset-8 animate-gradient-spin bg-[conic-gradient(from_0deg,transparent,#7c5cfc,#5b7cff,#4db6e8,#7c5cfc,transparent)] opacity-80 blur-sm" />
+                <span className="relative inline-flex h-full w-full items-center justify-center rounded-full bg-card/95 px-7 ring-1 ring-white/5 transition-colors hover:bg-primary/10">
+                  Try Our AI Agent
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

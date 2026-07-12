@@ -233,6 +233,12 @@
   }
 }
 
+@keyframes gradient-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
 .animate-grow-line {
   animation: grow-line 1.4s ease-in-out both;
 }
@@ -254,6 +260,10 @@
   filter: drop-shadow(0 0 10px rgb(124 92 252 / 0.7));
   opacity: 0.95;
   stroke-dasharray: 22 74;
+}
+
+.animate-gradient-spin {
+  animation: gradient-spin 4.5s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -278,5 +288,8 @@
   .animate-network-flow {
     animation: none;
     stroke-dasharray: none;
+  }
+  .animate-gradient-spin {
+    animation: none;
   }
 }

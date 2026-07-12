@@ -18,14 +18,20 @@ export function UseCases() {
   const tab = useCases.find((useCase) => useCase.id === active)!
 
   return (
-    <section id="use-cases" className="px-6 py-20 md:py-28">
-      <Reveal className="mx-auto max-w-3xl text-center">
+    <section
+      id="use-cases"
+      className="relative overflow-hidden border-y border-border/70 bg-gradient-to-br from-[#2563eb]/10 via-card/25 to-[#7c5cfc]/10 px-6 py-20 md:py-28"
+    >
+      <div className="pointer-events-none absolute -left-24 bottom-12 h-64 w-64 rounded-full bg-[#2563eb]/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 top-12 h-72 w-72 rounded-full bg-[#7c5cfc]/20 blur-3xl" />
+
+      <Reveal className="relative mx-auto max-w-3xl text-center">
         <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-5xl">
           Built for the industries that can&apos;t afford to get it wrong.
         </h2>
       </Reveal>
 
-      <div className="mx-auto mt-10 max-w-5xl">
+      <div className="relative mx-auto mt-10 max-w-5xl">
         <div
           role="tablist"
           aria-label="Use case industries"

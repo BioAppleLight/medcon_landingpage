@@ -54,7 +54,7 @@ export function Problem() {
               <motion.div
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                className="h-full rounded-2xl border border-border bg-card p-8 transition-colors hover:border-destructive/40"
+                className="h-full border border-border bg-card p-8 transition-colors hover:border-destructive/40"
               >
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-destructive/15">
                   <Icon className="h-5 w-5 text-destructive" />
