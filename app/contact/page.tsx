@@ -12,9 +12,15 @@ export const metadata: Metadata = {
 const contactItems = [
   {
     icon: Mail,
-    label: "Email",
-    value: "mmedcon@gmail.com",
-    href: "mailto:mmedcon@gmail.com",
+    label: "General Inquiry Email",
+    value: "info@myos.sk",
+    href: "mailto:info@myos.sk",
+  },
+  {
+    icon: Mail,
+    label: "For Existing Clients and Customers Email",
+    value: "myos@myos.sk",
+    href: "mailto:myos@myos.sk",
   },
   {
     icon: Phone,
@@ -103,7 +109,7 @@ export default function ContactPage() {
             </div>
 
             <form
-              action="mailto:mmedcon@gmail.com"
+              action="mailto:info@myos.sk"
               method="post"
               encType="text/plain"
               className="rounded-3xl border border-border bg-card/70 p-6 shadow-2xl shadow-black/10 md:p-8"

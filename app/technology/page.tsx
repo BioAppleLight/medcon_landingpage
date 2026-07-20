@@ -1,18 +1,8 @@
 import Image from "next/image"
 import type { Metadata } from "next"
-import {
-  BrainCircuit,
-  Bot,
-  FileText,
-  GitBranch,
-  Mic,
-  Network,
-  RefreshCw,
-  Search,
-  ShieldCheck,
-} from "lucide-react"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteNav } from "@/components/site-nav"
+import { Reveal, MaskReveal, DrawLine, Parallax } from "@/components/gsap"
 
 export const metadata: Metadata = {
   title: "Technology | MYO'S",
@@ -22,17 +12,14 @@ export const metadata: Metadata = {
 
 const coreTech = [
   {
-    icon: FileText,
     title: "Reasoning Replication",
     desc: "Avatars emulate expert reasoning, not just appearance, grounded in the source material your experts approve.",
   },
   {
-    icon: RefreshCw,
     title: "Reinforcement Feedback Loop",
     desc: "Every interaction is summarized and stored, surfacing where learners struggle so the system keeps improving.",
   },
   {
-    icon: Network,
     title: "Multi-Domain Platform",
     desc: "A publisher and subscriber architecture lets one expert's knowledge reach many institutions and domains.",
   },
@@ -40,17 +27,14 @@ const coreTech = [
 
 const graphSteps = [
   {
-    icon: FileText,
     title: "Convert unstructured data",
     desc: "MYO'S turns policies, manuals, transcripts, SOPs, and training files into structured entities and relationships.",
   },
   {
-    icon: GitBranch,
     title: "Connect operating knowledge",
     desc: "The graph links people, documents, procedures, expertise, and decisions so the avatar understands context, not just keywords.",
   },
   {
-    icon: BrainCircuit,
     title: "Reason through the graph",
     desc: "When a user asks a question, the avatar follows the right relationships, retrieves approved evidence, and gives a grounded answer.",
   },
@@ -58,10 +42,9 @@ const graphSteps = [
 
 const intelligenceLayers = [
   {
-    eyebrow: "2. LLM + RAG",
-    icon: Search,
+    eyebrow: "LLM + RAG",
     title: "Retrieval-Augmented Generation",
-    desc: "MYO'S combines large language models with retrieval from approved enterprise knowledge, so answers are generated from the right source material instead of loose model memory.",
+    desc: "MYO'S combines large language models with retrieval from approved enterprise knowledge, so Ed's answers are generated from the right source material instead of loose model memory.",
     points: [
       "Enterprise document search",
       "Hallucination reduction",
@@ -69,8 +52,7 @@ const intelligenceLayers = [
     ],
   },
   {
-    eyebrow: "3. Audio-Based Human Interaction",
-    icon: Mic,
+    eyebrow: "Audio-Based Human Interaction",
     title: "Human-like conversations",
     desc: "Users interact naturally through voice, making expert knowledge feel closer to a real conversation than a static search box.",
     points: [
@@ -80,8 +62,7 @@ const intelligenceLayers = [
     ],
   },
   {
-    eyebrow: "4. AI Avatar Layer",
-    icon: Bot,
+    eyebrow: "AI Avatar Layer",
     title: "Digital experts",
     desc: "The avatar layer turns institutional knowledge into a recognizable expert presence that can teach, guide, assess, and answer in the organization's own context.",
     points: [
@@ -97,163 +78,185 @@ export default function TechnologyPage() {
     <main className="min-h-screen bg-background text-foreground">
       <SiteNav />
 
-      <section className="px-6 pb-16 pt-32 md:pb-24 md:pt-40">
-        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-          <div>
-            <span className="eyebrow text-primary">Core Technology</span>
-            <h1 className="mt-4 text-balance text-4xl font-semibold tracking-tight md:text-6xl">
-              Knowledge-based avatars that emulate expert reasoning.
-            </h1>
-            <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-muted-foreground">
-              MyOS isn&apos;t a talking head. It&apos;s a knowledge engine
-              wrapped in a human-like persona, built to reason like your best
-              expert and improve with every conversation.
-            </p>
-          </div>
+      {/* HERO */}
+      <section className="px-6 pb-20 pt-32 md:pb-28 md:pt-44">
+        <div className="mx-auto max-w-6xl">
+          <MaskReveal
+            as="p"
+            className="font-mono text-xs uppercase tracking-[0.35em] text-primary"
+          >
+            Core Technology
+          </MaskReveal>
+          <MaskReveal
+            as="h1"
+            delay={0.08}
+            className="mt-8 max-w-4xl text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-7xl"
+          >
+            Knowledge-based avatars that{" "}
+            <span className="font-serif italic font-normal text-primary">
+              emulate expert reasoning.
+            </span>
+          </MaskReveal>
+          <MaskReveal
+            as="p"
+            delay={0.16}
+            className="mt-8 max-w-2xl text-pretty text-lg leading-8 text-muted-foreground"
+          >
+            MyOS isn&apos;t a talking head. It&apos;s a knowledge engine wrapped
+            in a human-like persona, built to reason like your best expert and
+            improve with every conversation.
+          </MaskReveal>
 
-          <div className="flex flex-col gap-4">
-            {coreTech.map((item) => {
-              const Icon = item.icon
-              return (
-                <div
-                  key={item.title}
-                  className="flex gap-4 rounded-2xl border border-border bg-card p-6"
-                >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/15">
-                    <Icon className="h-5 w-5 text-accent" />
-                  </span>
-                  <div>
-                    <h2 className="font-medium">{item.title}</h2>
-                    <p className="mt-1 text-pretty text-sm leading-relaxed text-muted-foreground">
-                      {item.desc}
-                    </p>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+          {/* core tech — divided index rows, no boxes */}
+          <Reveal as="ul" stagger className="mt-20 grid gap-px md:grid-cols-3">
+            {coreTech.map((item) => (
+              <li
+                key={item.title}
+                className="border-t border-border pt-6 md:pr-8"
+              >
+                <h2 className="text-lg font-medium tracking-tight">
+                  {item.title}
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {item.desc}
+                </p>
+              </li>
+            ))}
+          </Reveal>
         </div>
       </section>
 
-      <section className="border-y border-border bg-card/40 px-6 py-16 md:py-24">
+      {/* KNOWLEDGE GRAPHS */}
+      <section className="px-6 py-20 md:py-28">
         <div className="mx-auto max-w-6xl">
-          <div className="max-w-3xl">
-            <span className="eyebrow text-primary">Knowledge Graphs</span>
-            <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-              How MYO&apos;S creates knowledge graphs.
-            </h2>
-            <p className="mt-5 text-pretty leading-8 text-muted-foreground">
-              MYO&apos;S organizes scattered institutional knowledge into a
-              living graph, so avatars can understand how information,
-              responsibilities, procedures, and decisions connect.
-            </p>
+          <div className="grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+            <Reveal>
+              <p className="font-mono text-xs uppercase tracking-[0.35em] text-primary">
+                Knowledge Graphs
+              </p>
+              <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
+                How MYO&apos;S creates{" "}
+                <span className="font-serif italic font-normal">
+                  knowledge graphs.
+                </span>
+              </h2>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="text-pretty leading-8 text-muted-foreground">
+                MYO&apos;S organizes scattered institutional knowledge into a
+                living graph, so avatars can understand how information,
+                responsibilities, procedures, and decisions connect.
+              </p>
+            </Reveal>
           </div>
 
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {graphSteps.map((step) => {
-              const Icon = step.icon
-              return (
-                <div
-                  key={step.title}
-                  className="rounded-2xl border border-border bg-background/60 p-6"
-                >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15 text-primary">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-5 text-lg font-semibold tracking-tight">
+          {/* animated connective line + steps */}
+          <div className="relative mt-20">
+            <DrawLine className="absolute left-0 top-4 hidden h-px w-full bg-gradient-to-r from-primary/60 via-border to-transparent md:block" />
+            <Reveal as="ul" stagger className="grid gap-12 md:grid-cols-3 md:gap-8">
+              {graphSteps.map((step) => (
+                <li key={step.title} className="relative md:pr-8">
+                  <span className="relative z-10 hidden h-2 w-2 bg-primary md:block" />
+                  <h3 className="text-xl font-semibold tracking-tight md:mt-6">
                     {step.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                  <p className="mt-4 text-sm leading-7 text-muted-foreground">
                     {step.desc}
                   </p>
-                </div>
-              )
-            })}
+                </li>
+              ))}
+            </Reveal>
           </div>
         </div>
       </section>
 
-      <section className="px-6 py-16 md:py-24">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
-          <div>
-            <span className="eyebrow text-primary">Visual graph examples</span>
-            <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-              From scattered inputs to connected intelligence.
+      {/* VISUAL GRAPH EXAMPLE */}
+      <section className="px-6 py-20 md:py-28">
+        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+          <Reveal>
+            <p className="font-mono text-xs uppercase tracking-[0.35em] text-primary">
+              Visual graph examples
+            </p>
+            <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
+              From scattered inputs to{" "}
+              <span className="font-serif italic font-normal">
+                connected intelligence.
+              </span>
             </h2>
-            <p className="mt-5 text-pretty leading-8 text-muted-foreground">
+            <p className="mt-6 text-pretty leading-8 text-muted-foreground">
               A user question can move through linked source material, expert
               ownership, procedures, and prior decisions before the avatar
               responds. The graph keeps answers explainable and grounded in the
               organization&apos;s approved knowledge.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xl shadow-black/10">
-            <Image
-              src="/demos/my-graph.png"
-              alt="Visual example of an interactive knowledge graph"
-              width={1600}
-              height={900}
-              className="h-auto w-full"
-            />
-          </div>
+          <Reveal delay={0.1} className="overflow-hidden">
+            <Parallax amount={40}>
+              <Image
+                src="/demos/my-graph.png"
+                alt="Visual example of an interactive knowledge graph"
+                width={1600}
+                height={900}
+                className="h-auto w-full"
+              />
+            </Parallax>
+          </Reveal>
         </div>
       </section>
 
-      <section className="border-y border-border bg-card/40 px-6 py-16 md:py-24">
+      {/* INTELLIGENCE STACK — divided rows, no cards */}
+      <section className="px-6 py-20 md:py-28">
         <div className="mx-auto max-w-6xl">
-          <div className="max-w-3xl">
-            <span className="eyebrow text-primary">Intelligence Stack</span>
-            <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-              The layers that turn knowledge into human interaction.
+          <Reveal className="max-w-3xl">
+            <p className="font-mono text-xs uppercase tracking-[0.35em] text-primary">
+              Intelligence Stack
+            </p>
+            <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
+              The layers that turn knowledge into{" "}
+              <span className="font-serif italic font-normal">
+                human interaction.
+              </span>
             </h2>
-            <p className="mt-5 text-pretty leading-8 text-muted-foreground">
+            <p className="mt-6 text-pretty leading-8 text-muted-foreground">
               MYO&apos;S connects retrieval, voice, and avatar delivery into one
               system, so organizations can give users source-grounded answers
               through a natural expert interface.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="mt-10 grid gap-5 lg:grid-cols-3">
-            {intelligenceLayers.map((layer) => {
-              const Icon = layer.icon
-              return (
-                <article
-                  key={layer.title}
-                  className="flex h-full flex-col rounded-2xl border border-border bg-background/60 p-6"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="eyebrow text-primary">{layer.eyebrow}</p>
-                      <h3 className="mt-4 text-xl font-semibold tracking-tight">
-                        {layer.title}
-                      </h3>
-                    </div>
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                  </div>
-
-                  <p className="mt-4 text-sm leading-7 text-muted-foreground">
+          <Reveal as="ul" stagger className="mt-16 border-t border-border">
+            {intelligenceLayers.map((layer) => (
+              <li
+                key={layer.title}
+                className="grid gap-6 border-b border-border py-10 md:grid-cols-[0.9fr_1.1fr] md:gap-12"
+              >
+                <div>
+                  <p className="font-mono text-xs uppercase tracking-[0.25em] text-primary">
+                    {layer.eyebrow}
+                  </p>
+                  <h3 className="mt-4 text-2xl font-semibold tracking-tight">
+                    {layer.title}
+                  </h3>
+                </div>
+                <div>
+                  <p className="text-pretty leading-7 text-muted-foreground">
                     {layer.desc}
                   </p>
-
-                  <ul className="mt-6 grid gap-3">
+                  <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
                     {layer.points.map((point) => (
-                      <li key={point} className="flex items-start gap-3">
-                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
-                          <ShieldCheck className="h-3 w-3" />
-                        </span>
-                        <span className="text-sm leading-6 text-muted-foreground">
-                          {point}
-                        </span>
+                      <li
+                        key={point}
+                        className="text-sm text-foreground/80 before:mr-2 before:text-primary before:content-['—']"
+                      >
+                        {point}
                       </li>
                     ))}
                   </ul>
-                </article>
-              )
-            })}
-          </div>
+                </div>
+              </li>
+            ))}
+          </Reveal>
         </div>
       </section>
 

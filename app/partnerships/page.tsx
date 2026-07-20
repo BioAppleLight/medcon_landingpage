@@ -11,7 +11,6 @@ import {
   Landmark,
   Network,
   ScrollText,
-  Target,
 } from "lucide-react"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteNav } from "@/components/site-nav"
@@ -24,11 +23,6 @@ export const metadata: Metadata = {
 }
 
 const fundingGoals = [
-  {
-    icon: Target,
-    title: "Seeking AED 1,000,000+ in funding",
-    desc: "Fuel product development, deployment readiness, and expansion across high-impact enterprise, education, healthcare, and government use cases.",
-  },
   {
     icon: Landmark,
     title: "UAE grant opportunities",

@@ -168,6 +168,36 @@
   }
 }
 
+@keyframes services-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes brand-logo-spin-3d {
+  0% {
+    transform: rotateX(8deg) rotateY(0deg);
+    filter: drop-shadow(0 3px 5px rgb(77 182 232 / 18%));
+  }
+  25% {
+    filter: drop-shadow(5px 3px 8px rgb(124 92 252 / 35%));
+  }
+  50% {
+    transform: rotateX(-8deg) rotateY(180deg);
+    filter: drop-shadow(0 3px 5px rgb(63 199 192 / 18%));
+  }
+  75% {
+    filter: drop-shadow(-5px 3px 8px rgb(77 182 232 / 35%));
+  }
+  100% {
+    transform: rotateX(8deg) rotateY(360deg);
+    filter: drop-shadow(0 3px 5px rgb(77 182 232 / 18%));
+  }
+}
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -251,6 +281,33 @@
   animation: marquee 28s linear infinite;
 }
 
+.services-belt {
+  position: relative;
+  border-block: 1px solid color-mix(in oklab, var(--primary) 24%, transparent);
+  background:
+    linear-gradient(90deg, var(--background), transparent 7% 93%, var(--background)),
+    linear-gradient(180deg, color-mix(in oklab, var(--primary) 7%, transparent), transparent);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 4%),
+    inset 0 -1px 0 rgb(255 255 255 / 4%);
+}
+
+.services-marquee {
+  animation: services-marquee 44s linear infinite;
+  will-change: transform;
+}
+
+.brand-logo-3d {
+  perspective: 240px;
+}
+
+.brand-logo-3d > svg {
+  animation: brand-logo-spin-3d 7s linear infinite;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  will-change: transform, filter;
+}
+
 .animate-chat-question-pop {
   animation: chat-question-pop 7s cubic-bezier(0.22, 1, 0.36, 1) infinite both;
 }
@@ -264,6 +321,90 @@
 
 .animate-gradient-spin {
   animation: gradient-spin 4.5s linear infinite;
+}
+
+@keyframes shimmer-sweep {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes blink-caret {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.75);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes eq-bar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes pop-in {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.35);
+  }
+}
+
+@keyframes node-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-shimmer-sweep {
+  animation: shimmer-sweep 2.6s ease-in-out infinite;
+}
+
+.animate-blink-caret {
+  animation: blink-caret 1s step-end infinite;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-eq-bar {
+  animation: eq-bar 1.1s ease-in-out infinite;
+}
+
+.animate-pop-in {
+  animation: pop-in 2.2s ease-in-out infinite;
+}
+
+.animate-node-glow {
+  animation: node-glow 1.8s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -291,5 +432,26 @@
   }
   .animate-gradient-spin {
     animation: none;
+  }
+  .animate-shimmer-sweep,
+  .animate-blink-caret,
+  .animate-pulse-ring,
+  .animate-eq-bar,
+  .animate-pop-in,
+  .animate-node-glow {
+    animation: none;
+  }
+  .services-marquee-viewport {
+    overflow-x: auto;
+  }
+  .services-marquee {
+    animation: none;
+  }
+  .services-marquee-copy {
+    display: none;
+  }
+  .brand-logo-3d > svg {
+    animation: none;
+    transform: none;
   }
 }

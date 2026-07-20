@@ -1,56 +1,54 @@
-"use client"
-
 import Image from "next/image"
-import { Reveal } from "@/components/motion-primitives"
 
 export function Mission() {
   return (
     <section
       id="mission"
-      className="relative overflow-hidden border-y border-border/70 bg-card/20 px-6 py-20 md:py-28"
+      aria-labelledby="mission-heading"
+      className="grid overflow-hidden border-y border-border/70 bg-black lg:aspect-[1672/941] lg:grid-cols-[51%_49%]"
     >
-      <div className="pointer-events-none absolute -left-24 top-12 h-64 w-64 rounded-full bg-[#7c5cfc]/20 blur-3xl" />
-      <div className="pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full bg-[#4db6e8]/20 blur-3xl" />
-      <div className="pointer-events-none absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-[#5b7cff]/10 to-transparent" />
+      <div className="relative aspect-[852/941] overflow-hidden lg:aspect-auto">
+        <Image
+          src="/mission.png"
+          alt="AI-assisted brain scan analysis and interactive human intelligence visualization"
+          width={1672}
+          height={941}
+          sizes="(min-width: 1024px) 51vw, 100vw"
+          className="absolute inset-0 h-full w-[196.25%] max-w-none"
+        />
+      </div>
 
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-border bg-card/80 p-6 shadow-2xl shadow-black/10 backdrop-blur md:p-10">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-gradient-to-br from-[#7c5cfc]/30 to-[#4db6e8]/20 blur-2xl" />
-        <div className="pointer-events-none absolute -bottom-20 left-1/3 h-48 w-48 rounded-full bg-gradient-to-tr from-[#4db6e8]/20 to-[#7c5cfc]/20 blur-3xl" />
+      <div className="relative flex items-center overflow-hidden bg-[#261078] px-7 py-16 sm:px-12 lg:px-[10.5%] lg:py-[8%]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_45%_36%,rgba(100,43,255,0.48),transparent_48%),linear-gradient(135deg,rgba(26,11,94,0.2),rgba(43,15,132,0.85))]" />
 
-        <div className="relative grid items-center gap-10 md:grid-cols-2">
-          <Reveal>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-card shadow-2xl shadow-black/20">
-              <Image
-                src="/demos/1660314198561.png"
-                alt="Doctor using an AI expert avatar for medical guidance"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </Reveal>
+        <div className="relative z-10 max-w-2xl text-white">
+          <h2
+            id="mission-heading"
+            className="text-balance text-[clamp(2.25rem,3.35vw,4rem)] font-light leading-[1.3] tracking-[-0.025em]"
+          >
+            Our mission is to <strong className="font-bold">preserve</strong>,{" "}
+            <strong className="font-bold">improve</strong>, and{" "}
+            <strong className="font-bold">democratize</strong> human expertise.
+          </h2>
 
-          <Reveal delay={0.1}>
-            <span className="eyebrow text-primary">Our Mission</span>
-            <h2 className="mt-4 bg-gradient-to-br from-[#7c5cfc] via-[#5b7cff] to-[#4db6e8] bg-clip-text text-balance text-3xl font-semibold tracking-tight text-transparent md:text-5xl">
-              Preserve knowledge. Pass it forward with AI.
-            </h2>
-            <p className="mt-6 text-pretty text-lg leading-8 text-muted-foreground">
-              Our mission is to retain information and use AI to pass down
-              information to drive:
-            </p>
-            <ul className="mt-4 grid gap-3 text-lg">
-              {[
-                { label: "Education Changes", className: "text-[#7c5cfc]" },
-                { label: "Medical Improvements", className: "text-[#9d8cff]" },
-                { label: "Governmental Success", className: "text-[#4db6e8]" },
-              ].map((outcome) => (
-                <li key={outcome.label} className="flex items-center gap-3">
-                  <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_rgba(124,92,252,0.8)]" />
-                  <span className={outcome.className}>{outcome.label}</span>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+          <p className="mt-[8%] text-pretty text-[clamp(1.25rem,2vw,2.25rem)] font-light leading-[1.45] tracking-[-0.02em]">
+            We transform the world&apos;s greatest knowledge into{" "}
+            <strong className="font-bold">interactive intelligence</strong> that
+            is accessible to everyone, regardless of age, race, location, or
+            profession.
+          </p>
+
+          <p className="mt-[5%] text-[clamp(1.3rem,2.1vw,2.35rem)] font-light leading-[1.35]">
+            <strong className="font-bold">We empower every individual</strong>
+            <br /> in the world.
+          </p>
+
+          <a
+            href="https://www.myos.sk/"
+            className="mt-[8%] inline-flex min-h-14 min-w-52 items-center justify-center bg-[#090519] px-8 py-4 text-lg font-bold text-white shadow-[0_10px_30px_rgba(5,2,20,0.35)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.03] hover:bg-[#12082d] hover:shadow-[0_16px_40px_rgba(124,92,252,0.55)] active:translate-y-0 active:scale-[0.98] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-white"
+          >
+            Our Platform
+          </a>
         </div>
       </div>
     </section>

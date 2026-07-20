@@ -35,11 +35,24 @@ export function SiteFooter() {
 
           <div className="flex flex-col gap-3 text-sm text-muted-foreground">
             <a
-              href="mailto:mmedcon@gmail.com"
+              href="mailto:info@myos.sk"
               className="flex items-center gap-2 transition-colors hover:text-foreground"
             >
               <Mail className="h-4 w-4" />
-              mmedcon@gmail.com
+              <span>
+                info@myos.sk
+                <span className="ml-1 text-xs">— General information</span>
+              </span>
+            </a>
+            <a
+              href="mailto:myos@myos.sk"
+              className="flex items-center gap-2 transition-colors hover:text-foreground"
+            >
+              <Mail className="h-4 w-4" />
+              <span>
+                myos@myos.sk
+                <span className="ml-1 text-xs">— Existing clients and consumers</span>
+              </span>
             </a>
             <a
               href="tel:+421902950910"

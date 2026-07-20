@@ -4,42 +4,122 @@ import Image from "next/image"
 import { motion } from "motion/react"
 import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
 
-const team = [
-  { name: "Terezia Juras", role: "Founder, mMEDCON & MyOS" },
-  { name: "Lenka Sadovska", role: "Marketing & PR" },
-  { name: "Abbas Raza", role: "Backend Developer" },
-  { name: "Ignatius Ratemo", role: "Systems Developer" },
-  { name: "Emma Kortosova", role: "Associate @ mMEDCON" },
-  { name: "Sayda Abusalih", role: "Management & Outreach" },
-  { name: "Prof. Dr. Charmayne M. L. Hughes", role: "Advisor" },
+type TeamMember = {
+  name: string
+  role: string
+  image?: string
+}
+
+const team: TeamMember[] = [
+  {
+    name: "Terezia Juras",
+    role: "Founder of mMEDCON and MyoMetrics",
+    image: "/team/Tete.png",
+  },
+  {
+    name: "Lenka Sadovska",
+    role: "Marketing & PR",
+    image: "/team/Lenka.png",
+  },
+  {
+    name: "Abbas Raza",
+    role: "Backend Developer",
+    image: "/team/abbas.png",
+  },
+  {
+    name: "Ignatius Ratemo",
+    role: "Systems Developer",
+    image: "/team/Ignatius.png",
+  },
+  {
+    name: "Emma Kortosova",
+    role: "Associate @ mMEDCON",
+    image: "/team/Emma.png",
+  },
+  {
+    name: "Sayda Abusalih",
+    role: "Management and Outreach",
+    image: "/team/Sayda.png",
+  },
+  {
+    name: "Prof. Dr. Charmayne Mary Lee Hughes",
+    role: "Advisor",
+    image: "/team/prof-charmayne.png",
+  },
+  {
+    name: "Dr. Osama Abdullah",
+    role: "Advisor",
+    image: "/team/dr-osama.png",
+  },
+  { name: "Seidou", role: "Backend Engineer Intern" },
+  { name: "Edward Chen", role: "Frontend Designer Intern" },
 ]
 
 type Mentor = {
   name: string
-  logo?: string
-  width?: number
-  height?: number
-  className?: string
+  logo: string
+  width: number
+  height: number
+  imageClassName?: string
 }
 
 const mentors: Mentor[] = [
   {
     name: "Yale",
     logo: "/institutions/Yale-University-Logo-Vector.png",
-    width: 188,
-    height: 30,
-    className: "h-12",
+    width: 220,
+    height: 35,
+    imageClassName: "max-h-14 max-w-[90%]",
   },
   {
     name: "New York University",
     logo: "/institutions/nyu-logo.svg",
+    width: 210,
+    height: 63,
+    imageClassName: "max-h-16 max-w-[90%]",
   },
-  { name: "Charles University" },
-  { name: "TU Berlin" },
-  { name: "University of Amsterdam" },
-  { name: "NIMHANS" },
-  { name: "Czech Technical University" },
-  { name: "Comenius University" },
+  {
+    name: "Charles University",
+    logo: "/institutions/charles-university.svg",
+    width: 220,
+    height: 39,
+    imageClassName: "max-h-14 max-w-[90%]",
+  },
+  {
+    name: "TU Berlin",
+    logo: "/institutions/tu-berlin.svg",
+    width: 120,
+    height: 88,
+    imageClassName: "max-h-20 max-w-[80%]",
+  },
+  {
+    name: "University of Amsterdam",
+    logo: "/institutions/university-amsterdam.svg",
+    width: 220,
+    height: 39,
+    imageClassName: "max-h-14 max-w-[90%]",
+  },
+  {
+    name: "NIMHANS",
+    logo: "/institutions/nimhans.png",
+    width: 82,
+    height: 82,
+    imageClassName: "max-h-20 max-w-[80%]",
+  },
+  {
+    name: "Czech Technical University",
+    logo: "/institutions/ctu-prague-blue.jpg",
+    width: 866,
+    height: 650,
+    imageClassName: "max-h-24 max-w-[11rem] scale-150",
+  },
+  {
+    name: "Comenius University",
+    logo: "/institutions/comenius-university.png",
+    width: 108,
+    height: 72,
+    imageClassName: "max-h-24 max-w-[13rem] scale-[2.1]",
+  },
 ]
 
 function initials(name: string) {
@@ -65,20 +145,42 @@ export function Team() {
         </h2>
       </Reveal>
 
-      <Stagger className="mx-auto mt-14 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <Stagger className="mx-auto mt-14 grid max-w-7xl gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {team.map((member) => (
           <StaggerItem key={member.name}>
             <motion.div
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 300, damping: 22 }}
-              className="flex h-full items-center gap-4 rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/40"
+              className="mx-auto flex h-full w-full max-w-xs flex-col text-center"
             >
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
-                {initials(member.name)}
-              </span>
-              <div>
-                <p className="font-medium leading-tight">{member.name}</p>
-                <p className="mt-0.5 text-sm text-muted-foreground">
+              <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl border-[3px] border-white/90 bg-primary/15 text-5xl font-semibold text-primary shadow-xl shadow-black/20">
+                {member.image ? (
+                  <>
+                    <Image
+                      src={member.image}
+                      alt=""
+                      aria-hidden="true"
+                      fill
+                      sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+                      className="scale-125 object-cover blur-lg"
+                    />
+                    <Image
+                      src={member.image}
+                      alt={`${member.name} profile picture`}
+                      fill
+                      sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover"
+                    />
+                  </>
+                ) : (
+                  initials(member.name)
+                )}
+              </div>
+              <div className="flex flex-1 flex-col px-2 pt-5">
+                <p className="text-lg font-semibold leading-tight text-foreground md:text-xl">
+                  {member.name}
+                </p>
+                <p className="mt-1.5 text-base leading-snug text-muted-foreground md:text-lg">
                   {member.role}
                 </p>
               </div>
@@ -91,22 +193,20 @@ export function Team() {
         <p className="eyebrow">
           Mentored by experts from leading institutions
         </p>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+        <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {mentors.map((mentor) => (
-            <span key={mentor.name}>
-              {mentor.logo ? (
-                <Image
-                  src={mentor.logo}
-                  alt={`${mentor.name} logo`}
-                  width={mentor.width ?? 110}
-                  height={mentor.height ?? 36}
-                  className={`${mentor.className ?? "h-9"} w-auto opacity-75 transition-opacity hover:opacity-100`}
-                />
-              ) : (
-                <span className="text-sm font-medium text-muted-foreground/70 transition-colors hover:text-foreground">
-                  {mentor.name}
-                </span>
-              )}
+            <span
+              key={mentor.name}
+              title={mentor.name}
+              className="flex h-24 items-center justify-center overflow-hidden border border-black/10 bg-white px-4 shadow-sm transition-transform duration-200 hover:-translate-y-0.5"
+            >
+              <Image
+                src={mentor.logo}
+                alt={`${mentor.name} logo`}
+                width={mentor.width}
+                height={mentor.height}
+                className={`h-auto w-auto object-contain ${mentor.imageClassName ?? "max-h-12 max-w-[9rem]"}`}
+              />
             </span>
           ))}
         </div>
