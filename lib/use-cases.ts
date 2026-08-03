@@ -1,4 +1,20 @@
-export const useCases = [
+export type UseCaseId = "healthcare" | "education" | "government"
+
+export interface UseCase {
+  id: UseCaseId
+  label: string
+  icon: "stethoscope" | "graduation-cap" | "landmark"
+  headline: string
+  summary: string
+  points: string[]
+  pageSections: { title: string; body: string }[]
+  outcomes: string[]
+  image: string
+  demoVideo: { src: string; poster: string; title: string } | null
+  alt: string
+}
+
+export const useCases: UseCase[] = [
   {
     id: "healthcare",
     label: "Healthcare",
@@ -96,11 +112,72 @@ export const useCases = [
     demoVideo: null,
     alt: "AI government training assistant running an oral assessment",
   },
-] as const
+]
 
-export type UseCase = (typeof useCases)[number]
-export type UseCaseId = UseCase["id"]
+const CUSTOM_SLUG_PREFIX = "custom-"
+const GOAL_MAX_LENGTH = 160
 
-export function getUseCase(id: string) {
+const headlineByIndustry: Record<UseCaseId, (goal: string) => string> = {
+  healthcare: (goal) => `AI doctor avatars built around: "${goal}"`,
+  education: (goal) => `An AI teaching avatar built around: "${goal}"`,
+  government: (goal) => `An AI government training avatar built around: "${goal}"`,
+}
+
+function truncate(text: string, max: number) {
+  return text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text
+}
+
+/** Encodes {industry, goal} into a shareable slug — no server storage needed. */
+export function encodeCustomUseCase(industry: UseCaseId, goal: string): string {
+  const payload = JSON.stringify({ i: industry, g: truncate(goal.trim(), GOAL_MAX_LENGTH) })
+  return `${CUSTOM_SLUG_PREFIX}${Buffer.from(payload, "utf-8").toString("base64url")}`
+}
+
+function decodeCustomSlug(slug: string): { industry: UseCaseId; goal: string } | null {
+  if (!slug.startsWith(CUSTOM_SLUG_PREFIX)) return null
+
+  try {
+    const json = Buffer.from(slug.slice(CUSTOM_SLUG_PREFIX.length), "base64url").toString("utf-8")
+    const data = JSON.parse(json) as { i?: unknown; g?: unknown }
+
+    if (
+      typeof data.g !== "string" ||
+      data.g.length === 0 ||
+      (data.i !== "healthcare" && data.i !== "education" && data.i !== "government")
+    ) {
+      return null
+    }
+
+    return { industry: data.i, goal: data.g }
+  } catch {
+    return null
+  }
+}
+
+/** Builds a personalized use case by layering the visitor's goal onto the base industry template. */
+export function buildPersonalizedUseCase(industry: UseCaseId, goal: string): UseCase {
+  const base = useCases.find((useCase) => useCase.id === industry)
+  if (!base) throw new Error(`Unknown industry: ${industry}`)
+
+  const cleanGoal = truncate(goal.trim(), GOAL_MAX_LENGTH)
+
+  return {
+    ...base,
+    headline: headlineByIndustry[industry](truncate(cleanGoal, 80)),
+    summary: `Based on what you shared — "${cleanGoal}" — here's how MYO'S AI ${base.label.toLowerCase()} avatars can help.`,
+    pageSections: [
+      {
+        title: "Your request",
+        body: `You told us: "${cleanGoal}." Here's how that fits into a MYO'S ${base.label} deployment.`,
+      },
+      ...base.pageSections,
+    ],
+  }
+}
+
+export function getUseCase(id: string): UseCase | undefined {
+  const custom = decodeCustomSlug(id)
+  if (custom) return buildPersonalizedUseCase(custom.industry, custom.goal)
+
   return useCases.find((useCase) => useCase.id === id)
 }

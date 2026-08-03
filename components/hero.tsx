@@ -2,15 +2,9 @@
 
 import Image from "next/image"
 import { useEffect, useState } from "react"
-import {
-  Play,
-  Calendar,
-  Stethoscope,
-  GraduationCap,
-  Landmark,
-  SendHorizontal,
-} from "lucide-react"
+import { Play, Calendar, Stethoscope, GraduationCap, Landmark } from "lucide-react"
 import { BrandLogo } from "@/components/brand-logo"
+import { HeroChat } from "@/components/hero-chat"
 import { buttonVariants } from "@/components/ui/button"
 import { openNextDemo } from "@/lib/demo-links"
 import { BOOKING_URL } from "@/lib/site"
@@ -41,43 +35,12 @@ const scenarios = [
 
 export function Hero() {
   const [active, setActive] = useState(0)
-  const [inquiryPrompt, setInquiryPrompt] = useState("")
 
   useEffect(() => {
     const id = setInterval(() => {
       setActive((v) => (v + 1) % scenarios.length)
     }, 4000)
     return () => clearInterval(id)
-  }, [])
-
-  useEffect(() => {
-    const prompt = "What are your inquiries?"
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setInquiryPrompt(prompt)
-      return
-    }
-
-    let character = 0
-    let typingTimer: ReturnType<typeof setTimeout> | undefined
-
-    const startTimer = setTimeout(() => {
-      const typeNextCharacter = () => {
-        character += 1
-        setInquiryPrompt(prompt.slice(0, character))
-
-        if (character < prompt.length) {
-          typingTimer = setTimeout(typeNextCharacter, 65)
-        }
-      }
-
-      typeNextCharacter()
-    }, 650)
-
-    return () => {
-      clearTimeout(startTimer)
-      if (typingTimer) clearTimeout(typingTimer)
-    }
   }, [])
 
   const scenario = scenarios[active]
@@ -122,31 +85,7 @@ export function Hero() {
           teach, guide, and answer questions in real time.
         </p>
 
-        <form
-          className="animate-rise mx-auto mt-8 flex max-w-2xl items-center gap-3 rounded-2xl border border-white/15 bg-black/55 p-2 pl-5 shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors focus-within:border-primary/70 [animation-delay:0.2s]"
-          onSubmit={(event) => {
-            event.preventDefault()
-            openNextDemo()
-          }}
-        >
-          <label htmlFor="hero-inquiry" className="sr-only">
-            What are your inquiries?
-          </label>
-          <input
-            id="hero-inquiry"
-            name="inquiry"
-            type="text"
-            placeholder={inquiryPrompt}
-            className="min-w-0 flex-1 bg-transparent py-3 text-base text-white outline-none placeholder:text-white/55"
-          />
-          <button
-            type="submit"
-            aria-label="Send inquiry"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-all hover:scale-105 hover:bg-primary/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-          >
-            <SendHorizontal className="h-4 w-4" />
-          </button>
-        </form>
+        <HeroChat />
 
         <div className="animate-rise mt-6 flex flex-col items-center justify-center gap-3 [animation-delay:0.25s] sm:flex-row">
           <button
