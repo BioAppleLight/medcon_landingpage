@@ -1,6 +1,6 @@
 "use client"
 
-import { FileLock2, Hourglass, DoorOpen, BookX } from "lucide-react"
+import { ArrowDown, FileLock2, Hourglass, DoorOpen, BookX } from "lucide-react"
 import { motion } from "motion/react"
 import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
 
@@ -68,6 +68,23 @@ export function Problem() {
           )
         })}
       </Stagger>
+
+      <Reveal className="mx-auto mt-14 flex justify-center">
+        <a
+          href="#solution"
+          className="group inline-flex flex-col items-center gap-3 rounded-2xl px-6 py-3 text-center text-sm font-semibold text-primary transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+        >
+          <span>Scroll Down to See Our Solution</span>
+          <motion.span
+            aria-hidden="true"
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/40 bg-primary/10 transition-colors group-hover:border-primary group-hover:bg-primary/20"
+          >
+            <ArrowDown className="h-5 w-5" />
+          </motion.span>
+        </a>
+      </Reveal>
     </section>
   )
 }

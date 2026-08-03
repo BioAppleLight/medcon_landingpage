@@ -1,14 +1,17 @@
 interface BrandLogoProps {
   className?: string
+  animated?: boolean
 }
 
 /**
  * MYO'S compass emblem: a four-point diamond in blue / teal / indigo
  * with a white center, ringed by a purple-to-teal gradient circle.
  */
-export function BrandLogo({ className }: BrandLogoProps) {
+export function BrandLogo({ className, animated = true }: BrandLogoProps) {
   return (
-    <span className={`brand-logo-3d inline-flex shrink-0 ${className ?? ""}`}>
+    <span
+      className={`${animated ? "brand-logo-3d" : ""} inline-flex shrink-0 ${className ?? ""}`}
+    >
       <svg
         viewBox="0 0 48 48"
         fill="none"

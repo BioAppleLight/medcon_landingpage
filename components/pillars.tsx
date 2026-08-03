@@ -1,30 +1,9 @@
 "use client"
 
-import { Check, UserRound, Database, Globe } from "lucide-react"
-import { motion } from "motion/react"
+import Image from "next/image"
+import { Check } from "lucide-react"
 import { BrandLogo } from "@/components/brand-logo"
-import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
-
-const pillars = [
-  {
-    n: "01",
-    icon: UserRound,
-    title: "Customizable human expert persona",
-    desc: "A real-time, human-like avatar with your expert's voice, tone, and mannerisms that delivers knowledge the way they would.",
-  },
-  {
-    n: "02",
-    icon: Database,
-    title: "RAG + LLM knowledge layer",
-    desc: "We turn your learning content into a grounded knowledge base, so answers stay accurate, cited, and on-message.",
-  },
-  {
-    n: "03",
-    icon: Globe,
-    title: "Subscribe anytime, anywhere, any language",
-    desc: "Learners and patients reach the expert across time zones and languages, in English, Arabic, or both.",
-  },
-]
+import { Reveal } from "@/components/motion-primitives"
 
 const knowledgeOutcomes = [
   "Preserve expertise",
@@ -37,51 +16,43 @@ export function Pillars() {
   return (
     <section
       id="solution"
-      className="relative overflow-hidden border-y border-border/70 bg-gradient-to-br from-[#7c5cfc]/10 via-card/25 to-[#2563eb]/10 px-6 py-20 md:py-28"
+      className="relative scroll-mt-16 overflow-hidden border-y border-border/70 bg-[#02020b] px-6 py-20 md:py-28"
     >
       <div className="pointer-events-none absolute -left-24 top-12 h-64 w-64 rounded-full bg-[#7c5cfc]/20 blur-3xl" />
       <div className="pointer-events-none absolute -right-24 bottom-12 h-72 w-72 rounded-full bg-[#2563eb]/20 blur-3xl" />
 
-      <Reveal className="relative mx-auto max-w-3xl text-center">
-        <span className="eyebrow text-primary">
-          The Solution
-        </span>
-        <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-          Expert digital twins for education, healthcare &amp; beyond.
-        </h2>
-      </Reveal>
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.82fr)] lg:gap-16">
+        <Reveal className="max-w-2xl lg:justify-self-end">
+          <span className="eyebrow text-primary">The Solution</span>
+          <h2 className="mt-5 text-balance text-4xl font-semibold leading-[1.08] tracking-tight md:text-5xl lg:text-6xl">
+            Create{" "}
+            <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+              Expert
+            </span>{" "}
+            Digital Twins for Education, Healthcare, and{" "}
+            <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+              Beyond
+            </span>
+          </h2>
+          <p className="mt-8 max-w-[48ch] font-mono text-[clamp(1rem,1.35vw,1.35rem)] font-light leading-[1.6] tracking-[-0.035em] text-muted-foreground">
+            Our AI creates a customizable human expert powered by RAG and an LLM knowledge layer, ensuring every answer remains accurate, cited, and on-message and provides to subscribers anytime, anywhere, and in any language.
+          </p>
+        </Reveal>
 
-      <Stagger className="relative mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
-        {pillars.map((p) => {
-          const Icon = p.icon
-          return (
-            <StaggerItem key={p.n}>
-              <motion.div
-                whileHover={{ y: -6 }}
-                transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                className="group relative h-full overflow-hidden rounded-2xl border border-border bg-card p-8 transition-colors hover:border-primary/40"
-              >
-                <div className="flex items-start justify-between">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/15 transition-transform group-hover:scale-110">
-                    <Icon className="h-5 w-5 text-primary" />
-                  </span>
-                  <span className="pointer-events-none text-4xl font-semibold leading-none text-border/60 transition-colors group-hover:text-primary/20">
-                    {p.n}
-                  </span>
-                </div>
-                <h3 className="mt-6 text-lg font-medium text-balance">
-                  {p.title}
-                </h3>
-                <p className="mt-2 text-pretty leading-relaxed text-muted-foreground">
-                  {p.desc}
-                </p>
-              </motion.div>
-            </StaggerItem>
-          )
-        })}
-      </Stagger>
+        <Reveal className="solution-artwork-blend relative mx-auto w-full max-w-md lg:mx-0 lg:justify-self-end">
+          <div className="relative aspect-[1086/1448]">
+            <Image
+              src="/the Solution.png"
+              alt="AI expert digital twin surrounded by an interactive knowledge network"
+              fill
+              sizes="(min-width: 1024px) 38vw, 90vw"
+              className="object-cover"
+            />
+          </div>
+        </Reveal>
+      </div>
 
-      <Reveal className="relative mx-auto mt-12 max-w-5xl rounded-2xl border border-primary/25 bg-card p-6 shadow-xl shadow-primary/5 md:p-8">
+      <Reveal className="relative mx-auto mt-16 max-w-5xl rounded-2xl border border-primary/25 bg-card p-6 shadow-xl shadow-primary/5 md:p-8">
         <div className="grid gap-6 md:grid-cols-[auto_1fr] md:items-center">
           <div className="flex items-center gap-4">
             <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-border bg-background">

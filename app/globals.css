@@ -182,19 +182,49 @@
     transform: rotateX(8deg) rotateY(0deg);
     filter: drop-shadow(0 3px 5px rgb(77 182 232 / 18%));
   }
-  25% {
-    filter: drop-shadow(5px 3px 8px rgb(124 92 252 / 35%));
-  }
-  50% {
+  7.5% {
     transform: rotateX(-8deg) rotateY(180deg);
-    filter: drop-shadow(0 3px 5px rgb(63 199 192 / 18%));
+    filter: drop-shadow(5px 3px 9px rgb(124 92 252 / 40%));
   }
-  75% {
-    filter: drop-shadow(-5px 3px 8px rgb(77 182 232 / 35%));
+  15% {
+    transform: rotateX(8deg) rotateY(360deg);
+    filter: drop-shadow(-5px 3px 9px rgb(77 182 232 / 40%));
   }
+  18% {
+    transform: translateY(-4px) rotateX(8deg) rotateY(360deg) scale(1.08);
+  }
+  21% {
+    transform: translateY(1px) rotateX(8deg) rotateY(360deg) scale(0.98);
+  }
+  24% {
+    transform: translateY(-2px) rotateX(8deg) rotateY(360deg) scale(1.03);
+  }
+  25%,
   100% {
     transform: rotateX(8deg) rotateY(360deg);
     filter: drop-shadow(0 3px 5px rgb(77 182 232 / 18%));
+  }
+}
+
+@keyframes mission-artifact-outer {
+  0%, 100% { transform: rotate(-1.5deg) scale(1.02); }
+  50% { transform: rotate(2.5deg) scale(1.055) translateY(-0.8%); }
+}
+
+@keyframes mission-artifact-middle {
+  0%, 100% { transform: rotate(2deg) scale(1.025); }
+  50% { transform: rotate(-3deg) scale(1.065) translateX(0.8%); }
+}
+
+@keyframes mission-fluorescence {
+  0%,
+  100% {
+    opacity: 0.58;
+    filter: saturate(1.15) brightness(1);
+  }
+  50% {
+    opacity: 0.82;
+    filter: saturate(1.45) brightness(1.18);
   }
 }
 
@@ -302,10 +332,57 @@
 }
 
 .brand-logo-3d > svg {
-  animation: brand-logo-spin-3d 7s linear infinite;
+  animation: brand-logo-spin-3d 4s linear infinite;
   transform-style: preserve-3d;
   backface-visibility: visible;
   will-change: transform, filter;
+}
+
+.mission-artifact-base {
+  filter: saturate(1.2) contrast(1.05);
+}
+
+.mission-artifact-layer {
+  transform-origin: 50% 50%;
+  will-change: transform, filter;
+}
+
+.mission-artifact-outer {
+  animation: mission-artifact-outer 14s ease-in-out infinite;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0 38%, #000 43% 61%, transparent 67%);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 0 38%, #000 43% 61%, transparent 67%);
+}
+
+.mission-artifact-middle {
+  animation: mission-artifact-middle 10s ease-in-out infinite;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0 22%, #000 28% 43%, transparent 49%);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 0 22%, #000 28% 43%, transparent 49%);
+}
+
+.mission-fluorescence {
+  animation: mission-fluorescence 6s ease-in-out infinite;
+  background:
+    radial-gradient(circle at 32% 38%, rgb(217 70 239 / 34%), transparent 36%),
+    radial-gradient(circle at 72% 55%, rgb(59 130 246 / 38%), transparent 42%),
+    radial-gradient(circle at 50% 62%, rgb(124 58 237 / 30%), transparent 48%);
+  box-shadow:
+    inset 0 0 80px rgb(168 85 247 / 24%),
+    inset -45px 0 90px rgb(37 99 235 / 20%);
+}
+
+.solution-artwork-blend {
+  -webkit-mask-image: radial-gradient(
+    ellipse 76% 78% at 50% 48%,
+    #000 58%,
+    rgb(0 0 0 / 82%) 72%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 76% 78% at 50% 48%,
+    #000 58%,
+    rgb(0 0 0 / 82%) 72%,
+    transparent 100%
+  );
 }
 
 .animate-chat-question-pop {
@@ -453,5 +530,13 @@
   .brand-logo-3d > svg {
     animation: none;
     transform: none;
+  }
+  .mission-artifact-base,
+  .mission-artifact-layer {
+    animation: none;
+    transform: none;
+  }
+  .mission-fluorescence {
+    animation: none;
   }
 }

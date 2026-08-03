@@ -7,15 +7,60 @@ export function Mission() {
       aria-labelledby="mission-heading"
       className="grid overflow-hidden border-y border-border/70 bg-black lg:aspect-[1672/941] lg:grid-cols-[51%_49%]"
     >
-      <div className="relative aspect-[852/941] overflow-hidden lg:aspect-auto">
+      <div className="relative isolate aspect-[852/941] overflow-hidden bg-[#05010f] lg:aspect-auto">
         <Image
           src="/mission.png"
-          alt="AI-assisted brain scan analysis and interactive human intelligence visualization"
-          width={1672}
-          height={941}
+          alt="Purple and blue abstract geometric intelligence design"
+          fill
           sizes="(min-width: 1024px) 51vw, 100vw"
-          className="absolute inset-0 h-full w-[196.25%] max-w-none"
+          className="mission-artifact-base object-cover"
         />
+
+        {["outer", "middle"].map((layer) => (
+          <div
+            key={layer}
+            aria-hidden="true"
+            className={`mission-artifact-layer mission-artifact-${layer} absolute inset-0`}
+          >
+            <Image
+              src="/mission.png"
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 51vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+        ))}
+
+        <div
+          aria-hidden="true"
+          className="mission-fluorescence pointer-events-none absolute inset-0 z-[1] mix-blend-screen"
+        />
+
+        <div className="pointer-events-none absolute inset-x-0 bottom-[5%] z-10 px-5 text-center sm:px-8">
+          <div className="mx-auto h-px w-20 bg-gradient-to-r from-violet-500 via-purple-400 to-blue-400 sm:w-28" />
+          <div className="mt-4 flex items-center justify-center gap-3">
+            <svg
+              viewBox="0 0 78 30"
+              aria-hidden="true"
+              className="h-6 w-[3.9rem] shrink-0 drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)] sm:h-7 sm:w-[4.5rem]"
+            >
+              <defs>
+                <linearGradient id="mission-arrows" x1="0" y1="0" x2="78" y2="0">
+                  <stop offset="0%" stopColor="#a78bfa" />
+                  <stop offset="52%" stopColor="#8b5cf6" />
+                  <stop offset="100%" stopColor="#60a5fa" />
+                </linearGradient>
+              </defs>
+              <path d="M0 3h13l12 12-12 12H0l12-12L0 3Z" fill="url(#mission-arrows)" />
+              <path d="M24 3h13l12 12-12 12H24l12-12L24 3Z" fill="url(#mission-arrows)" />
+              <path d="M48 3h13l12 12-12 12H48l12-12L48 3Z" fill="url(#mission-arrows)" />
+            </svg>
+            <p className="bg-gradient-to-r from-violet-300 via-purple-400 to-blue-300 bg-clip-text text-left text-[clamp(0.82rem,1.35vw,1.35rem)] font-bold uppercase tracking-[0.06em] text-transparent drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]">
+              Cooperate. Personalized. Power. Progress.
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="relative flex items-center overflow-hidden bg-[#261078] px-7 py-16 sm:px-12 lg:px-[10.5%] lg:py-[8%]">
@@ -26,7 +71,7 @@ export function Mission() {
             id="mission-heading"
             className="text-balance text-[clamp(2.25rem,3.35vw,4rem)] font-light leading-[1.3] tracking-[-0.025em]"
           >
-            Our mission is to <strong className="font-bold">preserve</strong>,{" "}
+            Our mission is to <strong className="font-bold">incorporate</strong>,{" "}
             <strong className="font-bold">improve</strong>, and{" "}
             <strong className="font-bold">democratize</strong> human expertise.
           </h2>
