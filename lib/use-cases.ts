@@ -1,9 +1,10 @@
-export type UseCaseId = "healthcare" | "education" | "government"
+export type IndustryUseCaseId = "healthcare" | "education" | "government"
+export type UseCaseId = IndustryUseCaseId | "template"
 
 export interface UseCase {
   id: UseCaseId
   label: string
-  icon: "stethoscope" | "graduation-cap" | "landmark"
+  icon: "stethoscope" | "graduation-cap" | "landmark" | "layout-template"
   headline: string
   summary: string
   points: string[]
@@ -112,12 +113,43 @@ export const useCases: UseCase[] = [
     demoVideo: null,
     alt: "AI government training assistant running an oral assessment",
   },
+  {
+    id: "template",
+    label: "Use Case Template",
+    icon: "layout-template",
+    headline: "A flexible starting point for your AI expert.",
+    summary:
+      "Use this template to shape a MYO'S deployment around your audience, trusted knowledge, workflows, and desired outcomes.",
+    points: [
+      "Define the people your AI expert should support",
+      "Connect approved knowledge and preferred guidance",
+      "Set escalation rules and measurable outcomes",
+    ],
+    pageSections: [
+      {
+        title: "1. Define the audience and need",
+        body: "Identify who needs support, the questions they ask most often, and the moments where expert guidance has the greatest value.",
+      },
+      {
+        title: "2. Add trusted expertise",
+        body: "Select the approved documents, processes, teaching materials, or institutional knowledge that should ground every response.",
+      },
+      {
+        title: "3. Design the experience",
+        body: "Choose the expert avatar, tone, languages, delivery channels, and human escalation path that fit your organization.",
+      },
+    ],
+    outcomes: ["Consistent expert guidance", "Faster knowledge access", "A scalable personalized experience"],
+    image: "/demos/my-graph.png",
+    demoVideo: null,
+    alt: "MYO'S AI knowledge graph illustrating a customizable expert use case",
+  },
 ]
 
 const CUSTOM_SLUG_PREFIX = "custom-"
 const GOAL_MAX_LENGTH = 160
 
-const headlineByIndustry: Record<UseCaseId, (goal: string) => string> = {
+const headlineByIndustry: Record<IndustryUseCaseId, (goal: string) => string> = {
   healthcare: (goal) => `AI doctor avatars built around: "${goal}"`,
   education: (goal) => `An AI teaching avatar built around: "${goal}"`,
   government: (goal) => `An AI government training avatar built around: "${goal}"`,
@@ -128,12 +160,12 @@ function truncate(text: string, max: number) {
 }
 
 /** Encodes {industry, goal} into a shareable slug — no server storage needed. */
-export function encodeCustomUseCase(industry: UseCaseId, goal: string): string {
+export function encodeCustomUseCase(industry: IndustryUseCaseId, goal: string): string {
   const payload = JSON.stringify({ i: industry, g: truncate(goal.trim(), GOAL_MAX_LENGTH) })
   return `${CUSTOM_SLUG_PREFIX}${Buffer.from(payload, "utf-8").toString("base64url")}`
 }
 
-function decodeCustomSlug(slug: string): { industry: UseCaseId; goal: string } | null {
+function decodeCustomSlug(slug: string): { industry: IndustryUseCaseId; goal: string } | null {
   if (!slug.startsWith(CUSTOM_SLUG_PREFIX)) return null
 
   try {
@@ -155,7 +187,7 @@ function decodeCustomSlug(slug: string): { industry: UseCaseId; goal: string } |
 }
 
 /** Builds a personalized use case by layering the visitor's goal onto the base industry template. */
-export function buildPersonalizedUseCase(industry: UseCaseId, goal: string): UseCase {
+export function buildPersonalizedUseCase(industry: IndustryUseCaseId, goal: string): UseCase {
   const base = useCases.find((useCase) => useCase.id === industry)
   if (!base) throw new Error(`Unknown industry: ${industry}`)
 

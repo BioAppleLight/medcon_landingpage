@@ -1,4 +1,4 @@
-import { encodeCustomUseCase, type UseCaseId } from "@/lib/use-cases"
+import { encodeCustomUseCase, type IndustryUseCaseId } from "@/lib/use-cases"
 
 export interface ChatMessage {
   role: "user" | "assistant"
@@ -7,7 +7,7 @@ export interface ChatMessage {
 
 export interface ChatDecision {
   intent: "create_personalized_page" | "clarify_industry" | "clarify_goal"
-  target: UseCaseId | null
+  target: IndustryUseCaseId | null
   confidence: number
   missing_information: string[]
   action: "generate_page" | "ask_clarification"
@@ -17,13 +17,13 @@ export interface ChatDecision {
   page: { slug: string; url: string; label: string } | null
 }
 
-const industryLabels: Record<UseCaseId, string> = {
+const industryLabels: Record<IndustryUseCaseId, string> = {
   healthcare: "Healthcare",
   education: "Education",
   government: "Government",
 }
 
-const keywordsByIndustry: Record<UseCaseId, string[]> = {
+const keywordsByIndustry: Record<IndustryUseCaseId, string[]> = {
   healthcare: [
     "healthcare", "health care", "patient", "doctor", "medical", "health", "clinic",
     "hospital", "recovery", "surgery", "rehab", "nurse", "clinical", "therapy",
@@ -44,9 +44,9 @@ const keywordsByIndustry: Record<UseCaseId, string[]> = {
 const MIN_GOAL_LENGTH = 8
 const MIN_GOAL_WORDS = 3
 
-function detectIndustry(text: string): { industry: UseCaseId | null; confidence: number } {
+function detectIndustry(text: string): { industry: IndustryUseCaseId | null; confidence: number } {
   const lower = text.toLowerCase()
-  const scores = (Object.keys(keywordsByIndustry) as UseCaseId[]).map((industry) => ({
+  const scores = (Object.keys(keywordsByIndustry) as IndustryUseCaseId[]).map((industry) => ({
     industry,
     score: keywordsByIndustry[industry].filter((keyword) => lower.includes(keyword)).length,
   }))
@@ -60,7 +60,7 @@ function detectIndustry(text: string): { industry: UseCaseId | null; confidence:
   return { industry: top.industry, confidence: 0.9 }
 }
 
-function mostRecentIndustryFromHistory(history: ChatMessage[]): UseCaseId | null {
+function mostRecentIndustryFromHistory(history: ChatMessage[]): IndustryUseCaseId | null {
   for (let i = history.length - 1; i >= 0; i -= 1) {
     const message = history[i]
     if (message.role !== "user") continue

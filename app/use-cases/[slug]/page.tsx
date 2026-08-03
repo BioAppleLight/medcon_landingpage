@@ -8,6 +8,7 @@ import {
   Check,
   GraduationCap,
   Landmark,
+  LayoutTemplate,
   Stethoscope,
 } from "lucide-react"
 import { GovernmentQuestionPrompts } from "@/components/government-question-prompts"
@@ -20,6 +21,7 @@ const icons = {
   "graduation-cap": GraduationCap,
   landmark: Landmark,
   stethoscope: Stethoscope,
+  "layout-template": LayoutTemplate,
 }
 
 const transformationCtas = {
@@ -34,6 +36,10 @@ const transformationCtas = {
   government: {
     theme: "Government Operations",
     body: "Let's discuss how MYO'S AI solutions can help public-sector teams standardize training, improve knowledge access, and support service success at scale.",
+  },
+  template: {
+    theme: "AI Expert Use Case",
+    body: "Let's turn this flexible template into a MYO'S AI expert designed around your audience, knowledge, workflows, and goals.",
   },
 } as const
 

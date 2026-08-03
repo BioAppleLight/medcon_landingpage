@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Check, Stethoscope, GraduationCap, Landmark } from "lucide-react"
+import { Check, Stethoscope, GraduationCap, Landmark, LayoutTemplate } from "lucide-react"
 import { Reveal } from "@/components/motion-primitives"
 import { useCases, type UseCaseId } from "@/lib/use-cases"
 
@@ -11,6 +11,7 @@ const icons = {
   "graduation-cap": GraduationCap,
   landmark: Landmark,
   stethoscope: Stethoscope,
+  "layout-template": LayoutTemplate,
 }
 
 export function UseCases() {

@@ -32,6 +32,11 @@ const aboutLinks = [
 
 const useCaseLinks = [
   {
+    label: "Use Case Template",
+    href: "/use-cases/template",
+    description: "Start with a flexible blueprint for your own AI expert.",
+  },
+  {
     label: "Healthcare",
     href: "/use-cases/healthcare",
     description: "AI doctor avatars for post-surgery recovery.",
