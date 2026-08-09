@@ -1,11 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Check, Stethoscope, GraduationCap, Landmark, LayoutTemplate } from "lucide-react"
 import { Reveal } from "@/components/motion-primitives"
 import { useCases, type UseCaseId } from "@/lib/use-cases"
+import {
+  hasPersonalizedUseCase,
+  PERSONALIZED_USE_CASE_EVENT,
+  readPersonalizedIndustryLabel,
+  readPersonalizedUseCaseUrl,
+} from "@/lib/personalized-use-case-link"
 
 const icons = {
   "graduation-cap": GraduationCap,
@@ -16,7 +22,25 @@ const icons = {
 
 export function UseCases() {
   const [active, setActive] = useState<UseCaseId>(useCases[0].id)
+  const [templateUrl, setTemplateUrl] = useState("/use-cases/template")
+  const [industryLabel, setIndustryLabel] = useState<string | null>(null)
+  const [showTemplate, setShowTemplate] = useState(false)
   const tab = useCases.find((useCase) => useCase.id === active)!
+
+  useEffect(() => {
+    const sync = () => {
+      setTemplateUrl(readPersonalizedUseCaseUrl())
+      setIndustryLabel(readPersonalizedIndustryLabel())
+      setShowTemplate(hasPersonalizedUseCase())
+    }
+    sync()
+    window.addEventListener(PERSONALIZED_USE_CASE_EVENT, sync)
+    window.addEventListener("storage", sync)
+    return () => {
+      window.removeEventListener(PERSONALIZED_USE_CASE_EVENT, sync)
+      window.removeEventListener("storage", sync)
+    }
+  }, [])
 
   return (
     <section
@@ -38,33 +62,35 @@ export function UseCases() {
           aria-label="Use case industries"
           className="flex flex-wrap items-center justify-center gap-2"
         >
-          {useCases.map((useCase) => {
-            const Icon = icons[useCase.icon]
-            const isActive = useCase.id === active
-            return (
-              <button
-                key={useCase.id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                aria-controls={`${useCase.id}-panel`}
-                onClick={() => setActive(useCase.id)}
-                onMouseEnter={() => setActive(useCase.id)}
-                onFocus={() => setActive(useCase.id)}
-                className={`relative inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-colors ${
-                  isActive
-                    ? "border-primary text-primary-foreground"
-                    : "border-border bg-card/50 text-muted-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-foreground"
-                }`}
-              >
-                {isActive && (
-                  <span className="absolute inset-0 -z-10 rounded-full bg-primary" />
-                )}
-                <Icon className="h-4 w-4" />
-                {useCase.label}
-              </button>
-            )
-          })}
+          {useCases
+            .filter((useCase) => useCase.id !== "template" || showTemplate)
+            .map((useCase) => {
+              const Icon = icons[useCase.icon]
+              const isActive = useCase.id === active
+              return (
+                <button
+                  key={useCase.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls={`${useCase.id}-panel`}
+                  onClick={() => setActive(useCase.id)}
+                  onMouseEnter={() => setActive(useCase.id)}
+                  onFocus={() => setActive(useCase.id)}
+                  className={`relative inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "border-primary text-primary-foreground"
+                      : "border-border bg-card/50 text-muted-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-foreground"
+                  }`}
+                >
+                  {isActive && (
+                    <span className="absolute inset-0 -z-10 rounded-full bg-primary" />
+                  )}
+                  <Icon className="h-4 w-4" />
+                  {useCase.id === "template" && industryLabel ? industryLabel : useCase.label}
+                </button>
+              )
+            })}
         </div>
 
         <div
@@ -89,7 +115,7 @@ export function UseCases() {
               ))}
             </ul>
             <Link
-              href={`/use-cases/${tab.id}`}
+              href={tab.id === "template" ? templateUrl : `/use-cases/${tab.id}`}
               className="mt-8 inline-flex text-sm font-semibold text-[#9d8cff] transition-colors hover:text-[#c4b8ff]"
             >
               Learn More

@@ -15,7 +15,7 @@ import { GovernmentQuestionPrompts } from "@/components/government-question-prom
 import { SiteFooter } from "@/components/site-footer"
 import { SiteNav } from "@/components/site-nav"
 import { BOOKING_URL } from "@/lib/site"
-import { getUseCase, useCases } from "@/lib/use-cases"
+import { getPersonalizedPresentation, getUseCase, useCases } from "@/lib/use-cases"
 
 const icons = {
   "graduation-cap": GraduationCap,
@@ -47,19 +47,36 @@ type PageProps = {
   params: Promise<{
     slug: string
   }>
+  searchParams: Promise<{
+    brief?: string | string[]
+  }>
+}
+
+function resolveUseCaseSlug(
+  slug: string,
+  brief: string | string[] | undefined,
+): string | null {
+  if (slug !== "template") return slug
+
+  // The template is not a public, generic use-case page. It only exists as the
+  // destination of a completed chatbot conversation.
+  return typeof brief === "string" && brief.startsWith("c-") ? brief : null
 }
 
 export function generateStaticParams() {
-  return useCases.map((useCase) => ({
+  return useCases.filter((useCase) => useCase.id !== "template").map((useCase) => ({
     slug: useCase.id,
   }))
 }
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const useCase = getUseCase(slug)
+  const { brief } = await searchParams
+  const effectiveSlug = resolveUseCaseSlug(slug, brief)
+  const useCase = effectiveSlug ? getUseCase(effectiveSlug) : undefined
 
   if (!useCase) {
     return {
@@ -73,16 +90,21 @@ export async function generateMetadata({
   }
 }
 
-export default async function UseCasePage({ params }: PageProps) {
+export default async function UseCasePage({ params, searchParams }: PageProps) {
   const { slug } = await params
-  const useCase = getUseCase(slug)
+  const { brief } = await searchParams
+  const effectiveSlug = resolveUseCaseSlug(slug, brief)
+  const useCase = effectiveSlug ? getUseCase(effectiveSlug) : undefined
 
-  if (!useCase) {
+  if (!useCase || !effectiveSlug) {
     notFound()
   }
 
   const Icon = icons[useCase.icon]
-  const transformationCta = transformationCtas[useCase.id]
+  const personalized = getPersonalizedPresentation(effectiveSlug)
+  const transformationCta = personalized
+    ? { theme: personalized.ctaTheme, body: personalized.ctaBody }
+    : transformationCtas[useCase.id]
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -165,9 +187,10 @@ export default async function UseCasePage({ params }: PageProps) {
       <section className="px-6 py-16 md:py-24">
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[0.8fr_1fr]">
           <div>
-            <p className="eyebrow">How it works</p>
+            <p className="eyebrow">{personalized?.eyebrow ?? "How it works"}</p>
             <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-              Built around the moments where guidance matters most.
+              {personalized?.howItWorksTitle ??
+                "Built around the moments where guidance matters most."}
             </h2>
           </div>
 

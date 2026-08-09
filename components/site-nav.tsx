@@ -5,6 +5,12 @@ import { ChevronDown, Menu, X } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { BrandLogo } from "@/components/brand-logo"
 import { BOOKING_URL } from "@/lib/site"
+import {
+  hasPersonalizedUseCase,
+  PERSONALIZED_USE_CASE_EVENT,
+  readPersonalizedIndustryLabel,
+  readPersonalizedUseCaseUrl,
+} from "@/lib/personalized-use-case-link"
 
 const links = [
   { label: "About", href: "/about" },
@@ -72,12 +78,30 @@ export function SiteNav() {
   const [aboutOpen, setAboutOpen] = useState(false)
   const [useCasesOpen, setUseCasesOpen] = useState(false)
   const [technologyOpen, setTechnologyOpen] = useState(false)
+  const [templateUrl, setTemplateUrl] = useState("/use-cases/template")
+  const [industryLabel, setIndustryLabel] = useState<string | null>(null)
+  const [showTemplate, setShowTemplate] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
     onScroll()
     window.addEventListener("scroll", onScroll)
     return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  useEffect(() => {
+    const sync = () => {
+      setTemplateUrl(readPersonalizedUseCaseUrl())
+      setIndustryLabel(readPersonalizedIndustryLabel())
+      setShowTemplate(hasPersonalizedUseCase())
+    }
+    sync()
+    window.addEventListener(PERSONALIZED_USE_CASE_EVENT, sync)
+    window.addEventListener("storage", sync)
+    return () => {
+      window.removeEventListener(PERSONALIZED_USE_CASE_EVENT, sync)
+      window.removeEventListener("storage", sync)
+    }
   }, [])
 
   const closeMenus = () => {
@@ -181,22 +205,26 @@ export function SiteNav() {
                       role="menu"
                       className="overflow-hidden rounded-xl border border-border bg-card/95 p-2 shadow-2xl shadow-black/20 backdrop-blur-xl"
                     >
-                      {useCaseLinks.map((item) => (
-                        <a
-                          key={item.href}
-                          href={item.href}
-                          role="menuitem"
-                          onClick={closeMenus}
-                          className="block rounded-lg px-4 py-3 transition-colors hover:bg-primary/10"
-                        >
-                          <span className="block text-sm font-semibold text-foreground">
-                            {item.label}
-                          </span>
-                          <span className="mt-1 block text-pretty text-xs leading-5 text-muted-foreground">
-                            {item.description}
-                          </span>
-                        </a>
-                      ))}
+                      {useCaseLinks
+                        .filter((item) => item.href !== "/use-cases/template" || showTemplate)
+                        .map((item) => (
+                          <a
+                            key={item.href}
+                            href={item.href === "/use-cases/template" ? templateUrl : item.href}
+                            role="menuitem"
+                            onClick={closeMenus}
+                            className="block rounded-lg px-4 py-3 transition-colors hover:bg-primary/10"
+                          >
+                            <span className="block text-sm font-semibold text-foreground">
+                              {item.href === "/use-cases/template" && industryLabel
+                                ? industryLabel
+                                : item.label}
+                            </span>
+                            <span className="mt-1 block text-pretty text-xs leading-5 text-muted-foreground">
+                              {item.description}
+                            </span>
+                          </a>
+                        ))}
                     </div>
                   </div>
                 )}
@@ -312,7 +340,9 @@ export function SiteNav() {
                           className="rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
                         >
                           <span className="block text-sm font-semibold text-foreground">
-                            {item.label}
+                            {item.href === "/use-cases/template" && industryLabel
+                              ? industryLabel
+                              : item.label}
                           </span>
                           <span className="mt-1 block text-xs leading-5 text-muted-foreground">
                             {item.description}
@@ -340,21 +370,25 @@ export function SiteNav() {
 
                   {useCasesOpen && (
                     <div className="grid gap-2 border-l border-border pl-4">
-                      {useCaseLinks.map((item) => (
-                        <a
-                          key={item.href}
-                          href={item.href}
-                          onClick={closeMenus}
-                          className="rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
-                        >
-                          <span className="block text-sm font-semibold text-foreground">
-                            {item.label}
-                          </span>
-                          <span className="mt-1 block text-xs leading-5 text-muted-foreground">
-                            {item.description}
-                          </span>
-                        </a>
-                      ))}
+                      {useCaseLinks
+                        .filter((item) => item.href !== "/use-cases/template" || showTemplate)
+                        .map((item) => (
+                          <a
+                            key={item.href}
+                            href={item.href === "/use-cases/template" ? templateUrl : item.href}
+                            onClick={closeMenus}
+                            className="rounded-lg px-3 py-2 transition-colors hover:bg-primary/10"
+                          >
+                            <span className="block text-sm font-semibold text-foreground">
+                              {item.href === "/use-cases/template" && industryLabel
+                                ? industryLabel
+                                : item.label}
+                            </span>
+                            <span className="mt-1 block text-xs leading-5 text-muted-foreground">
+                              {item.description}
+                            </span>
+                          </a>
+                        ))}
                     </div>
                   )}
                 </div>
