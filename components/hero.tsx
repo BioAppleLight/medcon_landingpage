@@ -8,43 +8,20 @@ import { HeroChat } from "@/components/hero-chat"
 import { buttonVariants } from "@/components/ui/button"
 import { openNextDemo } from "@/lib/demo-links"
 import { BOOKING_URL } from "@/lib/site"
+import { useAdaptive } from "@/components/adaptive-provider"
+import { VARIANT_HERO, type Variant } from "@/lib/variants"
 
-const scenarios = [
-  {
-    role: "Healthcare",
-    name: "Dr. Amira Hassan",
-    title: "Orthopedic Recovery",
-    quote: "Let's review your ACL recovery exercises.",
-    icon: Stethoscope,
-  },
-  {
-    role: "Education",
-    name: "Prof. Daniel Reyes",
-    title: "Calculus Tutor",
-    quote: "Can you explain why integration by parts works?",
-    icon: GraduationCap,
-  },
-  {
-    role: "Government",
-    name: "Khalid Al Mansoori",
-    title: "AI Governance Trainer",
-    quote: "Would you like help preparing for your AI Governance assessment?",
-    icon: Landmark,
-  },
-]
+const VARIANT_ICON: Record<Variant, typeof Stethoscope> = {
+  healthcare: Stethoscope,
+  education: GraduationCap,
+  business: Briefcase,
+}
 
 export function Hero() {
-  const [active, setActive] = useState(0)
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setActive((v) => (v + 1) % scenarios.length)
-    }, 4000)
-    return () => clearInterval(id)
-  }, [])
-
-  const scenario = scenarios[active]
-  const Icon = scenario.icon
+  const { variant } = useAdaptive()
+  const content = VARIANT_HERO[variant]
+  const scenario = content.card
+  const Icon = VARIANT_ICON[variant]
 
   return (
     <section
@@ -115,47 +92,32 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Cycling avatar card */}
-      <div className="animate-rise mx-auto mt-16 max-w-lg [animation-delay:0.35s]">
-        <div className="relative rounded-2xl border border-border bg-card p-6 shadow-2xl">
-          <div key={scenario.role} className="animate-fade-in">
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent">
-                  <Icon className="h-7 w-7 text-primary-foreground" />
-                </span>
-                <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card bg-emerald-400" />
-              </div>
-              <div className="text-left">
-                <p className="text-sm font-medium">{scenario.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {scenario.title}
-                </p>
-              </div>
-              <span className="ml-auto rounded-full border border-border bg-secondary px-3 py-1 text-xs text-muted-foreground">
-                {scenario.role}
+      {/* Variant-driven avatar card */}
+      <div className="mx-auto mt-16 max-w-lg">
+        <div
+          key={variant}
+          className="animate-fade-in relative rounded-2xl border border-border bg-card p-6 shadow-2xl"
+        >
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent">
+                <Icon className="h-7 w-7 text-primary-foreground" />
               </span>
+              <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-card bg-emerald-400" />
             </div>
-
-            <div className="mt-5 rounded-xl rounded-tl-sm bg-secondary px-4 py-3 text-left">
-              <p className="text-pretty text-sm leading-relaxed">
-                {scenario.quote}
-              </p>
+            <div className="text-left">
+              <p className="text-sm font-medium">{scenario.name}</p>
+              <p className="text-xs text-muted-foreground">{scenario.title}</p>
             </div>
+            <span className="ml-auto rounded-full border border-border bg-secondary px-3 py-1 text-xs text-muted-foreground">
+              {scenario.role}
+            </span>
           </div>
 
-          <div className="mt-5 flex items-center justify-center gap-2">
-            {scenarios.map((s, i) => (
-              <button
-                key={s.role}
-                type="button"
-                aria-label={`Show ${s.role} scenario`}
-                onClick={() => setActive(i)}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === active ? "w-6 bg-primary" : "w-1.5 bg-border"
-                }`}
-              />
-            ))}
+          <div className="mt-5 rounded-xl rounded-tl-sm bg-secondary px-4 py-3 text-left">
+            <p className="text-pretty text-sm leading-relaxed">
+              {scenario.quote}
+            </p>
           </div>
         </div>
       </div>
