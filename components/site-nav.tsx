@@ -1,10 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronDown, Menu, X } from "lucide-react"
+import { ChevronDown, Menu, RotateCcw, X } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { BrandLogo } from "@/components/brand-logo"
 import { BOOKING_URL } from "@/lib/site"
+import { useAdaptive } from "@/components/adaptive-provider"
 import {
   hasPersonalizedUseCase,
   PERSONALIZED_USE_CASE_EVENT,

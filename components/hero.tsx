@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { useEffect, useState } from "react"
-import { Play, Calendar, Stethoscope, GraduationCap, Landmark } from "lucide-react"
+import { Play, Calendar, Stethoscope, GraduationCap, Landmark, Briefcase } from "lucide-react"
 import { BrandLogo } from "@/components/brand-logo"
 import { HeroChat } from "@/components/hero-chat"
 import { buttonVariants } from "@/components/ui/button"
