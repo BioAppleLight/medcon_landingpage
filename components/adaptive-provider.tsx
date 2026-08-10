@@ -29,7 +29,7 @@ export function useAdaptive() {
 
 export function AdaptiveProvider({ children }: { children: ReactNode }) {
   const [variant, setVariant] = useState<Variant>("healthcare")
-  const [onboarded, setOnboarded] = useState(false)
+  const [onboarded, setOnboarded] = useState(true)
 
   function finish(next: Variant) {
     setVariant(next)
