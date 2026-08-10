@@ -11,7 +11,7 @@ const linkGroups = [
     href: "/partnerships",
   },
   { label: "Pricing", href: "/pricing" },
-  { label: "Team", href: "/#team" },
+  { label: "Team", href: "/team" },
   { label: "Contact", href: "/contact" },
 ]
 
