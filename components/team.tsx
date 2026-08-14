@@ -14,42 +14,42 @@ const team: TeamMember[] = [
   {
     name: "Terezia Juras",
     role: "Founder of mMEDCON and MyoMetrics",
-    image: "/team/Tete.png",
+    image: "/team/Tete.jpg",
   },
   {
     name: "Lenka Sadovska",
     role: "Marketing & PR",
-    image: "/team/Lenka.png",
+    image: "/team/Lenka.jpg",
   },
   {
     name: "Abbas Raza",
     role: "Backend Developer",
-    image: "/team/abbas.png",
+    image: "/team/abbas.jpg",
   },
   {
     name: "Ignatius Ratemo",
     role: "Systems Developer",
-    image: "/team/Ignatius.png",
+    image: "/team/Ignatius.jpg",
   },
   {
     name: "Emma Kortosova",
     role: "Associate @ mMEDCON",
-    image: "/team/Emma.png",
+    image: "/team/Emma.jpg",
   },
   {
     name: "Sayda Abusalih",
     role: "Management and Outreach",
-    image: "/team/Sayda.png",
+    image: "/team/Sayda.jpg",
   },
   {
     name: "Prof. Dr. Charmayne Mary Lee Hughes",
     role: "Advisor",
-    image: "/team/prof-charmayne.png",
+    image: "/team/Prof.%20Dr.%20Charmanye.jpg",
   },
   {
     name: "Dr. Osama Abdullah",
     role: "Advisor",
-    image: "/team/dr-osama.png",
+    image: "/team/Dr.%20Osama.jpg",
   },
   { name: "Seidou", role: "Backend Engineer Intern" },
   { name: "Edward Chen", role: "Frontend Designer Intern" },
@@ -66,7 +66,7 @@ type Mentor = {
 const mentors: Mentor[] = [
   {
     name: "Yale",
-    logo: "/institutions/Yale-University-Logo-Vector.png",
+    logo: "/institutions/Yale-University-Logo-Vector%20.svg",
     width: 220,
     height: 35,
     imageClassName: "max-h-14 max-w-[90%]",
@@ -101,7 +101,7 @@ const mentors: Mentor[] = [
   },
   {
     name: "NIMHANS",
-    logo: "/institutions/nimhans.png",
+    logo: "/institutions/nimhans.jpeg",
     width: 82,
     height: 82,
     imageClassName: "max-h-20 max-w-[80%]",
@@ -115,7 +115,7 @@ const mentors: Mentor[] = [
   },
   {
     name: "Comenius University",
-    logo: "/institutions/comenius-university.png",
+    logo: "/institutions/comenius-university.svg",
     width: 108,
     height: 72,
     imageClassName: "max-h-24 max-w-[13rem] scale-[2.1]",

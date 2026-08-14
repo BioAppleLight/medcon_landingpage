@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import { motion } from "motion/react"
 import { Check, Play } from "lucide-react"
@@ -13,6 +14,8 @@ const features = [
 ]
 
 export function HumanDelivery() {
+  const [isPlaying, setIsPlaying] = useState(false)
+
   return (
     <section className="px-6 py-20 md:py-28">
       <Reveal className="mx-auto max-w-3xl text-center">
@@ -41,24 +44,41 @@ export function HumanDelivery() {
         </Stagger>
 
         <Reveal delay={0.1}>
-          <button
-            type="button"
-            className="group relative block aspect-video w-full overflow-hidden rounded-2xl border border-border bg-secondary"
-            aria-label="Play product demo video"
-          >
-            <Image
-              src="/demos/human-delivery.png"
-              alt="MyOS AI avatar speaking naturally to camera"
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <span className="absolute inset-0 flex items-center justify-center bg-background/30">
-              <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform group-hover:scale-110">
-                <span className="absolute inset-0 animate-ping rounded-full bg-primary/40 [animation-duration:2s]" />
-                <Play className="h-6 w-6 translate-x-0.5" />
-              </span>
-            </span>
-          </button>
+          <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border bg-secondary">
+            {isPlaying ? (
+              <video
+                className="h-full w-full object-cover"
+                autoPlay
+                controls
+                playsInline
+                poster="/demos/human-delivery.png"
+                aria-label="Rehabilitation product demonstration"
+              >
+                <source src="/Rehab.mp4" type="video/mp4" />
+                Your browser does not support the video element.
+              </video>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsPlaying(true)}
+                className="group relative block h-full w-full"
+                aria-label="Play rehabilitation demo video"
+              >
+                <Image
+                  src="/demos/human-delivery.png"
+                  alt="MyOS AI avatar speaking naturally to camera"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <span className="absolute inset-0 flex items-center justify-center bg-background/30">
+                  <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform group-hover:scale-110">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-primary/40 [animation-duration:2s]" />
+                    <Play className="h-6 w-6 translate-x-0.5" />
+                  </span>
+                </span>
+              </button>
+            )}
+          </div>
         </Reveal>
       </div>
     </section>

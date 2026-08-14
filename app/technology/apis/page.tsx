@@ -50,7 +50,7 @@ const apiPlatforms: ApiPlatform[] = [
   {
     model: "Pika Labs",
     brand: "Pika",
-    logo: "/api-logos/pika.png",
+    logo: "/api-logos/pika.svg",
     category: "Video generation",
     description: "Fast creative video generation, effects, and transformations.",
   },

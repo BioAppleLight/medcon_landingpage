@@ -116,7 +116,7 @@ export function UseCases() {
             </ul>
             <Link
               href={tab.id === "template" ? templateUrl : `/use-cases/${tab.id}`}
-              className="mt-8 inline-flex text-sm font-semibold text-[#9d8cff] transition-colors hover:text-[#c4b8ff]"
+              className="mt-8 inline-flex text-sm font-semibold text-white transition-colors hover:text-white/80"
             >
               Learn More
             </Link>

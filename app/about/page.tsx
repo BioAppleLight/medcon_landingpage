@@ -3,10 +3,10 @@ import { BeforeAfter } from "@/components/before-after"
 import { BusinessModel } from "@/components/business-model"
 import { IndustryNews } from "@/components/industry-news"
 import { Hero } from "@/components/hero"
-import { MetricsStrip } from "@/components/metrics-strip"
 import { Partners } from "@/components/partners"
 import { Pillars } from "@/components/pillars"
 import { Problem } from "@/components/problem"
+import { ResearchQuote } from "@/components/research-quote"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteNav } from "@/components/site-nav"
 import { SpecialOfferPopup } from "@/components/special-offer-popup"
@@ -28,9 +28,9 @@ export default function AboutPage() {
       <Problem />
       <Pillars />
       <BeforeAfter />
+      <ResearchQuote />
       <BusinessModel />
       <IndustryNews />
-      <MetricsStrip />
       <WhyUs />
       <SiteFooter />
     </main>

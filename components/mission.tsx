@@ -39,27 +39,6 @@ export function Mission() {
 
         <div className="pointer-events-none absolute inset-x-0 bottom-[5%] z-10 px-5 text-center sm:px-8">
           <div className="mx-auto h-px w-20 bg-gradient-to-r from-violet-500 via-purple-400 to-blue-400 sm:w-28" />
-          <div className="mt-4 flex items-center justify-center gap-3">
-            <svg
-              viewBox="0 0 78 30"
-              aria-hidden="true"
-              className="h-6 w-[3.9rem] shrink-0 drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)] sm:h-7 sm:w-[4.5rem]"
-            >
-              <defs>
-                <linearGradient id="mission-arrows" x1="0" y1="0" x2="78" y2="0">
-                  <stop offset="0%" stopColor="#a78bfa" />
-                  <stop offset="52%" stopColor="#8b5cf6" />
-                  <stop offset="100%" stopColor="#60a5fa" />
-                </linearGradient>
-              </defs>
-              <path d="M0 3h13l12 12-12 12H0l12-12L0 3Z" fill="url(#mission-arrows)" />
-              <path d="M24 3h13l12 12-12 12H24l12-12L24 3Z" fill="url(#mission-arrows)" />
-              <path d="M48 3h13l12 12-12 12H48l12-12L48 3Z" fill="url(#mission-arrows)" />
-            </svg>
-            <p className="bg-gradient-to-r from-violet-300 via-purple-400 to-blue-300 bg-clip-text text-left text-[clamp(0.82rem,1.35vw,1.35rem)] font-bold uppercase tracking-[0.06em] text-transparent drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]">
-              Cooperate. Personalized. Power. Progress.
-            </p>
-          </div>
         </div>
       </div>
 

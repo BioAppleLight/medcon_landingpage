@@ -297,7 +297,7 @@ Object.assign(domainContent, {
     "Sales and lead generation",
     "AI sales representative",
     "MYO'S AI sales avatars explain offers, qualify interest, and help each visitor take a relevant next step.",
-    "/Homepage design.png",
+    "/Homepage design.jpg",
   ),
   marketing: catalogDomain(
     "Marketing and brand communication",
@@ -374,7 +374,7 @@ Object.assign(domainContent, {
     "Real estate and property management",
     "AI property guide",
     "MYO'S AI property avatars present listings, educate buyers and sellers, onboard tenants, and support resident services.",
-    "/Homepage design.png",
+    "/Homepage design.jpg",
   ),
   travel_hospitality: catalogDomain(
     "Travel and hospitality",
@@ -392,7 +392,7 @@ Object.assign(domainContent, {
     "Entertainment and media",
     "AI media presenter",
     "MYO'S AI media avatars host, narrate, recommend, teach, and create interactive audience experiences.",
-    "/Homepage design.png",
+    "/Homepage design.jpg",
   ),
   museums_culture: catalogDomain(
     "Museums, culture and heritage",
@@ -404,7 +404,7 @@ Object.assign(domainContent, {
     "Events and conferences",
     "AI event host",
     "MYO'S AI event avatars support registration, agendas, navigation, session discovery, exhibitors, livestreams, and follow-up.",
-    "/Homepage design.png",
+    "/Homepage design.jpg",
   ),
   recruitment_career: catalogDomain(
     "Recruitment and career services",
@@ -453,7 +453,7 @@ Object.assign(domainContent, {
     "Internal organizational communication",
     "AI internal-communications host",
     "MYO'S AI internal avatars deliver leadership messages, policy updates, change guidance, benefits, news, and organizational knowledge.",
-    "/Homepage design.png",
+    "/Homepage design.jpg",
   ),
 })
 

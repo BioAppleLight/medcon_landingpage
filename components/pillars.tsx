@@ -1,16 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { Check } from "lucide-react"
-import { BrandLogo } from "@/components/brand-logo"
 import { Reveal } from "@/components/motion-primitives"
-
-const knowledgeOutcomes = [
-  "Preserve expertise",
-  "Accelerate onboarding",
-  "Improve training",
-  "Enable knowledge access at scale",
-]
 
 export function Pillars() {
   return (
@@ -42,7 +33,7 @@ export function Pillars() {
         <Reveal className="solution-artwork-blend relative mx-auto w-full max-w-md lg:mx-0 lg:justify-self-end">
           <div className="relative aspect-[1086/1448]">
             <Image
-              src="/the Solution.png"
+              src="/the Solution.svg"
               alt="AI expert digital twin surrounded by an interactive knowledge network"
               fill
               sizes="(min-width: 1024px) 38vw, 90vw"
@@ -52,40 +43,6 @@ export function Pillars() {
         </Reveal>
       </div>
 
-      <Reveal className="relative mx-auto mt-16 max-w-5xl rounded-2xl border border-primary/25 bg-card p-6 shadow-xl shadow-primary/5 md:p-8">
-        <div className="grid gap-6 md:grid-cols-[auto_1fr] md:items-center">
-          <div className="flex items-center gap-4">
-            <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-border bg-background">
-              <BrandLogo className="h-10 w-10" />
-            </span>
-            <div className="md:hidden">
-              <p className="text-lg font-semibold tracking-tight">MYO&apos;S</p>
-              <p className="text-sm text-muted-foreground">
-                Organizational knowledge, made interactive.
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-balance text-2xl font-semibold tracking-tight md:text-3xl">
-              MyOS transforms organizational knowledge into interactive AI
-              avatars that:
-            </h3>
-            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-              {knowledgeOutcomes.map((outcome) => (
-                <li key={outcome} className="flex items-center gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/15">
-                    <Check className="h-4 w-4 text-primary" />
-                  </span>
-                  <span className="text-sm font-medium text-muted-foreground">
-                    {outcome}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </Reveal>
     </section>
   )
 }

@@ -326,7 +326,7 @@ export const personalizedImageLibrary = {
   qa: "/demos/my-graph.png",
   assessment: "/demos/1660314198561.png",
   general: "/the Solution.png",
-  presenter: "/Homepage design.png",
+  presenter: "/Homepage design.jpg",
   brand: "/mission.png",
 } as const
 

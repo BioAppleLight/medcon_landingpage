@@ -1,6 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google'
+import { Geist, Geist_Mono, IBM_Plex_Sans, Instrument_Serif, Manrope, Newsreader } from 'next/font/google'
 import './globals.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
@@ -12,6 +12,20 @@ const instrumentSerif = Instrument_Serif({
   variable: '--font-instrument-serif',
   weight: '400',
   style: ['normal', 'italic'],
+  subsets: ['latin'],
+})
+const newsreader = Newsreader({
+  variable: '--font-newsreader',
+  weight: '400',
+  subsets: ['latin'],
+})
+const manrope = Manrope({
+  variable: '--font-manrope',
+  subsets: ['latin'],
+})
+const ibmPlexSans = IBM_Plex_Sans({
+  variable: '--font-ibm-plex-sans',
+  weight: '300',
   subsets: ['latin'],
 })
 
@@ -47,7 +61,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} bg-background`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${newsreader.variable} ${manrope.variable} ${ibmPlexSans.variable} bg-background`}
     >
       <body className="font-sans antialiased">
         {children}

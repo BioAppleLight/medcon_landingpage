@@ -207,24 +207,26 @@
 }
 
 @keyframes mission-artifact-outer {
-  0%, 100% { transform: rotate(-1.5deg) scale(1.02); }
-  50% { transform: rotate(2.5deg) scale(1.055) translateY(-0.8%); }
+  0%, 100% { transform: rotate(-4deg) scale(1.04) translate3d(-1%, 1%, 0); }
+  50% { transform: rotate(6deg) scale(1.12) translate3d(1.5%, -2%, 0); }
 }
 
 @keyframes mission-artifact-middle {
-  0%, 100% { transform: rotate(2deg) scale(1.025); }
-  50% { transform: rotate(-3deg) scale(1.065) translateX(0.8%); }
+  0%, 100% { transform: rotate(5deg) scale(1.035) translate3d(1%, -1%, 0); }
+  50% { transform: rotate(-8deg) scale(1.14) translate3d(-2%, 1.5%, 0); }
 }
 
 @keyframes mission-fluorescence {
   0%,
   100% {
-    opacity: 0.58;
-    filter: saturate(1.15) brightness(1);
+    opacity: 0.42;
+    filter: saturate(1.05) brightness(0.96);
+    transform: scale(1);
   }
   50% {
-    opacity: 0.82;
-    filter: saturate(1.45) brightness(1.18);
+    opacity: 0.94;
+    filter: saturate(1.7) brightness(1.32);
+    transform: scale(1.06);
   }
 }
 
@@ -348,19 +350,21 @@
 }
 
 .mission-artifact-outer {
-  animation: mission-artifact-outer 14s ease-in-out infinite;
+  animation: mission-artifact-outer 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0 38%, #000 43% 61%, transparent 67%);
   mask-image: radial-gradient(circle at 50% 50%, transparent 0 38%, #000 43% 61%, transparent 67%);
 }
 
 .mission-artifact-middle {
-  animation: mission-artifact-middle 10s ease-in-out infinite;
+  animation: mission-artifact-middle 6.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0 22%, #000 28% 43%, transparent 49%);
   mask-image: radial-gradient(circle at 50% 50%, transparent 0 22%, #000 28% 43%, transparent 49%);
 }
 
 .mission-fluorescence {
-  animation: mission-fluorescence 6s ease-in-out infinite;
+  animation: mission-fluorescence 4.5s ease-in-out infinite;
+  transform-origin: 50% 50%;
+  will-change: transform, filter, opacity;
   background:
     radial-gradient(circle at 32% 38%, rgb(217 70 239 / 34%), transparent 36%),
     radial-gradient(circle at 72% 55%, rgb(59 130 246 / 38%), transparent 42%),
@@ -368,6 +372,91 @@
   box-shadow:
     inset 0 0 80px rgb(168 85 247 / 24%),
     inset -45px 0 90px rgb(37 99 235 / 20%);
+}
+
+.quote-band {
+  min-height: 560px;
+  background: #0a0d14;
+}
+
+.quote-band__inner {
+  display: flex;
+  align-items: stretch;
+  gap: 56px;
+  width: 100%;
+  max-width: 1440px;
+  min-height: 560px;
+  margin-inline: auto;
+  padding: 120px 96px;
+}
+
+.quote-band__rule {
+  width: 3px;
+  flex: 0 0 3px;
+  background: linear-gradient(180deg, #c8a45c, #3a3320);
+}
+
+.quote-band__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.quote-band__quote {
+  max-width: 1120px;
+  color: #e8ebf2;
+  font-family: var(--font-ibm-plex-sans), sans-serif;
+  font-size: 36px;
+  font-weight: 300;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+.quote-band__citation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: 40px;
+}
+
+.quote-band__source-label {
+  color: #6e7787;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+}
+
+.quote-band__paper-title {
+  max-width: 640px;
+  color: #c6cdda;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.quote-band__venue {
+  color: #8a93a6;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+@media (max-width: 899px) {
+  .quote-band {
+    min-height: auto;
+  }
+
+  .quote-band__inner {
+    gap: 28px;
+    min-height: auto;
+    padding: 72px 28px;
+  }
+
+  .quote-band__quote {
+    font-size: clamp(24px, 6vw, 30px);
+  }
 }
 
 .solution-artwork-blend {

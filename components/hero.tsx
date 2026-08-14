@@ -52,7 +52,7 @@ export function Hero() {
       className="relative isolate mt-16 overflow-hidden border-t border-border bg-black px-6 pb-20 pt-36 md:pb-28 md:pt-44"
     >
       <Image
-        src="/Homepage design.png"
+        src="/Homepage design.jpg"
         alt="Collage showing the growing demand for AI expertise and digital twins"
         fill
         priority
