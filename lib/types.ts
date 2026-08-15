@@ -13,6 +13,8 @@ export type AnswerKey =
   | "outcome"
   | "requirement"
   | "scale"
+  | "career"
+  | "avatar_function"
   | "note"
 
 export type AnswerSet = Partial<Record<AnswerKey, string>>

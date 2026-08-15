@@ -1,5 +1,11 @@
 import { choiceReplies, systemReplies } from "./preset-content.ts"
 import {
+  classifyFreeText,
+  classifyPurpose,
+  classifySectorGroup,
+  hasClassificationPhrase,
+} from "./free-text-classifier.ts"
+import {
   questionTree,
   REQUIRED_SLOTS,
   RESTART_KEYWORDS,
@@ -162,6 +168,51 @@ function unrecognizedDecision(state: SessionState, node: TreeNode): ChatDecision
   }
 }
 
+function classifiedDecision(state: SessionState, node: TreeNode, message: string): ChatDecision | null {
+  const canClassify = node.id === ROOT_NODE_ID || node.id.startsWith("sector_") ||
+    node.id === "purpose" || node.id.startsWith("scenario_") ||
+    node.id === "interaction" || node.id === "audience"
+  if (!canClassify) return null
+
+  const classified = classifyFreeText(message)
+  const additions = Object.fromEntries(
+    Object.entries(classified.answers).filter(([key]) => !state.answers[key as AnswerKey]),
+  ) as AnswerSet
+  if (Object.keys(additions).length === 0) return null
+
+  const answers: AnswerSet = { ...state.answers, ...additions }
+  if (!answers.note) {
+    const captured = message.trim().slice(0, CAPTURED_TEXT_MAX_LENGTH).trim()
+    if (captured) answers.note = captured
+  }
+
+  let nextNodeId = node.id
+  if (answers.domain) {
+    nextNodeId = "purpose"
+    if (answers.goal) {
+      nextNodeId = "interaction"
+      if (answers.interaction) {
+        nextNodeId = "audience"
+        if (answers.audience) nextNodeId = "tone"
+      }
+    }
+  }
+
+  const resolved = resolveNextNodeId(nextNodeId, answers) ?? nextNodeId
+  return {
+    status: "asking",
+    state: {
+      ...state,
+      current_node: resolved,
+      answers,
+      asked: state.asked.includes(resolved) ? state.asked : [...state.asked, resolved],
+    },
+    missing: missingSlots(answers),
+    reply: systemReplies.acknowledged,
+    next_question: publicQuestion(questionTree[resolved]),
+  }
+}
+
 function applyChoice(
   state: SessionState,
   node: TreeNode,
@@ -254,7 +305,31 @@ export function advance(state: SessionState, input: ChatEngineInput): Result<Cha
     return ok(unrecognizedDecision(state, node))
   }
 
+  if (node.id === ROOT_NODE_ID && !hasClassificationPhrase(message)) {
+    const sectorGroup = classifySectorGroup(message)
+    if (sectorGroup) {
+      const choice = node.choices.find((candidate) => candidate.id === sectorGroup)
+      if (choice) return applyChoice(state, node, choice, message)
+    }
+  }
+
+  if (node.id === "purpose") {
+    const purpose = classifyPurpose(message)
+    if (purpose) {
+      const choice = node.choices.find((candidate) => candidate.id === purpose)
+      if (choice) return applyChoice(state, node, choice, message)
+    }
+  }
+
   const matches = matchChoices(node, message)
+  if (!hasClassificationPhrase(message)) {
+    if (matches.length === 1) return applyChoice(state, node, matches[0], node.capture ? message : null)
+    if (matches.length > 1) return ok(unrecognizedDecision(state, node))
+  }
+
+  const classified = classifiedDecision(state, node, message)
+  if (classified) return ok(classified)
+
   if (matches.length !== 1) {
     return ok(unrecognizedDecision(state, node))
   }

@@ -6,10 +6,10 @@ import type { AnswerSet, ChatRequest, Result, SessionState } from "./types.ts"
  * *meaningful* (a real node, a real choice) is the engine's job, re-derived from the tree.
  */
 
-export const MAX_BODY_LENGTH = 4000
-export const MAX_MESSAGE_LENGTH = 500
+export const MAX_BODY_LENGTH = 16_000
+export const MAX_MESSAGE_LENGTH = 8_000
 export const MAX_ID_LENGTH = 64
-export const MAX_ANSWER_SLOTS = 9
+export const MAX_ANSWER_SLOTS = 11
 export const MAX_ANSWER_KEY_LENGTH = 32
 /** Deliberately looser than the engine's capture cap, so engine output always round-trips. */
 export const MAX_ANSWER_VALUE_LENGTH = 200
@@ -27,6 +27,8 @@ const ANSWER_KEYS = new Set([
   "requirement",
   // Accepted only for backward compatibility with sessions from the previous flow.
   "scale",
+  "career",
+  "avatar_function",
   "note",
 ])
 

@@ -6,6 +6,11 @@ import { choiceReplies } from "../lib/preset-content.ts"
 import { questionTree, REQUIRED_SLOTS, ROOT_NODE_ID } from "../lib/question-tree.ts"
 import type { ChatDecision, SessionState } from "../lib/types.ts"
 import { parseChatRequest, MAX_MESSAGE_LENGTH } from "../lib/validate.ts"
+import {
+  classifyFreeText,
+  classifyPurpose,
+  classifySectorGroup,
+} from "../lib/free-text-classifier.ts"
 
 function step(
   state: SessionState,
@@ -156,6 +161,124 @@ describe("the tree itself", () => {
 })
 
 describe("free text", () => {
+  it("recognizes a direct one-word healthcare interest", () => {
+    const decision = step(startSession("health-keyword").state, { message: "health" })
+
+    assert.equal(decision.status, "asking")
+    assert.equal(decision.state.answers.domain, undefined)
+    assert.equal(decision.next_question?.id, "sector_public_regulated")
+  })
+
+  it("votes across the full message for the opening organization category", () => {
+    assert.equal(classifySectorGroup("customer retention and digital marketing"), "customer_growth")
+    assert.equal(classifySectorGroup("employee onboarding and skills training"), "people_learning")
+    assert.equal(classifySectorGroup("We want to train nurses in our hospital"), "public_regulated")
+    assert.equal(classifySectorGroup("industrial safety for factory equipment"), "industry_technology")
+    assert.equal(classifySectorGroup("museum visitor experience and cultural heritage"), "places_experiences")
+  })
+
+  it("matches short abbreviations as whole words", () => {
+    assert.equal(classifySectorGroup("AI software"), "industry_technology")
+    assert.equal(classifySectorGroup("HR onboarding"), "people_learning")
+    assert.equal(classifySectorGroup("a chair for the room"), null)
+  })
+
+  it("votes across the full message for the primary AI purpose", () => {
+    assert.equal(classifyPurpose("answer customer questions and explain our services"), "information")
+    assert.equal(classifyPurpose("walk students through enrollment and the next steps"), "guidance")
+    assert.equal(classifyPurpose("recommend the right product and convert visitors into leads"), "recommendation")
+    assert.equal(classifyPurpose("train employees and assess them with a quiz"), "training")
+    assert.equal(classifyPurpose("troubleshoot problems and escalate urgent requests"), "support")
+  })
+
+  it("uses purpose keywords on the purpose question", () => {
+    const first = startSession("purpose-keywords")
+    const group = step(first.state, { choice_id: "public_regulated" })
+    const domain = step(group.state, { choice_id: "healthcare" })
+    const purpose = step(domain.state, { message: "answer patient questions and explain procedures" })
+
+    assert.equal(purpose.next_question?.id, "scenario_information")
+  })
+
+  it("recognizes direct keywords across the supplied category bank", () => {
+    const examples: Array<[string, string]> = [
+      ["health", "healthcare"],
+      ["classroom", "education"],
+      ["genetics", "research_science"],
+      ["programming", "technology"],
+      ["mechatronics", "professional_services"],
+      ["entrepreneurship", "professional_services"],
+      ["advertising", "marketing"],
+      ["crm", "sales"],
+      ["investing", "financial_services"],
+      ["lawsuit", "legal"],
+      ["diplomacy", "government"],
+      ["payroll", "human_resources"],
+      ["humanitarian", "nonprofits_community"],
+      ["shopify", "retail"],
+      ["resort", "travel_hospitality"],
+      ["culinary", "restaurants_food"],
+      ["housing", "real_estate"],
+      ["journalism", "entertainment_media"],
+      ["illustration", "professional_services"],
+      ["athletics", "productivity_coaching"],
+      ["anxiety", "healthcare"],
+      ["pharmaceutical", "healthcare"],
+      ["sustainability", "telecom_utilities"],
+      ["livestock", "research_science"],
+      ["logistics", "automotive_transport"],
+      ["construction", "professional_services"],
+      ["cosmetics", "retail"],
+      ["congregation", "nonprofits_community"],
+      ["archaeology", "museums_culture"],
+      ["resume", "recruitment_career"],
+    ]
+
+    for (const [keyword, domain] of examples) {
+      assert.equal(classifyFreeText(keyword).answers.domain, domain, keyword)
+    }
+  })
+
+  it("classifies four dimensions independently inside a long paragraph", () => {
+    const paragraph = `I have worked in higher education for more than a decade and I am a
+      professor. Our school wants to improve outreach without replacing our admissions team.
+      I want an avatar to help recruit prospective students, explain our programs, and generate
+      leads for a human adviser to follow up.`
+    const classified = classifyFreeText(paragraph)
+
+    assert.deepEqual(classified.answers, {
+      domain: "education",
+      career: "professor",
+      audience: "learners",
+      goal: "lead_consultation",
+      avatar_function: "information_lead_generation",
+      interaction: "presentation",
+    })
+  })
+
+  it("keeps career separate from the requested use case", () => {
+    const classified = classifyFreeText(
+      "I'm a doctor. Our hospital is growing, and I want to train new nurses across the team.",
+    )
+    assert.deepEqual(classified.answers, {
+      domain: "healthcare",
+      career: "physician",
+      audience: "employees",
+      goal: "instruction_learning",
+      avatar_function: "instructor",
+      interaction: "assessment",
+    })
+  })
+
+  it("prefills clear paragraph matches and asks the first unresolved question", () => {
+    const decision = step(startSession("long-paragraph").state, {
+      message: "I'm a doctor at a hospital and I want an avatar to train new nurses.",
+    })
+    assert.equal(decision.next_question?.id, "tone")
+    assert.equal(decision.state.answers.career, "physician")
+    assert.equal(decision.state.answers.audience, "employees")
+  })
+
   it("advances when it matches exactly one choice", () => {
     const afterGroup = step(startSession("session-5").state, {
       message: "we run a small clinic",
@@ -186,7 +309,7 @@ describe("free text", () => {
 
   it("matches on word boundaries, not substrings", () => {
     const decision = step(startSession("session-8").state, {
-      message: "career development",
+      message: "a chairperson joined us",
     })
 
     assert.equal(decision.status, "unrecognized")
