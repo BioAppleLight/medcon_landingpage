@@ -27,35 +27,17 @@ const WIDTH = 720
 const HEIGHT = 420
 const LAND_WIDTH = 720
 const LAND_HEIGHT = 360
-const ORIGIN: Coordinate = [-73.97, 40.75]
+// Abu Dhabi is the network hub. Keep this list intentionally focused on the
+// locations where MYO'S currently wants to show an active connection.
+const ORIGIN: Coordinate = [54.3773, 24.4539]
 const DESTINATIONS: Coordinate[] = [
-  // Americas
-  [-118.24, 34.05],
-  [-122.42, 37.77],
-  [-87.63, 41.88],
-  [-80.19, 25.76],
-  [-95.37, 29.76],
-  [-122.33, 47.61],
-  [-79.38, 43.65],
-  [-99.13, 19.43],
-  [-46.63, -23.55],
-  [-58.38, -34.6],
-  // Slovakia
-  [17.11, 48.15],
-  [21.26, 48.72],
-  [18.74, 49.22],
-  [19.15, 48.74],
-  [21.24, 49.0],
-  [18.08, 48.31],
-  [17.59, 48.38],
-  // Australia
-  [151.21, -33.87],
-  [144.96, -37.81],
-  [153.03, -27.47],
-  [115.86, -31.95],
-  [138.6, -34.93],
-  [149.13, -35.28],
-  [130.84, -12.46],
+  [13.405, 52.52], // Germany · Berlin
+  [14.4378, 50.0755], // Czechia · Prague
+  [12.4964, 41.9028], // Italy · Rome
+  [-122.4194, 37.7749], // San Francisco
+  [-73.9857, 40.7484], // United States · New York
+  [16.3738, 48.2082], // Austria · Vienna
+  [17.1077, 48.1486], // Slovakia · Bratislava
 ]
 
 const topology = landTopology as unknown as {
@@ -157,8 +139,7 @@ export const ImpactGlobe = forwardRef<
 
       const ratio = canvas.width / WIDTH
       const t = elapsed % 11
-      // One full eastward turn per loop brings the three priority regions into focus:
-      // the Americas first, Slovakia next, and Australia at the seeded six-second frame.
+      // One full eastward turn per loop brings the UAE, Europe, and US connections into view.
       projection.rotate([
         75 - t * (360 / 11) + autoRotationRef.current + rotationOffsetRef.current[0],
         -16 + rotationOffsetRef.current[1],
@@ -406,7 +387,7 @@ export const ImpactGlobe = forwardRef<
         height={HEIGHT}
         role="img"
         tabIndex={0}
-        aria-label="Interactive globe showing MYO'S worldwide reach. Drag to rotate, use arrow keys to move, or press Home to reset."
+        aria-label="Interactive globe showing connections from the UAE to Germany, Czechia, Italy, San Francisco, the United States, Austria, and Slovakia. Drag to rotate, use arrow keys to move, or press Home to reset."
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}

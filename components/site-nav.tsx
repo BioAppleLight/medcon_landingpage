@@ -1,11 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronDown, Menu, RotateCcw, X } from "lucide-react"
+import { ChevronDown, Menu, X } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { BrandLogo } from "@/components/brand-logo"
 import { BOOKING_URL } from "@/lib/site"
-import { useAdaptive } from "@/components/adaptive-provider"
 import {
   hasPersonalizedUseCase,
   PERSONALIZED_USE_CASE_EVENT,
@@ -74,7 +73,6 @@ const technologyLinks = [
 ]
 
 export function SiteNav() {
-  const { reset } = useAdaptive()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
@@ -121,15 +119,15 @@ export function SiteNav() {
           : "border-b border-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <a href="/" className="flex items-center gap-2.5" aria-label="MYO'S home">
+      <nav className="mx-auto flex max-w-[1440px] items-center gap-5 px-5 py-4 lg:gap-7 lg:px-8">
+        <a href="/" className="flex shrink-0 items-center gap-2.5" aria-label="MYO'S home">
           <BrandLogo className="h-8 w-8" />
           <span className="text-lg font-semibold tracking-tight">
             MYO&apos;S
           </span>
         </a>
 
-        <div className="hidden items-center gap-5 md:flex">
+        <div className="hidden min-w-0 flex-1 items-center justify-center gap-[clamp(0.75rem,1.35vw,1.5rem)] xl:flex">
           {links.map((link) =>
             link.href === "/about" ? (
               <div
@@ -143,7 +141,7 @@ export function SiteNav() {
                   aria-expanded={aboutOpen}
                   aria-haspopup="menu"
                   onClick={() => setAboutOpen((value) => !value)}
-                  className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {link.label}
                   <ChevronDown
@@ -191,7 +189,7 @@ export function SiteNav() {
                   aria-expanded={useCasesOpen}
                   aria-haspopup="menu"
                   onClick={() => setUseCasesOpen((value) => !value)}
-                  className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {link.label}
                   <ChevronDown
@@ -243,7 +241,7 @@ export function SiteNav() {
                   aria-expanded={technologyOpen}
                   aria-haspopup="menu"
                   onClick={() => setTechnologyOpen((value) => !value)}
-                  className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {link.label}
                   <ChevronDown
@@ -283,7 +281,7 @@ export function SiteNav() {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                className="whitespace-nowrap text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 {link.label}
               </a>
@@ -291,23 +289,19 @@ export function SiteNav() {
           )}
         </div>
 
-        <div className="hidden items-center gap-2 md:flex">
-          <button
-            type="button"
-            onClick={reset}
-            className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-            Reset Chat
-          </button>
+        <div className="hidden shrink-0 items-center gap-2 xl:flex">
           <a
-            href="/"
-            className={buttonVariants({
-              variant: "outline",
-              className: "h-9 px-4",
-            })}
+            href="https://app.myos.sk/"
+            className="group relative inline-flex h-10 items-center justify-center overflow-hidden bg-gradient-to-r from-[#6947e8] via-[#52a8ff] to-[#9b72ff] p-px text-sm font-semibold text-white shadow-[0_0_22px_rgba(82,168,255,0.22)] transition-all duration-300 [clip-path:polygon(10px_0,calc(100%_-_10px)_0,100%_50%,calc(100%_-_10px)_100%,10px_100%,0_50%)] hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(124,92,252,0.5)]"
           >
-            Launch App
+            <span className="absolute inset-y-0 -left-10 w-8 -skew-x-12 bg-white/35 blur-sm transition-transform duration-700 group-hover:translate-x-48" />
+            <span className="relative flex h-full items-center gap-2.5 bg-[#080d1b]/95 px-5 [clip-path:polygon(9px_0,calc(100%_-_9px)_0,100%_50%,calc(100%_-_9px)_100%,9px_100%,0_50%)] transition-colors group-hover:bg-[#111532]/90">
+              <span className="relative h-3.5 w-3.5 rotate-45 border border-[#91c9ff] bg-gradient-to-br from-white via-[#65b5ff] to-[#7957f5] shadow-[0_0_10px_rgba(99,170,255,0.8)] transition-transform duration-500 group-hover:rotate-[225deg]">
+                <span className="absolute left-1/2 top-0 h-full w-px bg-white/35" />
+                <span className="absolute left-0 top-1/2 h-px w-full bg-[#202b72]/50" />
+              </span>
+              <span className="tracking-[0.02em]">Launch App</span>
+            </span>
           </a>
           <a
             href={BOOKING_URL}
@@ -322,7 +316,7 @@ export function SiteNav() {
         <button
           type="button"
           aria-label="Toggle menu"
-          className="text-foreground md:hidden"
+          className="ml-auto text-foreground xl:hidden"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -330,7 +324,7 @@ export function SiteNav() {
       </nav>
 
       {open && (
-        <div className="border-t border-border bg-background/95 px-6 py-4 backdrop-blur-xl md:hidden">
+        <div className="border-t border-border bg-background/95 px-6 py-4 backdrop-blur-xl xl:hidden">
           <div className="flex flex-col gap-4">
             {links.map((link) =>
               link.href === "/about" ? (
