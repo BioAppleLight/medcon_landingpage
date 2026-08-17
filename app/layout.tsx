@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono, IBM_Plex_Sans, Instrument_Serif, Manrope, Newsreader } from 'next/font/google'
+import { AdaptiveProvider } from '@/components/adaptive-provider'
 import './globals.css'
 import { SITE_URL } from '@/lib/site'
 
@@ -138,7 +139,7 @@ export default function RootLayout({
             __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
           }}
         />
-        {children}
+        <AdaptiveProvider>{children}</AdaptiveProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

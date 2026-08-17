@@ -1,10 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronDown, Menu, X } from "lucide-react"
+import { ChevronDown, Menu, RotateCcw, X } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import { BrandLogo } from "@/components/brand-logo"
 import { BOOKING_URL } from "@/lib/site"
+import { useAdaptive } from "@/components/adaptive-provider"
 import {
   hasPersonalizedUseCase,
   PERSONALIZED_USE_CASE_EVENT,
@@ -73,6 +74,7 @@ const technologyLinks = [
 ]
 
 export function SiteNav() {
+  const { reset } = useAdaptive()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
@@ -289,7 +291,24 @@ export function SiteNav() {
           )}
         </div>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-2 md:flex">
+          <button
+            type="button"
+            onClick={reset}
+            className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            Reset Chat
+          </button>
+          <a
+            href="/"
+            className={buttonVariants({
+              variant: "outline",
+              className: "h-9 px-4",
+            })}
+          >
+            Launch App
+          </a>
           <a
             href={BOOKING_URL}
             target="_blank"
