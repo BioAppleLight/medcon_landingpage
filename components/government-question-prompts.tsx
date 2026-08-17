@@ -58,7 +58,10 @@ export function GovernmentQuestionPrompts() {
               poster="/demos/government-demo.png"
               title="Government use case demo"
             >
-              <source src="/demos/government-demo.mp4" type="video/mp4" />
+              <source
+                src="https://pub-9c0b5a57bb204edca8d45fe05db8821c.r2.dev/government-demo.mp4"
+                type="video/mp4"
+              />
             </video>
           </div>
         </div>

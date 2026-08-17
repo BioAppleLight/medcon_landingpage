@@ -46,14 +46,14 @@ export function Mission() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_45%_36%,rgba(100,43,255,0.48),transparent_48%),linear-gradient(135deg,rgba(26,11,94,0.2),rgba(43,15,132,0.85))]" />
 
         <div className="relative z-10 max-w-2xl text-white">
-          <h2
+          <h1
             id="mission-heading"
             className="text-balance text-[clamp(2.25rem,3.35vw,4rem)] font-light leading-[1.3] tracking-[-0.025em]"
           >
             Our mission is to <strong className="font-bold">incorporate</strong>,{" "}
             <strong className="font-bold">improve</strong>, and{" "}
             <strong className="font-bold">democratize</strong> human expertise.
-          </h2>
+          </h1>
 
           <p className="mt-[8%] text-pretty text-[clamp(1.25rem,2vw,2.25rem)] font-light leading-[1.45] tracking-[-0.02em]">
             We transform the world&apos;s greatest knowledge into{" "}

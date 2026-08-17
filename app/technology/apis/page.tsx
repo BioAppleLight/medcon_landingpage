@@ -5,9 +5,10 @@ import { SiteNav } from "@/components/site-nav"
 import { MaskReveal, Reveal } from "@/components/gsap"
 
 export const metadata: Metadata = {
-  title: "AI APIs | MYO'S",
+  title: "Generative Video and AI Avatar APIs",
   description:
     "Explore the video generation and AI avatar APIs available through MYO'S integrations.",
+  alternates: { canonical: "/technology/apis" },
 }
 
 type ApiPlatform = {

@@ -52,7 +52,9 @@ const team: TeamMember[] = [
     image: "/team/Dr.%20Osama.jpg",
   },
   { name: "Seidou", role: "Backend Engineer Intern" },
-  { name: "Edward Chen", role: "Frontend Designer Intern" },
+  { name: "Edward Chen", role: "Frontend Designer Intern",
+  image: "/team/342634775_3493591857634230_4602905074176546484_n.jpg",
+},
 ]
 
 type Mentor = {
@@ -140,9 +142,9 @@ export function Team() {
         <span className="eyebrow text-primary">
           Our Team
         </span>
-        <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
+        <h1 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
           Built by clinicians, engineers, and educators.
-        </h2>
+        </h1>
       </Reveal>
 
       <Stagger className="mx-auto mt-14 grid max-w-7xl gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

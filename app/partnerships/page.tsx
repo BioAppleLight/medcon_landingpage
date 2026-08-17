@@ -17,9 +17,10 @@ import { SiteNav } from "@/components/site-nav"
 import { BOOKING_URL } from "@/lib/site"
 
 export const metadata: Metadata = {
-  title: "Partnerships and Collaborations | MYO'S",
+  title: "AI Partnerships and Collaborations",
   description:
     "Explore MYO'S funding goals, UAE grant opportunities, venture capital partnerships, and strategic investor collaboration.",
+  alternates: { canonical: "/partnerships" },
 }
 
 const fundingGoals = [

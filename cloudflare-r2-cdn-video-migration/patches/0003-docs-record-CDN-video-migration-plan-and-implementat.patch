@@ -1,0 +1,137 @@
+From c133793ff93b4131f570a4a1413350aeb76de673 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 15 Aug 2026 08:24:23 +0000
+Subject: [PATCH 3/3] docs: record CDN video migration plan and implementation
+ log
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Follows the repo's existing convention: plans/ holds the forward-looking
+plan (goal, assumptions, ordered steps, validation method, risks) and
+logs/ the implementation record (files changed, checks run, deviations,
+known limitations), both under the dated-slug naming.
+
+The Cloudflare setup and one-time video upload are operator steps gated
+on account credentials, so they are captured as ordered steps rather
+than performed here.
+
+Per §6 of the source guide the ASP.NET R2 service stays out of this
+repo; it ships to the backend repository separately.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01GCh16K3rSAPPMiXDvbSo6A
+---
+ logs/2026-08-15-cloudflare-r2-cdn-video.md  | 46 +++++++++++++++++++++
+ plans/2026-08-15-cloudflare-r2-cdn-video.md | 46 +++++++++++++++++++++
+ 2 files changed, 92 insertions(+)
+ create mode 100644 logs/2026-08-15-cloudflare-r2-cdn-video.md
+ create mode 100644 plans/2026-08-15-cloudflare-r2-cdn-video.md
+
+diff --git a/logs/2026-08-15-cloudflare-r2-cdn-video.md b/logs/2026-08-15-cloudflare-r2-cdn-video.md
+new file mode 100644
+index 0000000..743235c
+--- /dev/null
++++ b/logs/2026-08-15-cloudflare-r2-cdn-video.md
+@@ -0,0 +1,46 @@
++# Move demo videos to Cloudflare R2 + CDN
++
++## Request
++Implement `CLOUDFLARE_R2_CDN_VIDEO_IMPLEMENTATION.md` — migrate `public/Rehab.mp4`, `public/demos/education-demo.mp4`, and `public/demos/government-demo.mp4` to Cloudflare R2 behind a CDN domain, and add an ASP.NET upload path for future videos — then package the result for integration.
++
++## Approved plan
++See [plans/2026-08-15-cloudflare-r2-cdn-video.md](../plans/2026-08-15-cloudflare-r2-cdn-video.md).
++
++## Files changed
++- `lib/cdn.ts` (new) — `cdn(path)` resolves against `NEXT_PUBLIC_CDN_BASE_URL`, returning the bare path when unset. Also exports `videoAssets`, a map of the three canonical `videos/*` keys.
++- `lib/use-cases.ts` — education `demoVideo.src` → `videoAssets.educationDemo`.
++- `components/government-question-prompts.tsx` — government demo `<source src>` → `videoAssets.governmentDemo`.
++- `components/human-delivery.tsx` — rehab `<source src>` → `videoAssets.rehab`.
++- `tests/cdn.test.ts` (new) — 6 tests: absolute-URL and local-fallback branches, leading-slash normalization, no double slash, all keys under `videos/`, keys distinct.
++- `scripts/migrate-videos-to-r2.sh` (new) — one-time upload to stable `videos/*` keys via AWS CLI v2, then verification. `--verify` re-checks without re-uploading.
++- `.env.example` (new) — `NEXT_PUBLIC_CDN_BASE_URL`, with a note that R2 secrets must never take a `NEXT_PUBLIC_` prefix.
++- `.gitignore` — `public/**/*.{mp4,mov,webm}`, `.DS_Store`, and a `!.env.example` exception.
++
++The `<video>` elements are untouched, as the guide predicts — the browser does not care whether `src` is a path or an absolute URL.
++
++## Tests / checks run
++- `npm test` — 63 pass, 0 fail (6 new).
++- `npx tsc --noEmit` — 0 errors. (Required `npm ci` first; the checkout had no `node_modules`, which made every type in the repo appear unresolved.)
++- `npm run build` with `NEXT_PUBLIC_CDN_BASE_URL=https://assets.myos.ai` — succeeds, 15/15 static pages.
++- Grepped `.next/` output: the three `/videos/*.mp4` keys and the CDN host are present; **no** stale `/Rehab.mp4` or `/demos/*-demo.mp4` references remain.
++- `bash -n` on the migration script; its network paths are unexercised (no R2 credentials in session).
++- Patches verified by applying them to a fresh clone at `ef96a1b` and re-running the suite there: applies cleanly, 63 pass.
++
++## Deviations from plan
++- **Three call sites, not one.** The guide's §14 names only `lib/use-cases.ts`. `components/human-delivery.tsx` (`/Rehab.mp4`) and `components/government-question-prompts.tsx` (`/demos/government-demo.mp4`) also hardcode paths; migrating only `use-cases.ts` would have left two videos 404-ing after cleanup.
++- **Added `videoAssets`** rather than calling `cdn()` at each site, so the three keys cannot drift and a re-encode is a one-line change.
++- **Backend needs request-size limits the guide omits.** ASP.NET's default multipart limit is ~128 MB and Kestrel's default request body limit is 30 MB, so a 250 MB video is rejected before the controller runs. `FormOptions.MultipartBodyLengthLimit` and `Kestrel.Limits.MaxRequestBodySize` must both be raised, plus the IIS/Nginx equivalents.
++- **Added magic-byte validation** to the upload endpoint (MP4/MOV `ftyp` at offset 4, WebM EBML). The guide's MIME + extension checks both trust client-supplied strings; §20 recommends signature checking and it is cheap.
++- **Uploads use `TransferUtility`** (multipart above 8 MiB) so a 250 MB video is never buffered whole. The guide defers multipart to §22, but this comes free from the SDK.
++- **Backend code is not in this repo.** Per guide §6 it ships to the ASP.NET repo instead — delivered in the integration ZIP alongside a `Program.cs` snippet, `appsettings.sample.json`, `.env.example`, and the Cloudflare CORS policy.
++
++## Result
++Frontend migration is complete and verified in-repo: every video reference resolves through the CDN helper, the build emits CDN URLs, and nothing points at a local MP4. The site still works with the variable unset (paths fall back to `public/`), so this commit is safe to land ahead of the Cloudflare work.
++
++## Known limitations
++- **The videos are not in R2 and the CDN domain does not exist yet.** Both need Cloudflare account credentials. Until `NEXT_PUBLIC_CDN_BASE_URL` is set *and* the objects are uploaded, the site serves the local copies exactly as before — the change is inert, not broken.
++- **The three MP4s are still in `public/`.** Deliberate: the first deploy changes only where videos are served from, preserving a revert path. Cleanup is a later, separate commit.
++- **`git rm` will not shrink the repository** — the blobs stay in history; see the plan's risks.
++- **The backend code is written but never compiled.** No ASP.NET project was attached to this session, so it is reviewed source, not build-verified. `UploadController.cs` is a merge into the existing controller, not a drop-in file, and needs AWSSDK.S3 ≥ 3.7.400 for the checksum settings R2 requires.
++- **These commits were never pushed.** This session had read-only GitHub access — `git push` returned 403 at the egress proxy and the GitHub API returned `403 Resource not accessible by integration`. The commits exist locally and as patches in the integration ZIP; pushing needs `contents: write` on the repo grant.
++- Poster images and the rest of `public/` are untouched; moving them is guide §16, deferred.
+diff --git a/plans/2026-08-15-cloudflare-r2-cdn-video.md b/plans/2026-08-15-cloudflare-r2-cdn-video.md
+new file mode 100644
+index 0000000..d0d4771
+--- /dev/null
++++ b/plans/2026-08-15-cloudflare-r2-cdn-video.md
+@@ -0,0 +1,46 @@
++# Move demo videos to Cloudflare R2 + CDN
++
++## Goal
++Get the three large MP4s out of the repo and serve them from Cloudflare R2 behind a custom CDN domain, so `public/` stops carrying ~135 MB of binary and video delivery gets edge caching and range requests. The frontend must only ever know public CDN URLs; all R2 write credentials stay server-side. Add an ASP.NET upload path so future videos can be published without another manual migration.
++
++## Assumptions (from the implementation guide)
++- CDN hostname is `https://assets.myos.ai`. Substitute everywhere if a different host is chosen — it appears in `.env.example`, the backend config, and the CORS policy.
++- Cloudflare account, R2 bucket, and custom domain are provisioned by the operator; nothing in this repo can create them.
++- Backend lives in a separate repository (the `CalmNguyen/api-retail-e-commerce` pattern). Per §6 of the guide, no C# is added to this repo — the R2 service and upload controller ship separately to that repo.
++- Object keys are versioned by rename (`rehab.mp4` → `rehab-v2.mp4`), never overwritten, so the edge can cache indefinitely.
++
++## Files likely to change
++- `lib/cdn.ts` (new) — `cdn()` resolving against `NEXT_PUBLIC_CDN_BASE_URL`, plus a `videoAssets` map of the three canonical keys.
++- `lib/use-cases.ts` — education `demoVideo.src` from a literal path to `videoAssets.educationDemo`.
++- `components/government-question-prompts.tsx` — government demo `<source src>`.
++- `components/human-delivery.tsx` — rehab clip `<source src>`.
++- `tests/cdn.test.ts` (new) — unit cover for path normalization and the configured/unconfigured branches.
++- `scripts/migrate-videos-to-r2.sh` (new) — one-time upload of the existing three files + public URL verification.
++- `.env.example` (new), `.gitignore` — CDN variable; block future MP4/MOV/WebM commits.
++
++Note: the guide's §14 only names `lib/use-cases.ts`, but **three** files hardcode video paths. Migrating only `use-cases.ts` would leave the government and rehab videos pointing at files that later cleanup deletes.
++
++## Ordered implementation steps
++1. Add `lib/cdn.ts` + `.env.example`; add `.gitignore` rules (including a `!.env.example` exception, since the existing `.env*` rule would swallow it).
++2. Switch all three video call sites to `videoAssets`.
++3. Add `scripts/migrate-videos-to-r2.sh` and `tests/cdn.test.ts`.
++4. **Operator — Cloudflare:** create bucket `myos-assets`; attach custom domain `assets.myos.ai` (not the rate-limited `*.r2.dev` endpoint); create an Object Read & Write API token scoped to the bucket; apply the CORS policy; optionally add a one-year edge cache rule for `assets.myos.ai/videos/*`.
++5. **Operator — upload:** run `scripts/migrate-videos-to-r2.sh` with `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `CDN_BASE_URL` set. Requires AWS CLI v2.
++6. **Operator — deploy:** set `NEXT_PUBLIC_CDN_BASE_URL` in the hosting provider for Production *and* Preview, then deploy.
++7. **Cleanup, days later:** `git rm` the three MP4s once CDN playback is confirmed in production.
++8. **Backend, independent:** add the R2 service + video upload endpoint to the ASP.NET repo.
++
++Steps 4–6 are gated on credentials and cannot be done from this repo.
++
++## Validation method
++- `npm test` and `npx tsc --noEmit` for the helper and call sites.
++- `npm run build` with `NEXT_PUBLIC_CDN_BASE_URL` set, then grep `.next/` to confirm no stale `public/` MP4 paths survive in the output.
++- The migration script self-verifies each public URL on three axes and fails loudly unless all pass: `HEAD` returns 200; a ranged `GET` returns 206 (without this, seeking forces a full download); `Content-Type` is `video/mp4` (a wrong type is the usual cause of a black `<video>` box).
++- In-browser after deploy: posters render, scrubbing works both directions, mobile Safari plays, no mixed-content/CORS/404/403 in devtools.
++
++## Risks / unresolved decisions
++- **No rollback if cleanup is rushed.** The first deploy changes only where videos are *served from*; the local MP4s stay so reverting the env var restores a working site. Deleting them in the same change removes that escape hatch. Cleanup is deliberately a separate, later step.
++- **`git rm` does not shrink the repository.** The blobs remain in history and every clone still pays for them. Reclaiming that needs `git filter-repo` and a force-push rewriting every collaborator's history — a separate coordinated operation, worth it only if clone size becomes a real problem.
++- **Production must always set `NEXT_PUBLIC_CDN_BASE_URL`.** The unset-variable fallback returns bare paths, which is a local-development convenience only; in production it would 404 on `/videos/*` paths that never existed under `public/`.
++- **Poster images stay local for now** (guide §16 lists them as an optional later step). `cdn()` is ready for them.
++- Backend request-size limits are an unstated prerequisite the guide omits — see the log.
+-- 
+2.43.0
+

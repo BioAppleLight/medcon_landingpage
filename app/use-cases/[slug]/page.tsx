@@ -85,8 +85,12 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${useCase.label} Use Case | MYO'S`,
+    title: `${useCase.label} AI Expert Avatar Use Case`,
     description: useCase.summary,
+    alternates: { canonical: `/use-cases/${useCase.id}` },
+    robots: effectiveSlug?.startsWith("c-")
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
   }
 }
 
@@ -166,7 +170,83 @@ export default async function UseCasePage({ params, searchParams }: PageProps) {
         </div>
       </section>
 
-      <section className="border-y border-border bg-card/40 px-6 py-14">
+      {personalized ? (
+        <section className="border-y border-white/10 bg-[#080e19] px-6 py-16 md:py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="grid gap-12 lg:grid-cols-[minmax(0,1.55fr)_minmax(17rem,0.75fr)] lg:items-end">
+              <div>
+                <p className="max-w-md font-mono text-[0.68rem] uppercase leading-4 tracking-[0.28em] text-[#8190aa]">
+                  {personalized.eyebrow}
+                </p>
+                <h2 className="mt-7 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-[-0.055em] text-[#f5f4fa] sm:text-6xl md:text-7xl">
+                  {personalized.howItWorksTitle}
+                </h2>
+                <p className="mt-7 max-w-2xl text-lg font-medium leading-8 text-[#a5b2ca] md:text-xl">
+                  Built for {personalized.outcome}, in a {personalized.tone} voice.
+                </p>
+              </div>
+
+              <div className="lg:pb-2">
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[#8190aa]">
+                  What you told us
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2 lg:flex-col lg:items-start">
+                  {[personalized.audience, personalized.interaction, personalized.tone, personalized.outcome].map((item) => (
+                    <span key={item} className="rounded-full border border-white/10 bg-white/[0.045] px-4 py-2 text-sm font-medium text-[#d5dbea]">
+                      {item}
+                    </span>
+                  ))}
+                  <span className="rounded-full bg-gradient-to-r from-[#a583ff] to-[#638dff] px-4 py-2 text-sm font-semibold text-[#080e19]">
+                    {personalized.requirement}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-14 border-t border-white/10 pt-12 md:mt-16 md:pt-14">
+              <div className="grid gap-12 md:grid-cols-3 md:gap-10 lg:gap-14">
+                <div>
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.25em] text-[#a996ff]">The conversation</p>
+                  <div className="mt-7">
+                    <h3 className="font-semibold text-[#f5f4fa]">Who it serves</h3>
+                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.audienceBody}</p>
+                  </div>
+                  <div className="mt-6 border-t border-white/[0.07] pt-6">
+                    <h3 className="font-semibold text-[#f5f4fa]">How visitors interact</h3>
+                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.interactionBody}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.25em] text-[#a996ff]">Voice and outcome</p>
+                  <div className="mt-7">
+                    <h3 className="font-semibold text-[#f5f4fa]">How it should sound</h3>
+                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.toneBody}</p>
+                  </div>
+                  <div className="mt-6 border-t border-white/[0.07] pt-6">
+                    <h3 className="font-semibold text-[#f5f4fa]">The outcome to optimize</h3>
+                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.outcomeBody}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.25em] text-[#a996ff]">Guardrails</p>
+                  <div className="mt-7">
+                    <h3 className="font-semibold text-[#f5f4fa]">Where a human steps in</h3>
+                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.escalation}</p>
+                  </div>
+                  <div className="mt-6 border-t border-white/[0.07] pt-6">
+                    <h3 className="font-semibold text-[#f5f4fa]">Delivery priority</h3>
+                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.requirementBody}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <>
+          <section className="border-y border-border bg-card/40 px-6 py-14">
         <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-3">
           {useCase.outcomes.map((outcome) => (
             <div
@@ -187,10 +267,9 @@ export default async function UseCasePage({ params, searchParams }: PageProps) {
       <section className="px-6 py-16 md:py-24">
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[0.8fr_1fr]">
           <div>
-            <p className="eyebrow">{personalized?.eyebrow ?? "How it works"}</p>
+            <p className="eyebrow">How it works</p>
             <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-              {personalized?.howItWorksTitle ??
-                "Built around the moments where guidance matters most."}
+              Built around the moments where guidance matters most.
             </h2>
           </div>
 
@@ -264,7 +343,9 @@ export default async function UseCasePage({ params, searchParams }: PageProps) {
             </Link>
           </div>
         </div>
-      </section>
+          </section>
+        </>
+      )}
 
       <section className="px-6 pb-20">
         <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-border bg-card/70 px-6 py-14 text-center shadow-2xl shadow-black/10 md:px-12 md:py-18">
@@ -295,7 +376,7 @@ export default async function UseCasePage({ params, searchParams }: PageProps) {
                 <ArrowRight className="h-4 w-4" />
               </a>
               <Link
-                href="/#product"
+                href="/product"
                 className="relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full p-px text-sm font-semibold text-[#c4b8ff] shadow-lg shadow-primary/10"
               >
                 <span className="absolute -inset-8 animate-gradient-spin bg-[conic-gradient(from_0deg,transparent,#7c5cfc,#5b7cff,#4db6e8,#7c5cfc,transparent)] opacity-80 blur-sm" />

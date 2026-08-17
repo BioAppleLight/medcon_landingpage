@@ -4,9 +4,10 @@ import { SiteNav } from "@/components/site-nav"
 import { Team } from "@/components/team"
 
 export const metadata: Metadata = {
-  title: "Team | MYO'S",
+  title: "Meet Our AI, Clinical and Education Team",
   description:
     "Meet the clinicians, engineers, educators, and advisors building MYO'S.",
+  alternates: { canonical: "/team" },
 }
 
 export default function TeamPage() {

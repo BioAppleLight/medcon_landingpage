@@ -5,9 +5,10 @@ import { SiteNav } from "@/components/site-nav"
 import { Reveal, MaskReveal, DrawLine, Parallax } from "@/components/gsap"
 
 export const metadata: Metadata = {
-  title: "Technology | MYO'S",
+  title: "AI Avatar and Knowledge Graph Technology",
   description:
     "Explore the MYO'S technology behind knowledge-based avatars and structured knowledge graphs.",
+  alternates: { canonical: "/technology" },
 }
 
 const coreTech = [

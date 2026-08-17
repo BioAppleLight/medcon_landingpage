@@ -89,7 +89,7 @@ export const useCases: UseCase[] = [
     outcomes: ["Higher engagement", "More scalable office hours", "Consistent course support"],
     image: "/demos/education-demo.png",
     demoVideo: {
-      src: "/demos/education-demo.mp4",
+      src: "https://pub-9c0b5a57bb204edca8d45fe05db8821c.r2.dev/education-demo.mp4",
       poster: "/demos/education-demo.png",
       title: "Education use case demo",
     },
@@ -435,6 +435,18 @@ export interface PersonalizedPresentation {
   howItWorksTitle: string
   ctaTheme: string
   ctaBody: string
+  audience: string
+  audienceBody: string
+  interaction: string
+  interactionBody: string
+  tone: string
+  toneBody: string
+  outcome: string
+  outcomeBody: string
+  requirement: string
+  requirementBody: string
+  domainLead: string
+  escalation: string
 }
 
 /** Page-level copy that sits outside the generic UseCase data structure. */
@@ -448,6 +460,18 @@ export function getPersonalizedPresentation(slug: string): PersonalizedPresentat
     howItWorksTitle: `A ${slots.tonePhrase} ${slots.interactionPhrase} for ${slots.audiencePhrase}, built for ${slots.outcomePhrase}.`,
     ctaTheme: slots.goalShort,
     ctaBody: `Let's build this ${slots.interactionPhrase} for ${slots.audiencePhrase} in ${slots.domainLabel.toLowerCase()}, with a ${slots.tonePhrase} voice, ${slots.requirementPhrase}, and a clear focus on ${slots.outcomePhrase}.`,
+    audience: slots.audiencePhrase,
+    audienceBody: slots.audienceBody,
+    interaction: slots.interactionPhrase,
+    interactionBody: slots.interactionBody,
+    tone: slots.tonePhrase,
+    toneBody: slots.toneBody,
+    outcome: slots.outcomePhrase,
+    outcomeBody: slots.outcomeBody,
+    requirement: slots.requirementPhrase,
+    requirementBody: slots.requirementBody,
+    domainLead: slots.lead,
+    escalation: slots.escalation,
   }
 }
 

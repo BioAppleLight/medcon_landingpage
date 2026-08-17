@@ -15,6 +15,7 @@ import { motion } from "motion/react"
 import { buttonVariants } from "@/components/ui/button"
 import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
 import { BOOKING_URL } from "@/lib/site"
+import { PricingCalculator } from "@/components/PricingCalculator"
 
 const plans = [
   {
@@ -184,12 +185,12 @@ export function Pricing({ showModelDiagram = true }: PricingProps) {
   return (
     <section id="pricing" className="px-6 py-20 md:py-28">
       <Reveal className="mx-auto max-w-5xl text-center">
-        <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-5xl">
+        <h1 className="text-balance text-3xl font-semibold tracking-tight md:text-5xl">
           Start small.{" "}
           <span className="font-serif italic font-normal text-primary">
             Scale fast.
           </span>
-        </h2>
+        </h1>
         {showModelDiagram && (
         <div className="mx-auto mt-8 max-w-5xl rounded-2xl border border-border bg-card/70 p-4 text-left shadow-xl shadow-black/5 md:p-6">
           <div className="md:hidden">
@@ -317,6 +318,8 @@ export function Pricing({ showModelDiagram = true }: PricingProps) {
           Ideal for hospitals and health systems.
         </p>
       </Reveal>
+
+      <PricingCalculator />
 
       <Stagger className="mx-auto mt-14 grid max-w-5xl items-start gap-6 md:grid-cols-3">
         {plans.map((plan) => (

@@ -13,9 +13,10 @@ import { SpecialOfferPopup } from "@/components/special-offer-popup"
 import { WhyUs } from "@/components/why-us"
 
 export const metadata: Metadata = {
-  title: "About | MYO'S",
+  title: "About Our AI Expert Platform",
   description:
     "Learn about the problem MYO'S solves, our solution, ability to scale, business model, and industry developments.",
+  alternates: { canonical: "/about" },
 }
 
 export default function AboutPage() {

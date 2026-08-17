@@ -1,8 +1,13 @@
 "use client"
 
+import { useLayoutEffect, useRef } from "react"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Reveal } from "@/components/motion-primitives"
 import { useCountUp } from "@/components/use-count-up"
-import { ImpactGlobe } from "@/components/impact-globe"
+import { ImpactGlobe, type ImpactGlobeHandle } from "@/components/impact-globe"
+
+if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger)
 
 const impactMetrics = [
   { target: 70, prefix: "+", suffix: "K", label: "People reached across our channels" },
@@ -37,9 +42,56 @@ function CountUpValue({
 }
 
 export function BeforeAfter() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const stageRef = useRef<HTMLDivElement>(null)
+  const impactRef = useRef<HTMLDivElement>(null)
+  const globeRef = useRef<HTMLDivElement>(null)
+  const globeCanvasRef = useRef<ImpactGlobeHandle>(null)
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current
+    const stage = stageRef.current
+    const impact = impactRef.current
+    const globe = globeRef.current
+    if (!section || !stage || !impact || !globe) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
+    const media = gsap.matchMedia()
+    media.add("(min-width: 1024px)", () => {
+      gsap.set(globe, { autoAlpha: 0, scale: 0.92, y: 42 })
+
+      const timeline = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: stage,
+          start: "top 72px",
+          end: "+=140%",
+          pin: true,
+          scrub: 0.7,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+        onUpdate() {
+          const progress = timeline.progress()
+          globeCanvasRef.current?.setProgress(Math.max(0, (progress - 0.24) / 0.76))
+        },
+      })
+
+      timeline
+        .to(impact, { autoAlpha: 0, y: -48, scale: 0.985, duration: 0.34 })
+        .to(globe, { autoAlpha: 1, y: 0, scale: 1, duration: 0.46 }, 0.2)
+        .to({}, { duration: 0.2 })
+
+      return () => timeline.kill()
+    })
+
+    return () => media.revert()
+  }, [])
+
   return (
-    <section id="impact" className="overflow-hidden border-y border-border/70 px-6 py-20 md:py-28">
-      <div className="mx-auto max-w-6xl">
+    <section ref={sectionRef} id="impact" className="overflow-hidden border-y border-border/70 px-6 py-20 md:py-28">
+      <div ref={stageRef} className="relative mx-auto max-w-6xl lg:flex lg:h-[calc(100svh-7rem)] lg:min-h-[720px] lg:max-h-[880px] lg:items-center">
+        <div ref={impactRef} className="w-full">
         <Reveal className="text-center">
           <span className="eyebrow block">Our proven results</span>
           <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
@@ -123,7 +175,6 @@ export function BeforeAfter() {
               </div>
             </div>
 
-            <ImpactGlobe />
           </Reveal>
         </div>
 
@@ -133,6 +184,15 @@ export function BeforeAfter() {
             <span className="text-sm font-semibold tracking-[0.12em] text-foreground">mMEDCON</span>
           </p>
         </Reveal>
+        </div>
+
+        <div ref={globeRef} className="mt-12 w-full lg:invisible lg:absolute lg:inset-0 lg:mt-0 lg:flex lg:items-stretch">
+          <ImpactGlobe
+            ref={globeCanvasRef}
+            scrollDriven
+            className="!mt-0 w-full lg:flex lg:h-full lg:flex-col lg:justify-between lg:rounded-[2rem] lg:px-8 lg:py-6 [&_canvas]:lg:min-h-0 [&_canvas]:lg:flex-1 [&_canvas]:lg:object-contain"
+          />
+        </div>
       </div>
     </section>
   )

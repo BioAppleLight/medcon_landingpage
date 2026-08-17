@@ -2,7 +2,7 @@ import { Camera, Mail, MapPin, Phone, Globe } from "lucide-react"
 import { BrandLogo } from "@/components/brand-logo"
 
 const linkGroups = [
-  { label: "Product", href: "/#product" },
+  { label: "Product", href: "/product" },
   { label: "Use Cases", href: "/#use-cases" },
   { label: "Technology", href: "/technology" },
   {

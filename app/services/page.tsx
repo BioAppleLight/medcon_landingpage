@@ -14,9 +14,10 @@ import {
 } from "@/components/service-art"
 
 export const metadata: Metadata = {
-  title: "Services | MYO'S",
+  title: "AI Automation and Software Services",
   description:
     "AI automation, web design, software development, custom AI agents, AI avatars, and AI consultation from MYO'S.",
+  alternates: { canonical: "/services" },
 }
 
 const services = [

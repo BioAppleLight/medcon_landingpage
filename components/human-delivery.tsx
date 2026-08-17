@@ -54,7 +54,10 @@ export function HumanDelivery() {
                 poster="/demos/human-delivery.png"
                 aria-label="Rehabilitation product demonstration"
               >
-                <source src="/Rehab.mp4" type="video/mp4" />
+                <source
+                  src="https://pub-9c0b5a57bb204edca8d45fe05db8821c.r2.dev/Rehab.mp4"
+                  type="video/mp4"
+                />
                 Your browser does not support the video element.
               </video>
             ) : (

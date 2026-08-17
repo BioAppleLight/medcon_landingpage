@@ -5,9 +5,10 @@ import { SiteFooter } from "@/components/site-footer"
 import { SiteNav } from "@/components/site-nav"
 
 export const metadata: Metadata = {
-  title: "Pricing | MYO'S",
+  title: "AI Expert Avatar Pricing",
   description:
     "Explore MYO'S pricing packages for pilot deployments, departments, and enterprise health systems.",
+  alternates: { canonical: "/pricing" },
 }
 
 export default function PricingPage() {

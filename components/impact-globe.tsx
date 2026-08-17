@@ -1,6 +1,14 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type PointerEvent,
+} from "react"
 import {
   geoDistance,
   geoEquirectangular,
@@ -95,8 +103,31 @@ function sampleLandPoints(): Coordinate[] {
   return points
 }
 
-export function ImpactGlobe() {
+export interface ImpactGlobeHandle {
+  setProgress: (progress: number) => void
+}
+
+export const ImpactGlobe = forwardRef<
+  ImpactGlobeHandle,
+  { scrollDriven?: boolean; className?: string }
+>(function ImpactGlobe({ scrollDriven = false, className = "" }, ref) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const drawRef = useRef<(elapsed: number) => void>(() => undefined)
+  const elapsedRef = useRef(0)
+  const autoRotationRef = useRef(0)
+  const rotationOffsetRef = useRef<Coordinate>([0, 0])
+  const dragRef = useRef<{ pointerId: number; x: number; y: number } | null>(null)
+  const interactingRef = useRef(false)
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
+
+  useImperativeHandle(ref, () => ({
+    setProgress(progress: number) {
+      // The complete network animation spans one deterministic eleven-second turn.
+      elapsedRef.current = clamp(progress) * 10.999
+      drawRef.current(elapsedRef.current)
+    },
+  }), [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -128,7 +159,10 @@ export function ImpactGlobe() {
       const t = elapsed % 11
       // One full eastward turn per loop brings the three priority regions into focus:
       // the Americas first, Slovakia next, and Australia at the seeded six-second frame.
-      projection.rotate([75 - t * (360 / 11), -16])
+      projection.rotate([
+        75 - t * (360 / 11) + autoRotationRef.current + rotationOffsetRef.current[0],
+        -16 + rotationOffsetRef.current[1],
+      ])
       const path = geoPath(projection, context)
       const center = projection.invert?.([WIDTH / 2, HEIGHT / 2]) as Coordinate
 
@@ -244,30 +278,121 @@ export function ImpactGlobe() {
       }
     }
 
+    drawRef.current = draw
+
+    let lastFrame = performance.now()
     function animate(now: number) {
-      draw((now - start) / 1000)
+      const delta = Math.min((now - lastFrame) / 1000, 0.1)
+      lastFrame = now
+
+      if (!interactingRef.current) {
+        if (scrollDriven) {
+          // Scroll controls the network sequence; idle time adds a gentle globe rotation.
+          autoRotationRef.current -= delta * 7
+        } else {
+          elapsedRef.current = (elapsedRef.current + delta) % 11
+        }
+        draw(elapsedRef.current)
+      }
       animationFrame = requestAnimationFrame(animate)
     }
 
     resize()
-    draw(6)
+    elapsedRef.current = scrollDriven ? elapsedRef.current : 6
+    draw(elapsedRef.current)
     start = performance.now()
     animationFrame = requestAnimationFrame(animate)
 
     const onResize = () => {
       resize()
-      draw((performance.now() - start) / 1000)
+      if (!scrollDriven) elapsedRef.current = (performance.now() - start) / 1000
+      draw(elapsedRef.current)
     }
     window.addEventListener("resize", onResize)
 
     return () => {
       cancelAnimationFrame(animationFrame)
       window.removeEventListener("resize", onResize)
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
     }
-  }, [])
+  }, [scrollDriven])
+
+  function redraw() {
+    drawRef.current(elapsedRef.current)
+  }
+
+  function pauseAutoRotation() {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    resumeTimerRef.current = null
+    interactingRef.current = true
+  }
+
+  function resumeAutoRotation() {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    resumeTimerRef.current = setTimeout(() => {
+      interactingRef.current = false
+      resumeTimerRef.current = null
+    }, 650)
+  }
+
+  function handlePointerDown(event: PointerEvent<HTMLCanvasElement>) {
+    pauseAutoRotation()
+    event.currentTarget.setPointerCapture(event.pointerId)
+    dragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY }
+    setIsDragging(true)
+  }
+
+  function handlePointerMove(event: PointerEvent<HTMLCanvasElement>) {
+    const drag = dragRef.current
+    if (!drag || drag.pointerId !== event.pointerId) return
+
+    const deltaX = event.clientX - drag.x
+    const deltaY = event.clientY - drag.y
+    rotationOffsetRef.current = [
+      rotationOffsetRef.current[0] + deltaX * 0.35,
+      Math.max(-70, Math.min(70, rotationOffsetRef.current[1] - deltaY * 0.3)),
+    ]
+    drag.x = event.clientX
+    drag.y = event.clientY
+    redraw()
+  }
+
+  function handlePointerEnd(event: PointerEvent<HTMLCanvasElement>) {
+    if (dragRef.current?.pointerId !== event.pointerId) return
+    dragRef.current = null
+    setIsDragging(false)
+    resumeAutoRotation()
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLCanvasElement>) {
+    const step = event.shiftKey ? 15 : 6
+    let [longitude, latitude] = rotationOffsetRef.current
+    if (event.key === "ArrowLeft") longitude -= step
+    else if (event.key === "ArrowRight") longitude += step
+    else if (event.key === "ArrowUp") latitude = Math.min(70, latitude + step)
+    else if (event.key === "ArrowDown") latitude = Math.max(-70, latitude - step)
+    else if (event.key === "Home") [longitude, latitude] = [0, 0]
+    else return
+
+    event.preventDefault()
+    pauseAutoRotation()
+    rotationOffsetRef.current = [longitude, latitude]
+    redraw()
+    resumeAutoRotation()
+  }
+
+  function resetRotation() {
+    pauseAutoRotation()
+    rotationOffsetRef.current = [0, 0]
+    redraw()
+    resumeAutoRotation()
+  }
 
   return (
-    <div className="mt-10 min-w-0 overflow-hidden rounded-2xl border border-border/70 bg-[#050b18] p-2 sm:p-4">
+    <div className={`mt-10 min-w-0 overflow-hidden rounded-2xl border border-border/70 bg-[#050b18] p-2 sm:p-4 ${className}`}>
       <div className="flex items-center justify-between gap-4 px-3 pt-2">
         <div>
           <p className="text-sm font-semibold text-foreground">Global reach</p>
@@ -279,9 +404,20 @@ export function ImpactGlobe() {
         ref={canvasRef}
         width={WIDTH}
         height={HEIGHT}
-        aria-label="Animated globe showing MYO'S reach from New York to destinations worldwide"
-        className="block h-auto w-full max-w-full"
+        role="img"
+        tabIndex={0}
+        aria-label="Interactive globe showing MYO'S worldwide reach. Drag to rotate, use arrow keys to move, or press Home to reset."
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerEnd}
+        onPointerCancel={handlePointerEnd}
+        onDoubleClick={resetRotation}
+        onKeyDown={handleKeyDown}
+        className={`block h-auto w-full max-w-full touch-none rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#63aaff] ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
       />
+      <p className="px-3 pb-1 text-center text-[0.65rem] uppercase tracking-[0.12em] text-muted-foreground/70">
+        Drag to explore · Double-click to reset
+      </p>
     </div>
   )
-}
+})

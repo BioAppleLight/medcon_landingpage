@@ -1,0 +1,284 @@
+From cdd104534357e7e6c1e4d3c4d79eb709fccab1b4 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 15 Aug 2026 08:12:10 +0000
+Subject: [PATCH 2/3] feat: serve demo videos from Cloudflare CDN
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+All three site videos now resolve through videoAssets in lib/cdn.ts
+rather than hardcoded public/ paths: the education demo on the use-case
+page, the government demo, and the rehab clip in the human-delivery
+section.
+
+scripts/migrate-videos-to-r2.sh performs the one-time upload of the
+existing files to stable videos/* keys and verifies each public URL,
+including byte-range support so seeking works.
+
+The local MP4s stay in place for now — per the rollback plan they are
+removed only after CDN playback is verified in production.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01GCh16K3rSAPPMiXDvbSo6A
+---
+ components/government-question-prompts.tsx |   4 +-
+ components/human-delivery.tsx              |   3 +-
+ lib/use-cases.ts                           |   3 +-
+ scripts/migrate-videos-to-r2.sh            | 133 +++++++++++++++++++++
+ tests/cdn.test.ts                          |  43 +++++++
+ 5 files changed, 183 insertions(+), 3 deletions(-)
+ create mode 100755 scripts/migrate-videos-to-r2.sh
+ create mode 100644 tests/cdn.test.ts
+
+diff --git a/components/government-question-prompts.tsx b/components/government-question-prompts.tsx
+index 86219ea..42b60cb 100644
+--- a/components/government-question-prompts.tsx
++++ b/components/government-question-prompts.tsx
+@@ -2,6 +2,8 @@
+ 
+ import { useMemo } from "react"
+ 
++import { videoAssets } from "@/lib/cdn"
++
+ const governmentAvatarQuestions = [
+   "What is the process for business licensing in Dubai?",
+   "What are the requirements for residency in the UAE?",
+@@ -58,7 +60,7 @@ export function GovernmentQuestionPrompts() {
+               poster="/demos/government-demo.png"
+               title="Government use case demo"
+             >
+-              <source src="/demos/government-demo.mp4" type="video/mp4" />
++              <source src={videoAssets.governmentDemo} type="video/mp4" />
+             </video>
+           </div>
+         </div>
+diff --git a/components/human-delivery.tsx b/components/human-delivery.tsx
+index 8095211..7d11971 100644
+--- a/components/human-delivery.tsx
++++ b/components/human-delivery.tsx
+@@ -5,6 +5,7 @@ import Image from "next/image"
+ import { motion } from "motion/react"
+ import { Check, Play } from "lucide-react"
+ import { Reveal, Stagger, StaggerItem } from "@/components/motion-primitives"
++import { videoAssets } from "@/lib/cdn"
+ 
+ const features = [
+   { title: "Speaks naturally", desc: "Human cadence, tone, and expression." },
+@@ -54,7 +55,7 @@ export function HumanDelivery() {
+                 poster="/demos/human-delivery.png"
+                 aria-label="Rehabilitation product demonstration"
+               >
+-                <source src="/Rehab.mp4" type="video/mp4" />
++                <source src={videoAssets.rehab} type="video/mp4" />
+                 Your browser does not support the video element.
+               </video>
+             ) : (
+diff --git a/lib/use-cases.ts b/lib/use-cases.ts
+index 88160b3..cafb47e 100644
+--- a/lib/use-cases.ts
++++ b/lib/use-cases.ts
+@@ -1,3 +1,4 @@
++import { videoAssets } from "./cdn.ts"
+ import {
+   audienceContent,
+   contextContent,
+@@ -89,7 +90,7 @@ export const useCases: UseCase[] = [
+     outcomes: ["Higher engagement", "More scalable office hours", "Consistent course support"],
+     image: "/demos/education-demo.png",
+     demoVideo: {
+-      src: "/demos/education-demo.mp4",
++      src: videoAssets.educationDemo,
+       poster: "/demos/education-demo.png",
+       title: "Education use case demo",
+     },
+diff --git a/scripts/migrate-videos-to-r2.sh b/scripts/migrate-videos-to-r2.sh
+new file mode 100755
+index 0000000..77d9b9b
+--- /dev/null
++++ b/scripts/migrate-videos-to-r2.sh
+@@ -0,0 +1,133 @@
++#!/usr/bin/env bash
++#
++# One-time migration of the permanent site videos into Cloudflare R2.
++#
++# These three files are site assets with stable names — they do not go through the CMS upload
++# endpoint, which mints dated `uploads/videos/...` keys. Run this once, verify the public URLs,
++# and only then remove the local copies.
++#
++# Requires the AWS CLI v2 (R2 is S3-compatible).
++#
++#   R2_ACCOUNT_ID=...          Cloudflare account id
++#   R2_ACCESS_KEY_ID=...       R2 API token access key (needs Object Read & Write)
++#   R2_SECRET_ACCESS_KEY=...   R2 API token secret
++#   R2_BUCKET=myos-assets      target bucket
++#   CDN_BASE_URL=https://assets.myos.ai   custom domain in front of the bucket
++#
++# Usage:
++#   ./scripts/migrate-videos-to-r2.sh            # upload, then verify
++#   ./scripts/migrate-videos-to-r2.sh --verify   # verify already-uploaded objects only
++
++set -euo pipefail
++
++REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
++VERIFY_ONLY=false
++[[ "${1:-}" == "--verify" ]] && VERIFY_ONLY=true
++
++require_env() {
++  local name="$1"
++  if [[ -z "${!name:-}" ]]; then
++    echo "error: $name is not set" >&2
++    exit 1
++  fi
++}
++
++require_env R2_BUCKET
++require_env CDN_BASE_URL
++
++if [[ "$VERIFY_ONLY" == false ]]; then
++  require_env R2_ACCOUNT_ID
++  require_env R2_ACCESS_KEY_ID
++  require_env R2_SECRET_ACCESS_KEY
++
++  command -v aws >/dev/null 2>&1 || {
++    echo "error: aws CLI not found — install AWS CLI v2" >&2
++    exit 1
++  }
++fi
++
++ENDPOINT="https://${R2_ACCOUNT_ID:-unset}.r2.cloudflarestorage.com"
++CDN_BASE_URL="${CDN_BASE_URL%/}"
++
++# local path -> object key. Keys are lowercase and namespaced under videos/.
++MIGRATIONS=(
++  "public/Rehab.mp4|videos/rehab.mp4"
++  "public/demos/education-demo.mp4|videos/education-demo.mp4"
++  "public/demos/government-demo.mp4|videos/government-demo.mp4"
++)
++
++upload() {
++  local source="$1" key="$2"
++
++  if [[ ! -f "$REPO_ROOT/$source" ]]; then
++    echo "skip: $source not present locally (already removed?)"
++    return
++  fi
++
++  echo "uploading $source -> s3://$R2_BUCKET/$key"
++
++  # Cache-Control is aggressive because these keys are versioned by rename, never overwritten.
++  AWS_ACCESS_KEY_ID="$R2_ACCESS_KEY_ID" \
++  AWS_SECRET_ACCESS_KEY="$R2_SECRET_ACCESS_KEY" \
++  AWS_DEFAULT_REGION=auto \
++  aws s3api put-object \
++    --endpoint-url "$ENDPOINT" \
++    --bucket "$R2_BUCKET" \
++    --key "$key" \
++    --body "$REPO_ROOT/$source" \
++    --content-type "video/mp4" \
++    --cache-control "public, max-age=31536000, immutable" \
++    --checksum-algorithm CRC32 \
++    >/dev/null
++}
++
++verify() {
++  local key="$1"
++  local url="$CDN_BASE_URL/$key"
++  local status
++
++  status="$(curl -s -o /dev/null -w '%{http_code}' -I "$url")"
++  if [[ "$status" != "200" ]]; then
++    echo "FAIL $url -> HTTP $status"
++    return 1
++  fi
++
++  # A seekable video needs byte-range support; the CDN must answer 206 to a ranged request.
++  local range_status
++  range_status="$(curl -s -o /dev/null -w '%{http_code}' -r 0-1023 "$url")"
++  if [[ "$range_status" != "206" ]]; then
++    echo "FAIL $url -> range request returned HTTP $range_status (expected 206)"
++    return 1
++  fi
++
++  local content_type
++  content_type="$(curl -s -o /dev/null -w '%{content_type}' -I "$url")"
++  if [[ "$content_type" != video/mp4* ]]; then
++    echo "FAIL $url -> Content-Type '$content_type' (expected video/mp4)"
++    return 1
++  fi
++
++  echo "OK   $url (200, range 206, $content_type)"
++}
++
++if [[ "$VERIFY_ONLY" == false ]]; then
++  for migration in "${MIGRATIONS[@]}"; do
++    upload "${migration%%|*}" "${migration##*|}"
++  done
++  echo
++fi
++
++echo "verifying public URLs..."
++failed=0
++for migration in "${MIGRATIONS[@]}"; do
++  verify "${migration##*|}" || failed=1
++done
++
++if [[ "$failed" -ne 0 ]]; then
++  echo
++  echo "one or more URLs failed verification — do NOT delete the local videos yet" >&2
++  exit 1
++fi
++
++echo
++echo "all videos verified. Set NEXT_PUBLIC_CDN_BASE_URL=$CDN_BASE_URL and deploy."
+diff --git a/tests/cdn.test.ts b/tests/cdn.test.ts
+new file mode 100644
+index 0000000..268aabf
+--- /dev/null
++++ b/tests/cdn.test.ts
+@@ -0,0 +1,43 @@
++import assert from "node:assert/strict"
++import { describe, it } from "node:test"
++
++import { cdn, videoAssets } from "../lib/cdn.ts"
++
++/**
++ * `lib/cdn.ts` reads NEXT_PUBLIC_CDN_BASE_URL once at module load, so these cases cover the
++ * behaviour under whichever environment the test run happens to have. Both branches are
++ * asserted through the invariants that must hold either way.
++ */
++describe("cdn", () => {
++  const base = process.env.NEXT_PUBLIC_CDN_BASE_URL?.replace(/\/+$/, "") ?? ""
++
++  it("returns an absolute CDN URL when a base URL is configured", () => {
++    if (!base) return
++    assert.equal(cdn("/videos/rehab.mp4"), `${base}/videos/rehab.mp4`)
++  })
++
++  it("falls back to the local public path when no base URL is configured", () => {
++    if (base) return
++    assert.equal(cdn("/videos/rehab.mp4"), "/videos/rehab.mp4")
++  })
++
++  it("normalizes paths that omit the leading slash", () => {
++    assert.equal(cdn("videos/rehab.mp4"), cdn("/videos/rehab.mp4"))
++  })
++
++  it("never emits a double slash between the base URL and the path", () => {
++    assert.ok(!cdn("/videos/rehab.mp4").replace(/^https?:\/\//, "").includes("//"))
++  })
++
++  it("exposes every permanent site video under the videos/ prefix", () => {
++    for (const url of Object.values(videoAssets)) {
++      assert.ok(url.endsWith(".mp4"), `${url} should be an mp4`)
++      assert.ok(url.includes("/videos/"), `${url} should live under videos/`)
++    }
++  })
++
++  it("gives each video a distinct object key", () => {
++    const urls = Object.values(videoAssets)
++    assert.equal(new Set(urls).size, urls.length)
++  })
++})
+-- 
+2.43.0
+
