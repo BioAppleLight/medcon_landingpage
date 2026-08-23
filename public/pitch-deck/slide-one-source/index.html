@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+html, body { margin: 0; padding: 0; background: #05102a; }
+a { color: #93AAD2; text-decoration: none; }
+a:hover { color: #FB9385; }
+.twk-panel, .om-playback-bar, [data-omelette-chrome] { display: none !important; }
+@keyframes slide-copy-pop {
+  0% { opacity: 0; transform: translateY(18px) scale(.985); }
+  68% { opacity: 1; transform: translateY(-2px) scale(1.006); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.slide-copy-pop { animation: slide-copy-pop 1s cubic-bezier(.16,1,.3,1) 0s both !important; }
+.slide-copy-pop > * { opacity: 1 !important; transition: none !important; }
+</style>
+<script>window.OM_SCENES = '[{"name":"Reveal","dur":3.2,"desc":"The knee wireframe assembles from a scattered cloud and starts rotating; the ACL graft threads in and the Burjeel x MyOS lockup fades up"},{"name":"Hours","dur":3,"desc":"First line appears and the graft pulses; a short coral segment marks the surgery on the axis"},{"name":"Months","dur":3.4,"desc":"Second line appears and the axis extends far to the right, ticking out the months of recovery"},{"name":"Question","dur":4.6,"desc":"The coral rule pops and the closing question sets in serif; a silver pulse travels the whole recovery axis"},{"name":"Settle","dur":3,"desc":"The pulse reaches the far end, the lockup brightens, and the slide holds with the knee still turning"}]';</script>
+<script>window.OM_PLAYBACK = '{"mode":"loop"}';</script>
+<script>window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "rotationSpeed": 1,
+  "motionEditor": true
+}/*EDITMODE-END*/;</script>
+</helmet>
+<x-import component-from-global-scope="BurjeelSlide" from="./animations-v3.jsx?v=3 ./tweaks-panel.jsx ./burjeel-slide.jsx?v=3" hint-size="100%,100%" style="position:absolute;inset:0"></x-import>
+</x-dc>
+</body>
+</html>

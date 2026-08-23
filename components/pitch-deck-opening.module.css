@@ -1,0 +1,85 @@
+.page { min-height:100vh; display:flex; flex-direction:column; align-items:center; gap:64px; overflow-x:clip; background:#030a1c; padding:32px; position:relative; }
+.back { position:fixed; z-index:20; left:28px; top:22px; display:flex; align-items:center; gap:8px; color:rgba(234,241,252,.62); font-size:13px; transition:color .2s; }
+.back:hover { color:#EAF1FC; }
+.back svg { width:16px; }
+.stage { width:min(calc(100vw - 64px), calc((100vh - 64px) * 16 / 9)); aspect-ratio:16/9; position:relative; overflow:hidden; background:#05102a; box-shadow:0 30px 90px rgba(0,0,0,.56); container-type:inline-size; }
+.sourceSlide { position:absolute; inset:0; width:100%; height:100%; border:0; background:#05102a; }
+.backdrop { position:absolute; inset:-8%; background:url('/pitch-deck/burjeel-or-backdrop.png') center/cover; transform-origin:54% 62%; animation:kenburns 17.2s linear both; }
+.radialScrim { position:absolute; inset:0; background:radial-gradient(circle at 58% 50%,rgba(10,29,71,.55),#030a1c 82%); animation:scrim 17.2s linear both; }
+.textScrim { position:absolute; inset:0; background:linear-gradient(90deg,#05102a 0%,rgba(5,16,42,.96) 36%,rgba(5,16,42,.64) 60%,transparent 84%); }
+.grid { position:absolute; inset:0; opacity:.05; background-image:repeating-linear-gradient(0deg,transparent 0,transparent calc(11.111% - 1px),#EAF1FC calc(11.111% - 1px),#EAF1FC 11.111%); }
+.anatomy { position:absolute; left:57.2%; top:5.5%; width:31.5%; height:88%; opacity:0; perspective:62cqw; perspective-origin:50% 48%; filter:drop-shadow(0 0 22px rgba(74,134,247,.28)); animation:anatomyreveal 1.35s .45s ease-out forwards; }
+.kneeRotor { position:absolute; inset:0; transform-style:preserve-3d; will-change:transform,filter; animation:kneeRotate3d 13.5s linear infinite; }
+.kneeImage { object-fit:contain; opacity:.075; backface-visibility:visible; filter:drop-shadow(0 0 6px rgba(74,134,247,.4)); }
+.kneeCore { opacity:.76; filter:drop-shadow(0 0 13px rgba(74,134,247,.62)); }
+.copy { position:absolute; left:6.875%; top:18.3%; width:49%; }
+.setup { margin:0; color:#EAF1FC; font-family:Archivo,var(--font-geist-sans),sans-serif; font-size:2.9167cqw; font-weight:300; letter-spacing:-.015em; line-height:1.12; opacity:0; transform:translateY(14px); }
+.hours { animation:copyin .7s 3.2s cubic-bezier(.2,.8,.2,1) forwards; }
+.months { margin-top:.2em; animation:copyin .7s 6.2s cubic-bezier(.2,.8,.2,1) forwards; }
+.questionWrap { display:flex; align-items:flex-start; gap:2.05cqw; margin-top:2.1cqw; }
+.coralRule { width:6.875cqw; height:3px; margin-top:1.15cqw; flex:none; background:#FB9385; transform:scaleX(0); transform-origin:left; animation:rulepop .35s 9.6s cubic-bezier(.16,1,.3,1) forwards; }
+.questionWrap h1 { margin:0; max-width:39cqw; color:white; font-family:var(--font-instrument-serif),Georgia,serif; font-weight:400; font-size:4.479cqw; line-height:.98; letter-spacing:-.025em; opacity:0; transform:translateY(16px); animation:copyin .9s 9.8s cubic-bezier(.2,.8,.2,1) forwards; }
+.axis { position:absolute; left:6.875%; top:73.33%; width:48.96%; height:5.8%; }
+.axisLine { position:absolute; left:0; top:50%; width:100%; height:1px; background:rgba(220,214,242,.45); transform:scaleX(0); transform-origin:left; animation:axisdraw 3s 6.5s ease-out forwards; }
+.surgery { position:absolute; left:0; top:calc(50% - 2px); width:8%; height:5px; border-radius:4px; background:#FB9385; transform:scaleX(0); transform-origin:left; animation:axisdraw .45s 4.2s ease-out forwards; }
+.ticks { position:absolute; inset:16% 0 12%; opacity:0; background:repeating-linear-gradient(90deg,transparent 0,transparent calc(4.1667% - 1px),rgba(220,214,242,.42) calc(4.1667% - 1px),rgba(220,214,242,.42) 4.1667%); animation:fadein 1.2s 7.5s forwards; }
+.pulse { position:absolute; top:calc(50% - 5px); left:0; width:10px; height:10px; border-radius:50%; background:#EAF1FC; opacity:0; box-shadow:0 0 16px 5px rgba(220,214,242,.9); animation:pulsetravel 3.5s 10.1s cubic-bezier(.35,0,.2,1) forwards; }
+.endDot { position:absolute; top:calc(50% - 4px); right:-4px; width:8px; height:8px; border-radius:50%; background:#DCD6F2; opacity:0; animation:endglow .5s 13.45s forwards; }
+.lockup { position:absolute; left:6.875%; top:82.4%; height:9.63%; display:flex; align-items:center; gap:1.45cqw; opacity:0; transform:translateY(10px); animation:copyin .8s 1.8s forwards; }
+.burjeelPlate { width:8.333cqw; height:5.4167cqw; padding:.26cqw .7cqw; border-radius:.65cqw; background:white; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.burjeelLogo { width:100%; height:100%; object-fit:contain; }
+.cross { width:2.3cqw; height:2.3cqw; position:relative; }
+.cross i { position:absolute; left:50%; top:12%; width:1px; height:76%; background:#DCD6F2; transform-origin:center; transform:rotate(0) scaleY(0); animation:crossone .6s 2.25s cubic-bezier(.2,.8,.2,1) forwards; }
+.cross i:last-child { animation-name:crosstwo; animation-delay:2.38s; }
+.myosMark { width:4.79cqw; height:4.79cqw; display:grid; place-items:center; filter:drop-shadow(0 0 12px rgba(139,107,224,.38)); animation:brandbreathe 3s 13.7s ease-in-out forwards; }
+.myosLogo { width:100%; height:100%; }
+.slideNumber { position:absolute; right:3.2%; bottom:3%; color:rgba(220,214,242,.34); font:500 .68cqw/1 var(--font-geist-mono),monospace; }
+
+/* Slide 02 — intentionally editorial and quiet after the cinematic opener. */
+.slideTwo { flex:none; background:radial-gradient(circle at 93% 7%,rgba(139,107,224,.16),transparent 27%),radial-gradient(circle at 3% 95%,rgba(74,134,247,.13),transparent 25%),#050505; color:#fff; padding:3.65% 3.2% 2.35%; font-family:var(--font-geist-sans),sans-serif; box-shadow:0 30px 90px rgba(0,0,0,.35); }
+.twoHeader { position:relative; z-index:2; }
+.twoEyebrow { margin:0 0 1.22cqw; color:#8B6BE0; font-size:.84cqw; font-weight:700; letter-spacing:.24em; text-transform:uppercase; }
+.twoHeader h2 { margin:0; max-width:93%; font-family:var(--font-instrument-serif),Georgia,serif; font-size:2.42cqw; font-weight:700; line-height:1.08; letter-spacing:-.015em; }
+.twoSubtitle { margin:1.18cqw 0 0; color:rgba(255,255,255,.66); font-size:1.05cqw; font-style:italic; }
+.problemGrid { display:grid; grid-template-columns:44% 52%; gap:4%; margin-top:2.25cqw; height:25.8cqw; }
+.panelLabel { margin:0; color:#4A86F7; font-size:.78cqw; font-weight:800; letter-spacing:.025em; text-transform:uppercase; }
+.noteStack { position:relative; height:22.3cqw; margin-top:.82cqw; }
+.questionNote { position:absolute; display:flex; align-items:center; min-height:6.55cqw; padding:1.2cqw 1.45cqw; border:1px solid rgba(74,134,247,.22); border-radius:.7cqw; background:#11182a; color:#fff; font-size:1.02cqw; font-style:italic; line-height:1.22; box-shadow:0 .25cqw .55cqw rgba(0,0,0,.3); }
+.noteOne { left:0; top:0; width:56%; transform:rotate(-1.5deg); }
+.noteTwo { right:1%; top:.45cqw; width:49%; transform:rotate(2deg); }
+.noteThree { left:2%; top:6.25cqw; width:56%; transform:rotate(1deg); }
+.noteFour { right:-2%; top:6.9cqw; width:53%; transform:rotate(-1.8deg); }
+.noteFive { left:0; top:12.55cqw; width:60%; transform:rotate(1.8deg); }
+.noteSix { right:-3%; top:14cqw; width:58%; min-height:7.1cqw; border-color:rgba(139,107,224,.45); background:#241b42; color:#fff; font-weight:650; transform:rotate(-1deg); }
+.evidencePanel { display:flex; flex-direction:column; gap:1.45cqw; }
+.evidenceCard { display:flex; flex:1; flex-direction:column; min-width:0; padding:1.5cqw 1.65cqw 1.05cqw; border:1px solid rgba(74,134,247,.22); border-radius:.7cqw; background:linear-gradient(135deg,#11182a,#1a1530); }
+.evidenceCard strong { color:#4A86F7; font-family:var(--font-instrument-serif),Georgia,serif; font-size:2.45cqw; line-height:1; }
+.evidenceCard p { margin:1cqw 0 .7cqw; font-size:.91cqw; line-height:1.34; }
+.evidenceCard small { margin-top:auto; color:rgba(255,255,255,.55); font-size:.59cqw; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+.timelineCard { min-height:10.7cqw; }
+.timelineCard strong { font-size:3.05cqw; }
+.timelineCard p { margin:.75cqw 0 .2cqw; }
+.smallEvidenceRow { display:grid; grid-template-columns:1fr 1fr; gap:1.45cqw; flex:1; }
+.problemFooter { margin-top:2.05cqw; }
+.problemStatement { margin:0; color:#DCD6F2; font-family:var(--font-instrument-serif),Georgia,serif; font-size:1.22cqw; font-weight:700; font-style:italic; }
+.impactGrid { display:grid; grid-template-columns:1fr 1fr 1fr .96fr; gap:2.3cqw; margin-top:.85cqw; }
+.impactGrid ul { display:flex; flex-direction:column; gap:1.25cqw; margin:0; padding:0; list-style:none; }
+.impactGrid li { position:relative; padding-left:1.55cqw; font-size:.78cqw; line-height:1.2; }
+.impactGrid li::before { content:""; position:absolute; left:0; top:.12cqw; width:.75cqw; height:.75cqw; border-radius:50%; background:linear-gradient(135deg,#4A86F7,#8B6BE0); }
+.sources { position:absolute; left:3.2%; bottom:2%; max-width:86%; margin:0; color:rgba(255,255,255,.43); font-size:.5cqw; }
+.twoNumber { position:absolute; right:2.6%; bottom:1.8%; color:#8B6BE0; font:700 .72cqw/1 var(--font-geist-mono),monospace; }
+@keyframes kenburns { from { transform:scale(1.04) translateX(0); } to { transform:scale(1.14) translateX(-1.6%); } }
+@keyframes scrim { from { opacity:.52; } to { opacity:.8; } }
+@keyframes anatomyreveal { from { opacity:0; transform:translateY(12px) scale(.985); } to { opacity:.9; transform:translateY(0) scale(1); } }
+@keyframes kneeRotate3d { 0% { transform:rotateX(2deg) rotateY(0deg) rotateZ(-1deg) translateY(0) scale(1.02); filter:brightness(1); } 25% { transform:rotateX(-1.5deg) rotateY(90deg) rotateZ(.6deg) translateY(-4px) scale(1.045); filter:brightness(1.14); } 50% { transform:rotateX(2deg) rotateY(180deg) rotateZ(-1deg) translateY(0) scale(1.07); filter:brightness(.9); } 75% { transform:rotateX(-1.5deg) rotateY(270deg) rotateZ(.6deg) translateY(4px) scale(1.045); filter:brightness(1.14); } 100% { transform:rotateX(2deg) rotateY(360deg) rotateZ(-1deg) translateY(0) scale(1.02); filter:brightness(1); } }
+@keyframes copyin { to { opacity:1; transform:translateY(0); } }
+@keyframes fadein { to { opacity:1; } }
+@keyframes rulepop { 65% { transform:scaleX(1.08); } to { transform:scaleX(1); } }
+@keyframes axisdraw { to { transform:scaleX(1); } }
+@keyframes pulsetravel { 0% { opacity:0; transform:translateX(0); } 8% { opacity:1; } 92%,100% { opacity:1; transform:translateX(calc(48.96cqw - 5px)); } }
+@keyframes endglow { to { opacity:1; box-shadow:0 0 19px 7px rgba(220,214,242,.72); } }
+@keyframes crossone { to { transform:rotate(45deg) scaleY(1); } }
+@keyframes crosstwo { to { transform:rotate(-45deg) scaleY(1); } }
+@keyframes brandbreathe { 50%,100% { filter:drop-shadow(0 0 25px rgba(139,107,224,.82)); transform:scale(1.035); } }
+@media (prefers-reduced-motion:reduce) { .backdrop,.radialScrim,.anatomy,.kneeRotor,.hours,.months,.coralRule,.questionWrap h1,.axisLine,.surgery,.ticks,.pulse,.endDot,.lockup,.cross i,.myosMark { animation-delay:0s; animation-duration:.01ms; } }
+@media (max-width:700px) { .page { gap:24px; padding:12px; } .stage { width:calc(100vw - 24px); } .back { top:8px; left:12px; font-size:0; } }

@@ -38,6 +38,11 @@ const aboutLinks = [
 
 const useCaseLinks = [
   {
+    label: "Pitch Deck",
+    href: "/use-cases/pitch-deck",
+    description: "See the MYO'S story in a concise investor presentation.",
+  },
+  {
     label: "Use Case Template",
     href: "/use-cases/template",
     description: "Start with a flexible blueprint for your own AI expert.",
