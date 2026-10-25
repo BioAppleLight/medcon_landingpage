@@ -29,7 +29,7 @@ export function ComparisonSlider() {
   }, [])
 
   return (
-    <section className="px-6 py-20 md:py-28">
+    <section className="px-4 py-20 md:py-28">
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="text-balance text-3xl font-semibold tracking-tight md:text-5xl">
           Not a chatbot. Not a video. Something new.
@@ -41,56 +41,81 @@ export function ComparisonSlider() {
 
       <div
         ref={containerRef}
-        className="relative mx-auto mt-12 h-80 max-w-4xl select-none overflow-hidden rounded-2xl border border-border md:h-72"
-        onMouseMove={(e) => dragging.current && update(e.clientX)}
-        onMouseUp={() => (dragging.current = false)}
-        onMouseLeave={() => (dragging.current = false)}
-        onTouchMove={(e) => update(e.touches[0].clientX)}
+        className="relative mx-auto mt-12 h-[clamp(22rem,32vw,36rem)] w-full max-w-[112rem] select-none overflow-hidden rounded-[2rem] border border-white/[0.04] md:rounded-[2.75rem]"
+        style={{ touchAction: "pan-y" }}
+        onPointerDown={(event) => {
+          dragging.current = true
+          event.currentTarget.setPointerCapture(event.pointerId)
+          update(event.clientX)
+        }}
+        onPointerMove={(event) => {
+          if (dragging.current) update(event.clientX)
+        }}
+        onPointerUp={() => { dragging.current = false }}
+        onPointerCancel={() => { dragging.current = false }}
+        onLostPointerCapture={() => { dragging.current = false }}
       >
-        {/* Traditional (base layer) */}
-        <div className="absolute inset-0 flex flex-col justify-center gap-5 bg-secondary p-8 md:p-12">
-          <span className="eyebrow">
-            Traditional Expert
-          </span>
-          {traditional.map((item) => {
-            const Icon = item.icon
-            return (
-              <div key={item.text} className="flex items-center gap-3">
-                <Icon className="h-5 w-5 text-muted-foreground" />
-                <span className="text-muted-foreground">{item.text}</span>
-              </div>
-            )
-          })}
+        {/* Traditional Expert */}
+        <div className="absolute inset-0 flex flex-col justify-center bg-[#1d2636] px-8 py-10 sm:px-12 md:px-[clamp(3rem,5.4vw,6rem)]">
+          <div className="flex w-max max-w-[92%] flex-col gap-7 text-[#9ba4b5] md:gap-9">
+            <span className="mb-1 text-sm font-medium uppercase tracking-[0.2em] md:mb-2 md:text-[clamp(1rem,1.35vw,1.5rem)]">
+              Traditional Expert
+            </span>
+            {traditional.map((item) => {
+              const Icon = item.icon
+              return (
+                <div key={item.text} className="flex items-center gap-5 md:gap-6">
+                  <Icon aria-hidden="true" className="h-7 w-7 shrink-0 stroke-[1.9] md:h-10 md:w-10" />
+                  <span className="text-[clamp(1.125rem,1.85vw,2rem)] leading-tight">{item.text}</span>
+                </div>
+              )
+            })}
+          </div>
         </div>
 
         {/* MyOS (clipped overlay) */}
         <div
-          className="absolute inset-0 flex flex-col items-end justify-center gap-5 bg-gradient-to-br from-primary/20 to-accent/20 p-8 text-right md:p-12"
+          className="absolute inset-0 flex flex-col items-end justify-center bg-[#30395c] px-8 py-10 text-right sm:px-12 md:px-[clamp(3rem,5.4vw,6rem)]"
           style={{ clipPath: `inset(0 0 0 ${pos}%)` }}
         >
-          <span className="eyebrow text-primary">
-            MyOS Expert
-          </span>
-          {myos.map((item) => {
-            const Icon = item.icon
-            return (
-              <div key={item.text} className="flex items-center gap-3">
-                <span className="font-medium text-foreground">{item.text}</span>
-                <Icon className="h-5 w-5 text-primary" />
-              </div>
-            )
-          })}
+          <div className="flex w-max max-w-[92%] flex-col items-end gap-7 md:gap-9">
+            <span className="mb-1 text-sm font-medium uppercase tracking-[0.2em] text-[#8dbdff] md:mb-2 md:text-[clamp(1rem,1.35vw,1.5rem)]">
+              MyOS Expert
+            </span>
+            {myos.map((item) => {
+              const Icon = item.icon
+              return (
+                <div key={item.text} className="flex items-center gap-5 md:gap-6">
+                  <span className="text-[clamp(1.125rem,1.85vw,2rem)] leading-tight text-white">{item.text}</span>
+                  <Icon aria-hidden="true" className="h-7 w-7 shrink-0 stroke-[1.9] text-[#8dbdff] md:h-10 md:w-10" />
+                </div>
+              )
+            })}
+          </div>
         </div>
 
-        {/* Handle */}
         <div
-          className="absolute inset-y-0 z-10 w-1 -translate-x-1/2 cursor-ew-resize bg-primary"
+          role="slider"
+          tabIndex={0}
+          aria-label="Compare Traditional Expert and MyOS Expert"
+          aria-valuemin={5}
+          aria-valuemax={95}
+          aria-valuenow={pos}
+          aria-valuetext={`${100 - pos}% MyOS Expert visible`}
+          onKeyDown={(event) => {
+            if (event.key === "ArrowLeft") {
+              event.preventDefault()
+              setPos((current) => Math.max(5, current - 5))
+            } else if (event.key === "ArrowRight") {
+              event.preventDefault()
+              setPos((current) => Math.min(95, current + 5))
+            }
+          }}
+          className="absolute inset-y-0 z-10 w-2 -translate-x-1/2 cursor-ew-resize bg-[#2388f5] outline-none focus-visible:ring-2 focus-visible:ring-white"
           style={{ left: `${pos}%` }}
-          onMouseDown={() => (dragging.current = true)}
-          onTouchStart={() => (dragging.current = true)}
         >
-          <span className="absolute top-1/2 left-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-primary text-primary-foreground shadow-lg">
-            <span className="text-xs">{"<>"}</span>
+          <span className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-[#2388f5] text-xl font-light text-white shadow-lg md:h-20 md:w-20">
+            <span aria-hidden="true">{"<>"}</span>
           </span>
         </div>
       </div>

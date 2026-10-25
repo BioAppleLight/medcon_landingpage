@@ -1,8 +1,8 @@
 "use client"
 
-import { useCallback, useEffect, useId, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowRight, RotateCcw, SendHorizontal } from "lucide-react"
+import { ArrowRight, RotateCcw } from "lucide-react"
 import {
   resetPersonalizedUseCase,
   savePersonalizedIndustryLabel,
@@ -24,7 +24,6 @@ interface Question {
   id: string
   text: string
   choices: Choice[]
-  allow_free_text: boolean
 }
 
 interface SessionState {
@@ -62,7 +61,6 @@ interface ChatRequestBody {
 }
 
 export function HeroChat() {
-  const inputId = useId()
   const threadRef = useRef<HTMLDivElement>(null)
   const hasStarted = useRef(false)
 
@@ -70,7 +68,6 @@ export function HeroChat() {
   const [question, setQuestion] = useState<Question | null>(null)
   const [session, setSession] = useState<SessionState | null>(null)
   const [page, setPage] = useState<GeneratedPage | null>(null)
-  const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -125,19 +122,10 @@ export function HeroChat() {
     void send({ choice_id: choice.id, state: session }, choice.label)
   }
 
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault()
-    const trimmed = input.trim()
-    if (!trimmed || isLoading || !session) return
-    setInput("")
-    void send({ message: trimmed, state: session }, trimmed)
-  }
-
   function handleRestart() {
     if (isLoading || !session) return
     setMessages([])
     setPage(null)
-    setInput("")
     void send({ message: "start over", state: session })
   }
 
@@ -215,36 +203,9 @@ export function HeroChat() {
       </div>
 
       <div className="flex items-center gap-3 p-2 pl-5">
-        {question?.allow_free_text ? (
-          <form className="flex flex-1 items-center gap-3" onSubmit={handleSubmit}>
-            <label htmlFor={inputId} className="sr-only">
-              Or describe it in your own words
-            </label>
-            <input
-              id={inputId}
-              name="inquiry"
-              type="text"
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              placeholder="Or type it in your own words…"
-              maxLength={500}
-              disabled={isLoading}
-              className="min-w-0 flex-1 bg-transparent py-3 text-base text-white outline-none placeholder:text-white/55 disabled:opacity-60"
-            />
-            <button
-              type="submit"
-              aria-label="Send message"
-              disabled={isLoading || input.trim().length === 0}
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-all hover:scale-105 hover:bg-primary/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:pointer-events-none disabled:opacity-50"
-            >
-              <SendHorizontal className="h-4 w-4" />
-            </button>
-          </form>
-        ) : (
-          <span className="flex-1 py-3 text-sm text-white/55">
-            {page ? "Your page is ready." : "Pick an option to continue."}
-          </span>
-        )}
+        <span className="flex-1 py-3 text-sm text-white/55">
+          {page ? "Your page is ready." : "Pick an option to continue."}
+        </span>
 
         <button
           type="button"

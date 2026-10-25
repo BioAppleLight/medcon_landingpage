@@ -52,10 +52,10 @@ export function HumanDelivery() {
                 controls
                 playsInline
                 poster="/demos/human-delivery.png"
-                aria-label="Rehabilitation product demonstration"
+                aria-label="Conversation with AI avatar"
               >
                 <source
-                  src="https://pub-9c0b5a57bb204edca8d45fe05db8821c.r2.dev/Rehab.mp4"
+                  src="https://pub-9c0b5a57bb204edca8d45fe05db8821c.r2.dev/conversation_with_avatar.mp4"
                   type="video/mp4"
                 />
                 Your browser does not support the video element.
@@ -65,7 +65,7 @@ export function HumanDelivery() {
                 type="button"
                 onClick={() => setIsPlaying(true)}
                 className="group relative block h-full w-full"
-                aria-label="Play rehabilitation demo video"
+                aria-label="Play conversation with AI avatar video"
               >
                 <Image
                   src="/demos/human-delivery.png"

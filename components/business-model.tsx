@@ -85,24 +85,6 @@ export function BusinessModel() {
           )
         })}
       </Stagger>
-
-      <Reveal
-        delay={0.1}
-        className="relative mx-auto mt-10 max-w-5xl rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/10 to-accent/10 px-8 py-10 text-center"
-      >
-        <p className="text-balance text-2xl font-semibold tracking-tight md:text-3xl">
-          Up to{" "}
-          <span className="font-serif italic font-normal text-primary">
-            40x return
-          </span>{" "}
-          vs. traditional diagnostic and recovery pathways.
-        </p>
-        <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm text-muted-foreground">
-          A traditional MS diagnostic pathway runs €1,500 to €7,000. MyOS
-          delivers comparable patient guidance from as little as €8.32 per scan
-          at hospital scale.
-        </p>
-      </Reveal>
     </section>
   )
 }

@@ -3,7 +3,7 @@ import { SITE_URL } from "@/lib/site"
 import { useCases } from "@/lib/use-cases"
 
 const routes = [
-  "/about", "/product", "/services", "/technology", "/technology/apis",
+  "/about", "/about/mission-vision", "/product", "/services", "/technology", "/technology/core", "/technology/apis",
   "/partnerships", "/pricing", "/team", "/contact",
 ]
 

@@ -24,7 +24,7 @@ export interface UseCase {
   pageSections: { title: string; body: string }[]
   outcomes: string[]
   image: string
-  demoVideo: { src: string; poster: string; title: string } | null
+  demoVideo: { src: string; poster: string; title: string; heading: string } | null
   alt: string
 }
 
@@ -57,7 +57,12 @@ export const useCases: UseCase[] = [
     ],
     outcomes: ["Faster Staff and Employee Onboarding", "Fewer repeated calls", "Accurate medical knowledge and stimulation"],
     image: "/demos/healthcare-demo.png",
-    demoVideo: null,
+    demoVideo: {
+      src: "https://pub-9c0b5a57bb204edca8d45fe05db8821c.r2.dev/Agent%20Video%20-%20Dr_%20Maryam_s%20AI%20twin_%20the%20woman%20in%20the%20first%20frame_%20greets%20a%20patient%20on%20a%20video%20call%20a.mp4",
+      poster: "/demos/healthcare-demo.png",
+      title: "Dr. Maryam's AI twin greeting a patient on a video call",
+      heading: "See the Healthcare AI Avatar in Action",
+    },
     alt: "AI doctor avatar guiding a patient through recovery exercises",
   },
   {
@@ -89,9 +94,10 @@ export const useCases: UseCase[] = [
     outcomes: ["Higher engagement", "More scalable office hours", "Consistent course support"],
     image: "/demos/education-demo.png",
     demoVideo: {
-      src: "https://pub-9c0b5a57bb204edca8d45fe05db8821c.r2.dev/education-demo.mp4",
+      src: "https://pub-9c0b5a57bb204edca8d45fe05db8821c.r2.dev/myos_professor.mp4",
       poster: "/demos/education-demo.png",
       title: "Education use case demo",
+      heading: "Demonstration to How MYO'S Transforms Education",
     },
     alt: "AI professor avatar answering a student's question",
   },

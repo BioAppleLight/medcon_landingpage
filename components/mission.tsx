@@ -68,7 +68,7 @@ export function Mission() {
           </p>
 
           <a
-            href="https://www.myos.sk/"
+            href="/product"
             className="mt-[8%] inline-flex min-h-14 min-w-52 items-center justify-center bg-[#090519] px-8 py-4 text-lg font-bold text-white shadow-[0_10px_30px_rgba(5,2,20,0.35)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.03] hover:bg-[#12082d] hover:shadow-[0_16px_40px_rgba(124,92,252,0.55)] active:translate-y-0 active:scale-[0.98] focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-white"
           >
             Our Platform

@@ -27,7 +27,12 @@ const aboutLinks = [
   {
     label: "About Overview",
     href: "/about",
-    description: "Learn about our mission, impact, and business.",
+    description: "Explore the company and what MYO'S does.",
+  },
+  {
+    label: "Mission & Vision",
+    href: "/about/mission-vision",
+    description: "Our purpose, direction, and the problem we address.",
   },
   {
     label: "Team",
@@ -68,7 +73,12 @@ const technologyLinks = [
   {
     label: "Technology Overview",
     href: "/technology",
-    description: "Explore the intelligence stack behind MYO'S.",
+    description: "Find the technology topics you want to explore.",
+  },
+  {
+    label: "Core Technology",
+    href: "/technology/core",
+    description: "Knowledge, lip synchronization, and the feedback loop.",
   },
   {
     label: "APIs",
@@ -321,6 +331,7 @@ export function SiteNav() {
         <button
           type="button"
           aria-label="Toggle menu"
+          aria-expanded={open}
           className="ml-auto text-foreground xl:hidden"
           onClick={() => setOpen((v) => !v)}
         >
@@ -329,7 +340,7 @@ export function SiteNav() {
       </nav>
 
       {open && (
-        <div className="border-t border-border bg-background/95 px-6 py-4 backdrop-blur-xl xl:hidden">
+        <div className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-border bg-background/95 px-6 py-4 backdrop-blur-xl xl:hidden">
           <div className="flex flex-col gap-4">
             {links.map((link) =>
               link.href === "/about" ? (

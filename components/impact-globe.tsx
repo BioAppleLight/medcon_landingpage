@@ -396,7 +396,10 @@ export const ImpactGlobe = forwardRef<
         onKeyDown={handleKeyDown}
         className={`block h-auto w-full max-w-full touch-none rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#63aaff] ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
       />
-      <p className="px-3 pb-1 text-center text-[0.65rem] uppercase tracking-[0.12em] text-muted-foreground/70">
+      <p className="px-3 text-center text-xs font-medium text-[#a9cfff]">
+        In Collaboration with mMEDCON
+      </p>
+      <p className="mt-1 px-3 pb-1 text-center text-[0.65rem] uppercase tracking-[0.12em] text-muted-foreground/70">
         Drag to explore · Double-click to reset
       </p>
     </div>

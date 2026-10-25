@@ -1,14 +1,28 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Check, Target, X, Zap } from "lucide-react"
-import { BOOKING_URL } from "@/lib/site"
+import { Sparkles, X } from "lucide-react"
+
+const SEEN_KEY = "myos-special-offer-seen"
 
 export function SpecialOfferPopup() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setVisible(true), 700)
+    try {
+      if (window.localStorage.getItem(SEEN_KEY)) return
+    } catch {
+      // Still show the introduction when browser storage is unavailable.
+    }
+
+    const timer = window.setTimeout(() => {
+      setVisible(true)
+      try {
+        window.localStorage.setItem(SEEN_KEY, "true")
+      } catch {
+        // Browser storage can be disabled; showing the introduction still works.
+      }
+    }, 3000)
     return () => window.clearTimeout(timer)
   }, [])
 
@@ -17,58 +31,47 @@ export function SpecialOfferPopup() {
   }
 
   return (
-    <aside className="animate-rise fixed right-4 top-24 z-40 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-3xl border border-[#5b7cff]/30 bg-card shadow-2xl shadow-black/30 sm:right-6">
-      <div className="flex items-center justify-between bg-gradient-to-r from-[#7c5cfc] via-[#5b7cff] to-[#2563eb] px-5 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-white">
+    <aside aria-labelledby="myos-intro-title" className="animate-rise fixed right-4 top-24 z-40 w-[calc(100vw-2rem)] max-w-sm overflow-hidden rounded-3xl border border-[#5b7cff]/30 bg-card shadow-2xl shadow-black/30 sm:right-6">
+      <div className="flex items-center justify-between border-b border-border bg-gradient-to-r from-[#7c5cfc]/15 via-[#5b7cff]/10 to-[#2563eb]/15 px-5 py-3 text-sm font-semibold tracking-wide text-foreground">
         <span className="inline-flex items-center gap-2">
-          <Zap className="h-4 w-4" />
-          Special Offer • Limited Time
+          <Sparkles className="h-4 w-4 text-primary" aria-hidden="true" />
+          Meet MYO&apos;S AI avatars
         </span>
         <button
           type="button"
-          aria-label="Close special offer"
+          aria-label="Close introduction"
           onClick={() => setVisible(false)}
-          className="rounded-full p-1 text-white/80 transition-colors hover:bg-white/15 hover:text-white"
+          className="rounded-full p-1 text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           <X className="h-5 w-5" />
         </button>
       </div>
 
-      <div className="px-6 py-7 text-center">
-        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary">
-          <Target className="h-6 w-6" />
-        </span>
-        <h2 className="mt-5 text-2xl font-semibold tracking-tight">
-          Ready to Get Started?
+      <div className="px-6 py-6">
+        <h2 id="myos-intro-title" className="text-balance text-2xl font-semibold leading-tight tracking-tight">
+          Focus on More Important Work.
+          <span className="mt-1 block bg-gradient-to-r from-[#a78bfa] via-[#7c9bff] to-[#67c9f3] bg-clip-text text-transparent">
+            Let AI Handle the Repetitive Work.
+          </span>
         </h2>
-        <p className="mx-auto mt-3 max-w-xs leading-7 text-muted-foreground">
-          Get a FREE consultation and discover how we can help your business
-          grow.
+        <p className="mt-4 leading-6 text-muted-foreground">
+          Save time, automate routine interactions, and simplify everyday workflows with MYO&apos;S AI avatars.
         </p>
 
         <div className="mt-6 grid gap-3">
           <a
-            href={BOOKING_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-12 items-center justify-center rounded-2xl bg-gradient-to-r from-[#7c5cfc] via-[#5b7cff] to-[#2563eb] px-5 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5"
+            href="/use-cases/government#demo"
+            className="inline-flex h-11 items-center justify-center rounded-2xl bg-gradient-to-r from-[#7c5cfc] via-[#5b7cff] to-[#2563eb] px-5 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            Claim Your Free Consultation
+            See MYO&apos;S in Action
           </a>
           <a
-            href="#contact"
-            className="inline-flex h-12 items-center justify-center rounded-2xl border border-border px-5 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:bg-primary/10"
+            href="#solution"
+            onClick={() => setVisible(false)}
+            className="inline-flex h-11 items-center justify-center rounded-2xl border border-border px-5 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            Learn More
+            Explore Solutions
           </a>
-        </div>
-
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-border pt-5 text-sm text-muted-foreground">
-          {["Free consultation", "No obligations"].map((item) => (
-            <span key={item} className="inline-flex items-center gap-2">
-              <Check className="h-4 w-4 text-emerald-400" />
-              {item}
-            </span>
-          ))}
         </div>
       </div>
     </aside>

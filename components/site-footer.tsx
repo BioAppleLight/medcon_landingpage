@@ -2,9 +2,12 @@ import { Camera, Mail, MapPin, Phone, Globe } from "lucide-react"
 import { BrandLogo } from "@/components/brand-logo"
 
 const linkGroups = [
+  { label: "About", href: "/about" },
+  { label: "Mission & Vision", href: "/about/mission-vision" },
   { label: "Product", href: "/product" },
   { label: "Use Cases", href: "/#use-cases" },
   { label: "Technology", href: "/technology" },
+  { label: "Core Technology", href: "/technology/core" },
   {
     label: "Partnerships and Collaborations",
     shortLabel: "Partnerships",
@@ -21,7 +24,7 @@ export function SiteFooter() {
       <div className="mx-auto flex max-w-6xl flex-col gap-10">
         <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
           <div>
-            <a href="#" className="flex items-center gap-2.5" aria-label="MYO'S home">
+            <a href="/" className="flex items-center gap-2.5" aria-label="MYO'S home">
               <BrandLogo className="h-8 w-8" />
               <span className="text-lg font-semibold tracking-tight">
                 MYO&apos;S
@@ -86,7 +89,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <nav className="flex flex-nowrap items-center justify-center gap-x-3 whitespace-nowrap sm:gap-x-6 lg:gap-x-8">
+        <nav aria-label="Footer" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-4 sm:gap-x-6 lg:gap-x-8">
           {linkGroups.map((link) => (
             <a
               key={link.label}
