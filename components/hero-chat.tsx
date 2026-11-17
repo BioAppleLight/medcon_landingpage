@@ -1,148 +1,87 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, type FormEvent } from "react"
 import Link from "next/link"
-import { ArrowRight, RotateCcw } from "lucide-react"
-import {
-  resetPersonalizedUseCase,
-  savePersonalizedIndustryLabel,
-  savePersonalizedUseCaseUrl,
-} from "@/lib/personalized-use-case-link"
+import { ArrowRight, ArrowUp, Expand, FileText, RotateCcw } from "lucide-react"
+import { ProposalCard } from "@/components/chat/proposal-card"
+import { STAGE_LABELS, useConsultation } from "@/components/chat/use-consultation"
 
 /**
- * The chat surface. It renders whatever the backend returns and sends back the visitor's
- * choice plus the session state — it holds no question tree, no reply content, and no rule
- * about which answers are required.
+ * The chat surface on the About hero. It renders whatever the consultation backend returns —
+ * it holds no conversation logic, no reply content, and no rule about what is required.
+ * The same consultation continues in the full-screen view at /chat.
  */
-
-interface Choice {
-  id: string
-  label: string
-}
-
-interface Question {
-  id: string
-  text: string
-  choices: Choice[]
-}
-
-interface SessionState {
-  session_id: string
-  current_node: string | null
-  answers: Record<string, string>
-  asked: string[]
-}
-
-interface GeneratedPage {
-  slug: string
-  url: string
-  label: string
-}
-
-interface ChatResponse {
-  status: "asking" | "unrecognized" | "ready" | "restart"
-  reply: string
-  state: SessionState
-  next_question: Question | null
-  page: GeneratedPage | null
-  done: boolean
-  industry_label: string | null
-}
-
-interface Bubble {
-  role: "assistant" | "user"
-  content: string
-}
-
-interface ChatRequestBody {
-  choice_id?: string
-  message?: string
-  state?: SessionState | null
-}
-
 export function HeroChat() {
   const threadRef = useRef<HTMLDivElement>(null)
-  const hasStarted = useRef(false)
+  const [draft, setDraft] = useState("")
+  const consultation = useConsultation()
+  const { view, pendingMessage, streamingReply, busy, error } = consultation
 
-  const [messages, setMessages] = useState<Bubble[]>([])
-  const [question, setQuestion] = useState<Question | null>(null)
-  const [session, setSession] = useState<SessionState | null>(null)
-  const [page, setPage] = useState<GeneratedPage | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const send = useCallback(async (body: ChatRequestBody, echo?: string) => {
-    setIsLoading(true)
-    setError(null)
-    if (echo) setMessages((current) => [...current, { role: "user", content: echo }])
-
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      })
-
-      const data = (await response.json()) as ChatResponse & {
-        error?: { message?: string }
-      }
-
-      if (!response.ok) throw new Error(data?.error?.message ?? "Something went wrong.")
-
-      setMessages((current) => [...current, { role: "assistant", content: data.reply }])
-      setSession(data.state)
-      setQuestion(data.next_question)
-      setPage(data.page)
-      if (data.status === "restart") {
-        resetPersonalizedUseCase()
-      } else {
-        if (data.industry_label) savePersonalizedIndustryLabel(data.industry_label)
-        if (data.page) savePersonalizedUseCaseUrl(data.page.url)
-      }
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Couldn't reach the assistant.")
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
-
-  // Ask the backend for the opening question — the frontend does not know what it is.
-  useEffect(() => {
-    if (hasStarted.current) return
-    hasStarted.current = true
-    void send({})
-  }, [send])
+  const maxLength = view?.limits.max_message_length ?? 2_000
+  const thinking = busy === "message" && !streamingReply
+  const canType = busy === null && view !== null && view.stage !== "GENERATION"
 
   useEffect(() => {
     threadRef.current?.scrollTo({ top: threadRef.current.scrollHeight, behavior: "smooth" })
-  }, [messages, question, page])
+  }, [view, pendingMessage, streamingReply, busy])
 
-  function handleChoice(choice: Choice) {
-    if (isLoading || !session) return
-    void send({ choice_id: choice.id, state: session }, choice.label)
+  function submit(event: FormEvent) {
+    event.preventDefault()
+    const text = draft.trim()
+    if (!text || !canType) return
+    setDraft("")
+    void consultation.send(text)
   }
 
-  function handleRestart() {
-    if (isLoading || !session) return
-    setMessages([])
-    setPage(null)
-    void send({ message: "start over", state: session })
+  function handleSuggestion(suggestion: string) {
+    if (!canType) return
+    if (suggestion === "Confirm" && view?.stage === "REVIEW") return void consultation.confirm()
+    if (suggestion === "Preview a draft page") return void consultation.preview()
+    if (suggestion === "Change something" && (view?.stage === "REVIEW" || view?.stage === "COMPLETED")) {
+      return void consultation.revise()
+    }
+    void consultation.send(suggestion)
   }
 
   return (
     <div className="animate-rise mx-auto mt-8 max-w-2xl rounded-2xl border border-white/15 bg-black/55 shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl [animation-delay:0.2s]">
+      {view && (
+        <div className="flex items-center gap-3 border-b border-white/10 px-5 py-2.5 text-left text-xs text-white/55">
+          <span className="font-medium text-white/75">{STAGE_LABELS[view.stage]}</span>
+          <div
+            className="h-1 flex-1 overflow-hidden rounded-full bg-white/10"
+            role="progressbar"
+            aria-label="Consultation progress"
+            aria-valuemin={0}
+            aria-valuemax={view.progress.total}
+            aria-valuenow={view.progress.covered}
+          >
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#7c5cfc] to-[#4db6e8] transition-[width] duration-500"
+              style={{ width: `${(view.progress.covered / view.progress.total) * 100}%` }}
+            />
+          </div>
+          <Link href="/chat" className="inline-flex items-center gap-1 transition-colors hover:text-white">
+            <Expand className="h-3.5 w-3.5" />
+            Full view
+          </Link>
+        </div>
+      )}
+
       <div
         ref={threadRef}
         role="log"
         aria-live="polite"
-        className="flex max-h-72 flex-col gap-3 overflow-y-auto px-5 pt-5 text-left"
+        className="flex max-h-80 flex-col gap-3 overflow-y-auto px-5 pt-5 text-left"
       >
-        {messages.map((message, index) => (
+        {view?.messages.map((message, index) => (
           <div
             key={index}
-            className={`max-w-[85%] rounded-xl px-4 py-2.5 text-sm leading-relaxed ${
+            className={`max-w-[85%] whitespace-pre-line rounded-xl px-4 py-2.5 text-sm leading-relaxed ${
               message.role === "assistant"
-                ? "self-start bg-white/10 text-white/90"
+                ? message.kind === "notice"
+                  ? "self-start border border-white/10 bg-white/[0.04] text-white/70"
+                  : "self-start bg-white/10 text-white/90"
                 : "self-end bg-primary text-primary-foreground"
             }`}
           >
@@ -150,73 +89,117 @@ export function HeroChat() {
           </div>
         ))}
 
-        {isLoading && (
+        {pendingMessage && (
+          <div className="max-w-[85%] self-end whitespace-pre-line rounded-xl bg-primary px-4 py-2.5 text-sm leading-relaxed text-primary-foreground">
+            {pendingMessage}
+          </div>
+        )}
+
+        {streamingReply && (
+          <div className="max-w-[85%] self-start whitespace-pre-line rounded-xl bg-white/10 px-4 py-2.5 text-sm leading-relaxed text-white/90">
+            {streamingReply}
+          </div>
+        )}
+
+        {(thinking || busy === "loading" || busy === "confirm" || busy === "preview") && (
           <div className="self-start rounded-xl bg-white/10 px-4 py-2.5 text-sm text-white/60">
-            Thinking…
+            {busy === "confirm" ? "Generating your page…" : busy === "preview" ? "Drafting a preview…" : "Thinking…"}
           </div>
         )}
 
         {error && (
           <div className="self-start rounded-xl bg-red-500/15 px-4 py-2.5 text-sm text-red-200">
             <span>{error}</span>
-            {!session && (
-              <button
-                type="button"
-                onClick={() => void send({})}
-                className="ml-2 underline underline-offset-2 hover:text-white"
+            <button
+              type="button"
+              onClick={() => void consultation.retry()}
+              className="ml-2 underline underline-offset-2 hover:text-white"
+            >
+              Try again
+            </button>
+          </div>
+        )}
+
+        {view?.proposal && (
+          <ProposalCard
+            view={view}
+            busy={busy}
+            compact
+            onConfirm={() => void consultation.confirm()}
+            onPreview={() => void consultation.preview()}
+            onRevise={() => void consultation.revise()}
+          />
+        )}
+
+        {view && ((view.page && !view.proposal) || view.draft_page) && (
+          <div className="flex flex-wrap gap-2 self-start">
+            {view.page && !view.proposal && (
+              <Link
+                href={view.page.url}
+                aria-label={`Open your use case page: ${view.page.label}`}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7c5cfc] via-[#5b7cff] to-[#2563eb] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5"
               >
-                Try again
-              </button>
+                {view.page.label}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
+            {view.draft_page && (
+              <Link
+                href={view.draft_page.url}
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2.5 text-sm text-white/85 transition-colors hover:border-primary/60 hover:bg-primary/20"
+              >
+                <FileText className="h-4 w-4" />
+                Open draft preview
+              </Link>
             )}
           </div>
         )}
 
-        {question && !isLoading && (
-          <div className="self-start">
-            <p className="text-sm leading-relaxed text-white/90">{question.text}</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {question.choices.map((choice) => (
-                <button
-                  key={choice.id}
-                  type="button"
-                  onClick={() => handleChoice(choice)}
-                  disabled={isLoading}
-                  className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-primary/60 hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50"
-                >
-                  {choice.label}
-                </button>
-              ))}
-            </div>
+        {view && view.suggestions.length > 0 && busy === null && (
+          <div className="flex flex-wrap gap-2 self-start pb-1">
+            {view.suggestions.map((suggestion) => (
+              <button
+                key={suggestion}
+                type="button"
+                onClick={() => handleSuggestion(suggestion)}
+                disabled={!canType}
+                className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-primary/60 hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50"
+              >
+                {suggestion}
+              </button>
+            ))}
           </div>
-        )}
-
-        {page && (
-          <Link
-            href={page.url}
-            aria-label={`Open your use case page: ${page.label}`}
-            className="self-start inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7c5cfc] via-[#5b7cff] to-[#2563eb] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5"
-          >
-            {page.label}
-            <ArrowRight className="h-4 w-4" />
-          </Link>
         )}
       </div>
 
-      <div className="flex items-center gap-3 p-2 pl-5">
-        <span className="flex-1 py-3 text-sm text-white/55">
-          {page ? "Your page is ready." : "Pick an option to continue."}
-        </span>
-
+      <form onSubmit={submit} className="flex items-center gap-2 p-2 pl-5">
+        <input
+          value={draft}
+          onChange={(event) => setDraft(event.target.value)}
+          maxLength={maxLength}
+          disabled={!canType}
+          aria-label="Describe your digital twin idea"
+          placeholder={view?.page ? "Ask for a change to your proposal…" : "Describe what you'd like your AI expert to do…"}
+          className="min-w-0 flex-1 bg-transparent py-3 text-sm text-white outline-none placeholder:text-white/45 disabled:opacity-60"
+        />
+        <button
+          type="submit"
+          disabled={!canType || !draft.trim()}
+          aria-label="Send message"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform hover:scale-105 disabled:opacity-40"
+        >
+          <ArrowUp className="h-4 w-4" />
+        </button>
         <button
           type="button"
-          onClick={handleRestart}
-          disabled={isLoading || !session}
+          onClick={() => void consultation.reset()}
+          disabled={busy !== null || !view}
           className="mr-1 inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-2 text-xs font-medium text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:pointer-events-none disabled:opacity-40"
         >
           <RotateCcw className="h-3.5 w-3.5" />
           Start over
         </button>
-      </div>
+      </form>
     </div>
   )
 }

@@ -12,6 +12,7 @@ import {
   AvatarsArt,
   ConsultationArt,
 } from "@/components/service-art"
+import { services } from "@/lib/services-content"
 
 export const metadata: Metadata = {
   title: "AI Automation and Software Services",
@@ -20,80 +21,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services" },
 }
 
-const services = [
-  {
-    step: "01",
-    art: AutomationArt,
-    title: "AI Agent Automation",
-    tagline: "Automate repetitive work with intelligent, reliable workflows.",
-    desc: "We design AI-powered automations that connect your tools, handle routine processes, and give your team more time for high-value work.",
-    points: [
-      "Workflow and process automation",
-      "CRM, ERP, and support integrations",
-      "Human review and safety controls",
-    ],
-  },
-  {
-    step: "02",
-    art: WebDesignArt,
-    title: "Web Design",
-    tagline: "High-performing digital experiences built around your brand.",
-    desc: "We create responsive, accessible websites that look polished, communicate clearly, and turn visitors into customers.",
-    points: [
-      "UX and UI design",
-      "Responsive development",
-      "SEO and performance optimization",
-    ],
-  },
-  {
-    step: "03",
-    art: SoftwareDevArt,
-    title: "Software Development",
-    tagline: "Custom software engineered for your operations and growth.",
-    desc: "From focused internal tools to full-scale platforms, we build secure software tailored to your users, systems, and business goals.",
-    points: [
-      "Full-stack application development",
-      "API and systems integration",
-      "Maintenance and modernization",
-    ],
-  },
-  {
-    step: "04",
-    art: AiAgentsArt,
-    title: "Custom AI Agents",
-    tagline: "Purpose-built AI assistants grounded in your knowledge.",
-    desc: "We develop secure AI agents that answer questions, guide users, and take action using your approved information and business rules.",
-    points: [
-      "Knowledge-grounded assistants",
-      "Tool use and multi-step reasoning",
-      "Web, app, and platform deployment",
-    ],
-  },
-  {
-    step: "05",
-    art: AvatarsArt,
-    title: "AI Avatars",
-    tagline: "Bring trusted expertise to life through a human presence.",
-    desc: "Create multilingual digital experts that communicate naturally and deliver consistent guidance, training, and support at scale.",
-    points: [
-      "Custom voice and visual identity",
-      "Multilingual conversations",
-      "Training, onboarding, and support",
-    ],
-  },
-  {
-    step: "06",
-    art: ConsultationArt,
-    title: "AI Consultation",
-    tagline: "A practical AI strategy aligned with real business value.",
-    desc: "We help you identify the strongest opportunities, choose the right technology, and create a responsible roadmap from pilot to deployment.",
-    points: [
-      "AI readiness assessment",
-      "Use-case and technology planning",
-      "Governance and implementation roadmap",
-    ],
-  },
-]
+const serviceArt = {
+  automation: AutomationArt,
+  web_design: WebDesignArt,
+  software_dev: SoftwareDevArt,
+  ai_agents: AiAgentsArt,
+  avatars: AvatarsArt,
+  consultation: ConsultationArt,
+} as const
 
 export default function ServicesPage() {
   return (
@@ -146,7 +81,7 @@ export default function ServicesPage() {
                 className={`flex gap-6 pr-6 md:gap-8 md:pr-8 ${duplicate ? "services-marquee-copy" : ""}`}
               >
                 {services.map((service) => {
-                  const Art = service.art
+                  const Art = serviceArt[service.art]
                   return (
                     <li
                       key={service.step}

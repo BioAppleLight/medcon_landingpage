@@ -24,6 +24,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## AI consultant
+
+The chat on `/about` and `/chat` is a Gemini-powered AI digital twin consultant. Copy
+`.env.example` to `.env.local` and set `GEMINI_API_KEY` (and Upstash Redis for production). See
+[docs/ai-consultant.md](docs/ai-consultant.md).
+
+Checks: `npm test`, `npm run typecheck` (the build skips type errors), `npm run build`.
+
 ## Learn More
 
 To learn more, take a look at the following resources:

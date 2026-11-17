@@ -1,7 +1,9 @@
 import Image from "next/image"
 import Link from "next/link"
+import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
+import { cache, type ReactNode } from "react"
 import {
   ArrowLeft,
   ArrowRight,
@@ -11,11 +13,23 @@ import {
   LayoutTemplate,
   Stethoscope,
 } from "lucide-react"
+import { GeneratedPageToolbar } from "@/components/generated-page-toolbar"
 import { GovernmentQuestionPrompts } from "@/components/government-question-prompts"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteNav } from "@/components/site-nav"
-import { BOOKING_URL } from "@/lib/site"
-import { getPersonalizedPresentation, getUseCase, useCases } from "@/lib/use-cases"
+import { OWNER_COOKIE, pageIdFromSlug } from "@/lib/consultation/auth"
+import { getConsultantRuntime } from "@/lib/consultation/runtime"
+import {
+  DEFAULT_CTA_LINKS,
+  DEFAULT_HERO_LINKS,
+  generatedPageContent,
+  getUseCase,
+  legacyPageContent,
+  useCases,
+  type PageLink,
+  type PersonalizedPageContent,
+  type UseCase,
+} from "@/lib/use-cases"
 
 const icons = {
   "graduation-cap": GraduationCap,
@@ -43,13 +57,21 @@ const transformationCtas = {
   },
 } as const
 
+type SearchParams = {
+  brief?: string | string[]
+  k?: string | string[]
+  rev?: string | string[]
+}
+
 type PageProps = {
   params: Promise<{
     slug: string
   }>
-  searchParams: Promise<{
-    brief?: string | string[]
-  }>
+  searchParams: Promise<SearchParams>
+}
+
+function single(value: string | string[] | undefined): string | null {
+  return typeof value === "string" ? value : null
 }
 
 function resolveUseCaseSlug(
@@ -63,6 +85,56 @@ function resolveUseCaseSlug(
   return typeof brief === "string" && brief.startsWith("c-") ? brief : null
 }
 
+/** A generated page, authorized server-side by the owner cookie or a share token. */
+const loadGeneratedPage = cache(async (pageId: string, shareToken: string | null, rev: string | null) => {
+  const cookieStore = await cookies()
+  const revision = rev && /^\d{1,4}$/.test(rev) ? Number.parseInt(rev, 10) : null
+  return getConsultantRuntime().service.loadPageForViewer(
+    pageId,
+    { ownerToken: cookieStore.get(OWNER_COOKIE)?.value ?? null, shareToken },
+    revision,
+  )
+})
+
+type ResolvedPage =
+  | { kind: "static"; useCase: UseCase; slug: string }
+  | { kind: "personalized"; content: PersonalizedPageContent; slug: string }
+  | {
+      kind: "generated"
+      pageId: string
+      content: PersonalizedPageContent
+      draft: boolean
+      isOwner: boolean
+      revision: number
+      revisions: { revision: number; status: "draft" | "final" }[]
+    }
+
+async function resolvePage(slug: string, searchParams: SearchParams): Promise<ResolvedPage | null> {
+  const pageId = pageIdFromSlug(slug)
+  if (pageId) {
+    const loaded = await loadGeneratedPage(pageId, single(searchParams.k), single(searchParams.rev))
+    if (!loaded) return null
+    return {
+      kind: "generated",
+      pageId,
+      content: generatedPageContent(loaded.revision),
+      draft: loaded.revision.status === "draft",
+      isOwner: loaded.isOwner,
+      revision: loaded.revision.revision,
+      revisions: loaded.isOwner
+        ? loaded.page.revisions.map(({ revision, status }) => ({ revision, status }))
+        : [],
+    }
+  }
+
+  const effectiveSlug = resolveUseCaseSlug(slug, searchParams.brief)
+  if (!effectiveSlug) return null
+  const legacy = legacyPageContent(effectiveSlug)
+  if (legacy) return { kind: "personalized", content: legacy, slug: effectiveSlug }
+  const useCase = getUseCase(effectiveSlug)
+  return useCase ? { kind: "static", useCase, slug: effectiveSlug } : null
+}
+
 export function generateStaticParams() {
   return useCases.filter((useCase) => useCase.id !== "template").map((useCase) => ({
     slug: useCase.id,
@@ -74,41 +146,68 @@ export async function generateMetadata({
   searchParams,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const { brief } = await searchParams
-  const effectiveSlug = resolveUseCaseSlug(slug, brief)
-  const useCase = effectiveSlug ? getUseCase(effectiveSlug) : undefined
+  const resolved = await resolvePage(slug, await searchParams)
 
-  if (!useCase) {
+  if (!resolved) {
     return {
       title: "Use Case Not Found | MYO'S",
+      robots: { index: false, follow: false },
     }
   }
 
+  if (resolved.kind === "generated") {
+    // Private by default: never indexed, and no referrer so share tokens cannot leak.
+    return {
+      title: `${resolved.content.useCase.label} AI Digital Twin Proposal`,
+      description: resolved.content.useCase.summary,
+      robots: { index: false, follow: false, nocache: true },
+      referrer: "no-referrer",
+    }
+  }
+
+  const useCase = resolved.kind === "static" ? resolved.useCase : resolved.content.useCase
   return {
     title: `${useCase.label} AI Expert Avatar Use Case`,
     description: useCase.summary,
     alternates: { canonical: `/use-cases/${useCase.id}` },
-    robots: effectiveSlug?.startsWith("c-")
+    robots: resolved.kind === "personalized"
       ? { index: false, follow: true }
       : { index: true, follow: true },
   }
 }
 
+function CtaLink({ link, className, children }: { link: PageLink; className: string; children?: ReactNode }) {
+  if (link.external) {
+    return (
+      <a href={link.href} target="_blank" rel="noopener noreferrer" className={className}>
+        {children ?? link.label}
+      </a>
+    )
+  }
+  return (
+    <Link href={link.href} className={className}>
+      {children ?? link.label}
+    </Link>
+  )
+}
+
 export default async function UseCasePage({ params, searchParams }: PageProps) {
   const { slug } = await params
-  const { brief } = await searchParams
-  const effectiveSlug = resolveUseCaseSlug(slug, brief)
-  const useCase = effectiveSlug ? getUseCase(effectiveSlug) : undefined
+  const resolved = await resolvePage(slug, await searchParams)
 
-  if (!useCase || !effectiveSlug) {
+  if (!resolved) {
     notFound()
   }
 
+  const personalized = resolved.kind === "static" ? null : resolved.content
+  const useCase = resolved.kind === "static" ? resolved.useCase : resolved.content.useCase
   const Icon = icons[useCase.icon]
-  const personalized = getPersonalizedPresentation(effectiveSlug)
+  const [heroPrimary, heroSecondary] = personalized
+    ? [personalized.heroPrimary, personalized.heroSecondary]
+    : DEFAULT_HERO_LINKS
   const transformationCta = personalized
-    ? { theme: personalized.ctaTheme, body: personalized.ctaBody }
-    : transformationCtas[useCase.id]
+    ? personalized.cta
+    : { ...transformationCtas[useCase.id], primary: DEFAULT_CTA_LINKS[0], secondary: DEFAULT_CTA_LINKS[1] }
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -123,6 +222,17 @@ export default async function UseCasePage({ params, searchParams }: PageProps) {
             <ArrowLeft className="h-4 w-4" />
             Back to use cases
           </Link>
+
+          {resolved.kind === "generated" && (
+            <GeneratedPageToolbar
+              draft={resolved.draft}
+              isOwner={resolved.isOwner}
+              revision={resolved.revision}
+              revisions={resolved.revisions}
+              basePath={`/use-cases/${slug}`}
+              pageId={resolved.pageId}
+            />
+          )}
 
           <div className="mt-10 grid items-center gap-10 md:grid-cols-[1fr_0.9fr]">
             <div>
@@ -140,20 +250,14 @@ export default async function UseCasePage({ params, searchParams }: PageProps) {
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href={BOOKING_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <CtaLink
+                  link={heroPrimary}
                   className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-                >
-                  Book Demo
-                </a>
-                <Link
-                  href="/#pricing"
+                />
+                <CtaLink
+                  link={heroSecondary}
                   className="inline-flex h-11 items-center justify-center rounded-full border border-border px-6 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-primary/10"
-                >
-                  View Pricing
-                </Link>
+                />
               </div>
             </div>
 
@@ -176,13 +280,13 @@ export default async function UseCasePage({ params, searchParams }: PageProps) {
             <div className="grid gap-12 lg:grid-cols-[minmax(0,1.55fr)_minmax(17rem,0.75fr)] lg:items-end">
               <div>
                 <p className="max-w-md font-mono text-[0.68rem] uppercase leading-4 tracking-[0.28em] text-[#8190aa]">
-                  {personalized.eyebrow}
+                  {personalized.told.eyebrow}
                 </p>
                 <h2 className="mt-7 max-w-3xl text-balance text-5xl font-semibold leading-[0.98] tracking-[-0.055em] text-[#f5f4fa] sm:text-6xl md:text-7xl">
-                  {personalized.howItWorksTitle}
+                  {personalized.told.headline}
                 </h2>
                 <p className="mt-7 max-w-2xl text-lg font-medium leading-8 text-[#a5b2ca] md:text-xl">
-                  Built for {personalized.outcome}, in a {personalized.tone} voice.
+                  {personalized.told.summary}
                 </p>
               </div>
 
@@ -191,55 +295,33 @@ export default async function UseCasePage({ params, searchParams }: PageProps) {
                   What you told us
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2 lg:flex-col lg:items-start">
-                  {[personalized.audience, personalized.interaction, personalized.tone, personalized.outcome].map((item) => (
+                  {personalized.told.tags.map((item) => (
                     <span key={item} className="rounded-full border border-white/10 bg-white/[0.045] px-4 py-2 text-sm font-medium text-[#d5dbea]">
                       {item}
                     </span>
                   ))}
-                  <span className="rounded-full bg-gradient-to-r from-[#a583ff] to-[#638dff] px-4 py-2 text-sm font-semibold text-[#080e19]">
-                    {personalized.requirement}
-                  </span>
+                  {personalized.told.highlight && (
+                    <span className="rounded-full bg-gradient-to-r from-[#a583ff] to-[#638dff] px-4 py-2 text-sm font-semibold text-[#080e19]">
+                      {personalized.told.highlight}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
 
             <div className="mt-14 border-t border-white/10 pt-12 md:mt-16 md:pt-14">
               <div className="grid gap-12 md:grid-cols-3 md:gap-10 lg:gap-14">
-                <div>
-                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.25em] text-[#a996ff]">The conversation</p>
-                  <div className="mt-7">
-                    <h3 className="font-semibold text-[#f5f4fa]">Who it serves</h3>
-                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.audienceBody}</p>
+                {personalized.columns.map((column) => (
+                  <div key={column.eyebrow}>
+                    <p className="font-mono text-[0.68rem] uppercase tracking-[0.25em] text-[#a996ff]">{column.eyebrow}</p>
+                    {column.items.map((item, index) => (
+                      <div key={item.title} className={index === 0 ? "mt-7" : "mt-6 border-t border-white/[0.07] pt-6"}>
+                        <h3 className="font-semibold text-[#f5f4fa]">{item.title}</h3>
+                        <p className="mt-2 leading-7 text-[#9eabc3]">{item.body}</p>
+                      </div>
+                    ))}
                   </div>
-                  <div className="mt-6 border-t border-white/[0.07] pt-6">
-                    <h3 className="font-semibold text-[#f5f4fa]">How visitors interact</h3>
-                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.interactionBody}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.25em] text-[#a996ff]">Voice and outcome</p>
-                  <div className="mt-7">
-                    <h3 className="font-semibold text-[#f5f4fa]">How it should sound</h3>
-                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.toneBody}</p>
-                  </div>
-                  <div className="mt-6 border-t border-white/[0.07] pt-6">
-                    <h3 className="font-semibold text-[#f5f4fa]">The outcome to optimize</h3>
-                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.outcomeBody}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.25em] text-[#a996ff]">Guardrails</p>
-                  <div className="mt-7">
-                    <h3 className="font-semibold text-[#f5f4fa]">Where a human steps in</h3>
-                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.escalation}</p>
-                  </div>
-                  <div className="mt-6 border-t border-white/[0.07] pt-6">
-                    <h3 className="font-semibold text-[#f5f4fa]">Delivery priority</h3>
-                    <p className="mt-2 leading-7 text-[#9eabc3]">{personalized.requirementBody}</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -366,24 +448,22 @@ export default async function UseCasePage({ params, searchParams }: PageProps) {
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a
-                href={BOOKING_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <CtaLink
+                link={transformationCta.primary}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#7c5cfc] via-[#5b7cff] to-[#2563eb] px-7 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5"
               >
-                Get Started Today
+                {transformationCta.primary.label}
                 <ArrowRight className="h-4 w-4" />
-              </a>
-              <Link
-                href="/product"
+              </CtaLink>
+              <CtaLink
+                link={transformationCta.secondary}
                 className="relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full p-px text-sm font-semibold text-[#c4b8ff] shadow-lg shadow-primary/10"
               >
                 <span className="absolute -inset-8 animate-gradient-spin bg-[conic-gradient(from_0deg,transparent,#7c5cfc,#5b7cff,#4db6e8,#7c5cfc,transparent)] opacity-80 blur-sm" />
                 <span className="relative inline-flex h-full w-full items-center justify-center rounded-full bg-card/95 px-7 ring-1 ring-white/5 transition-colors hover:bg-primary/10">
-                  Try Our AI Agent
+                  {transformationCta.secondary.label}
                 </span>
-              </Link>
+              </CtaLink>
             </div>
           </div>
         </div>

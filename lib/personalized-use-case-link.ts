@@ -4,11 +4,24 @@ export const PERSONALIZED_USE_CASE_READY_KEY = "myos-personalized-use-case-ready
 export const PERSONALIZED_USE_CASE_EVENT = "myos:personalized-use-case"
 export const DEFAULT_TEMPLATE_URL = "/use-cases/template"
 
+const LEGACY_BRIEF_URL = /^\/use-cases\/template\?brief=c-[A-Za-z0-9_%-]+$/
+/** A consultant-generated page: opaque id, optionally a specific draft revision. */
+const GENERATED_PAGE_URL = /^\/use-cases\/p-[A-Za-z0-9_-]{22}(\?rev=\d{1,4})?$/
+
+/** Only these two link shapes may ever be stored or shown in navigation. */
+export function isPersonalizedUseCaseUrl(url: string | null | undefined): url is string {
+  return typeof url === "string" && (LEGACY_BRIEF_URL.test(url) || GENERATED_PAGE_URL.test(url))
+}
+
+function isGeneratedPageUrl(url: string | null | undefined): boolean {
+  return typeof url === "string" && GENERATED_PAGE_URL.test(url)
+}
+
 export function readPersonalizedUseCaseUrl(): string {
   if (typeof window === "undefined") return DEFAULT_TEMPLATE_URL
 
   const value = window.localStorage.getItem(PERSONALIZED_USE_CASE_STORAGE_KEY)
-  return value?.startsWith("/use-cases/template?brief=c-") ? value : DEFAULT_TEMPLATE_URL
+  return isPersonalizedUseCaseUrl(value) ? value : DEFAULT_TEMPLATE_URL
 }
 
 export function hasPersonalizedUseCase(): boolean {
@@ -19,15 +32,16 @@ export function hasPersonalizedUseCase(): boolean {
     .getItem(PERSONALIZED_INDUSTRY_STORAGE_KEY)
     ?.trim()
 
-  return (
-    window.sessionStorage.getItem(PERSONALIZED_USE_CASE_READY_KEY) === "true" &&
-    (url?.startsWith("/use-cases/template?brief=c-") ?? false) &&
-    Boolean(industryLabel && industryLabel.length <= 80)
-  )
+  // Generated pages are stored server-side and owned by this browser, so they stay in the
+  // navigation across sessions. Legacy brief links keep their original session-only behavior.
+  const ready = isGeneratedPageUrl(url) ||
+    (window.sessionStorage.getItem(PERSONALIZED_USE_CASE_READY_KEY) === "true" && isPersonalizedUseCaseUrl(url))
+
+  return ready && Boolean(industryLabel && industryLabel.length <= 80)
 }
 
 export function savePersonalizedUseCaseUrl(url: string): void {
-  if (typeof window === "undefined" || !url.startsWith("/use-cases/template?brief=c-")) return
+  if (typeof window === "undefined" || !isPersonalizedUseCaseUrl(url)) return
 
   window.localStorage.setItem(PERSONALIZED_USE_CASE_STORAGE_KEY, url)
   window.sessionStorage.setItem(PERSONALIZED_USE_CASE_READY_KEY, "true")

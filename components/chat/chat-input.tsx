@@ -13,9 +13,18 @@ const SUGGESTIONS = [
 export function ChatInput({
   onSend,
   disabled,
+  suggestions = SUGGESTIONS,
+  onSuggestion,
+  maxLength,
+  placeholder = "Ask me anything...",
 }: {
   onSend: (text: string) => void
   disabled?: boolean
+  suggestions?: string[]
+  /** Handles a tapped suggestion; defaults to sending it as a message. */
+  onSuggestion?: (suggestion: string) => void
+  maxLength?: number
+  placeholder?: string
 }) {
   const [value, setValue] = useState("")
 
@@ -30,11 +39,11 @@ export function ChatInput({
   return (
     <div className="mx-auto w-full max-w-2xl">
       <div className="mb-3 flex flex-wrap items-center justify-center gap-2">
-        {SUGGESTIONS.map((s) => (
+        {suggestions.map((s) => (
           <button
             key={s}
             type="button"
-            onClick={() => onSend(s)}
+            onClick={() => (onSuggestion ?? onSend)(s)}
             disabled={disabled}
             className="rounded-full border border-border bg-card/60 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:border-primary/40 hover:text-foreground disabled:opacity-50"
           >
@@ -56,8 +65,9 @@ export function ChatInput({
             }}
             rows={1}
             disabled={disabled}
+            maxLength={maxLength}
             aria-label="Chat message"
-            placeholder="Ask me anything..."
+            placeholder={placeholder}
             className="max-h-40 min-h-10 flex-1 resize-none bg-transparent px-3 py-2 text-sm leading-relaxed outline-none placeholder:text-muted-foreground disabled:opacity-50"
           />
         </div>
