@@ -15,7 +15,6 @@ import { GovernmentQuestionPrompts } from "@/components/government-question-prom
 import { SiteFooter } from "@/components/site-footer"
 import { SiteNav } from "@/components/site-nav"
 import { BOOKING_URL } from "@/lib/site"
-import { REHABILITATION_DEMO_VIDEO } from "@/lib/demo-media"
 import { getPersonalizedPresentation, getUseCase, useCases } from "@/lib/use-cases"
 
 const icons = {
@@ -310,28 +309,6 @@ export default async function UseCasePage({ params, searchParams }: PageProps) {
                 title={useCase.demoVideo.title}
               >
                 <source src={useCase.demoVideo.src} type="video/mp4" />
-              </video>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {useCase.id === "healthcare" && (
-        <section id="rehabilitation-demo" className="scroll-mt-24 px-6 pb-16 md:pb-24">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="mb-6 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
-              Rehabiliation Demonstration
-            </h2>
-            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-2xl shadow-black/20">
-              <video
-                className="aspect-video w-full bg-background object-cover"
-                controls
-                playsInline
-                preload="metadata"
-                title="Rehabilitation demonstration"
-              >
-                <source src={REHABILITATION_DEMO_VIDEO} type="video/mp4" />
-                Your browser does not support the video element.
               </video>
             </div>
           </div>
